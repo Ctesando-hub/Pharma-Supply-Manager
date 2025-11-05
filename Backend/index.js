@@ -1,20 +1,7 @@
- /*import http from 'http';
-
-
-
-const server = http.createServer((request, response)=>{
-    response.statusCode = 200;
-    response.setHeader('Content-Type', 'text/plain');
-    console.log(request.method, response.url);
-    response.end('ok');
-});
-const Port = 3000;
-server.listen(Port, ()=>{
-    console.log(`Servidor corriendo el puerto http://localhost:${Port}/`);
-})*/
 import express from "express";  // Framework para crear el servidor y manejar rutas HTTP
 import cors from "cors";        // Middleware que permite el acceso desde otros dominios (Frontend)
 import dotenv from "dotenv";    // Permite manejar variables de entorno desde un archivo .env
+import productosRouters from "./routes/productos_route.js";
 
 //  Configuramos dotenv para habilitar las variables de entorno
 dotenv.config();
@@ -36,8 +23,16 @@ app.get("/", (req, res) => {
 res.send("Servidor Pharma Supply Manager funcionando correctamente");
 });
 
-// ▶ Iniciamos el servidor
-// Escucha las peticiones en el puerto indicado y muestra un mensaje en consola.
-app.listen(PORT, () => {
-console.log(`Servidor escuchando en el puerto ${PORT}`);
+
+//-------------------*
+//       Rutas
+//-------------------*
+
+//Productos
+
+app.use("/api/productos", productosRouters); // Usa el router de productos con el prefijo /productos
+
+
+app.listen(PORT, () =>{
+    console.log(`Servidor escuchando en el puerto ${PORT}`);
 });
