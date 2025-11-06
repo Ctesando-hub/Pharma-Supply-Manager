@@ -67,6 +67,21 @@ router.put("/:id", (req, res)=>{
 });
 
 
+//-------------------
+//Route DELETE
+//-------------------
+
+router.delete("/:id",(req,res)=> {
+    const id = parseInt(req.params.id); // Extrae el parámetro "id" de la URL y lo convierte a número entero. 
+    const index = productos.findIndex((p) => p.id === id); 
+    if (index === -1) {
+    return res.status(404).json({ mensaje: "Producto no encontrado" });
+    } 
+    const productoEliminado = productos.splice(index, 1);
+    res.json({ mensaje: "Producto eliminado correctamente", producto: productoEliminado })
+});
+
+
 
 
 
