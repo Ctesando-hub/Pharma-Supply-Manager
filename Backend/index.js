@@ -3,7 +3,10 @@ import cors from "cors";        // Middleware que permite el acceso desde otros 
 import dotenv from "dotenv";    // Permite manejar variables de entorno desde un archivo .env
 import productosRouters from "./routes/productos_route.js";
 import usuariosRouters from "./routes/usuarios_route.js";
-import proveedoresRouters from "./routes/proveedores_route.js"
+import proveedoresRouters from "./routes/proveedores_route.js";
+import clientesRouters from "./routes/clientes_route.js";
+import pedidosRouters from "./routes/pedidos_route.js";
+
 
 //  Configuramos dotenv para habilitar las variables de entorno
 dotenv.config();
@@ -39,6 +42,12 @@ app.use("/api/usuarios", usuariosRouters); // usa el router de usuarios con el p
 
 //Proveedores
 app.use("/api/proveedores", proveedoresRouters); //usa el router de proveedores con el prefijo /proveedores
+
+//Clientes
+app.use("/api/clientes", clientesRouters); //usa el router de clientes con el prefijo /clientes
+
+//Pedidos
+app.use("/api/pedidos", pedidosRouters); //usa el router de clientes con el prefijo  /pedidos
 
 
 

@@ -1,4 +1,6 @@
+import express from "express"; //Importa el modulo Express para crear el servidor y definir rutas HTTP
 
+const router = express.Router(); //crea un enrutador de express, que permite organizar las rutas en modulos separados.
 
 let clientes = [
     {
@@ -42,3 +44,84 @@ let clientes = [
     fechaRegistro: "2024-07-18"
     }
 ];
+
+//-------------------
+//Route GET - Devuelve todos los clientes
+//-------------------
+
+router.get("/", (req, res)=>{
+        res.json(clientes); 
+});
+
+//GET ID
+router.get("/:id",(req,res)=>{
+    const id = parseInt(req.params.id); // Extrae el parámetro "id" de la URL y lo convierte a número entero.
+    const cliente = clientes.find((p) => p.id === id); // Busca el cliente cuyo id coincida con el recibido.
+    if (!cliente){
+        return res.status(404).json({ mensaje: "Cliente no encontrado"});
+    }
+    res.json(cliente); // Si lo encuentra, envía el cliente en formato JSON.
+});
+
+
+//--------------------
+//Route POST -Crear nuevo ciente
+//--------------------
+
+router.post("/",(req,res)=>{
+    const {nombre, email, telefono, direccion, fechaRegistro} = req.body; // Extrae las propiedades del cuerpo (body) de la petición.
+
+// Validar datos
+    if (!nombre || !email || !telefono || !direccion || !fechaRegistro) {
+        return res.status(400).json({ mensaje: "Faltan datos del cliente" });// Si falta alguno, responde con error 400 (Bad Request).
+    }
+    const nuevoCliente ={  // Crea un nuevo objeto proveedor con un id incremental
+        id: clientes.length +1,
+        nombre,
+        email,
+        telefono,
+        direccion,
+        fechaRegistro
+    };
+    clientes.push(nuevoCliente);   // Agrega el nuevo Cliente al array de clientes existente
+    res.status(201).json({mensaje: "Cliente agregado correctamente", cliente: nuevoCliente});// Devuelve una respuesta 201 (Created) con un mensaje y el nuevo cliente agregado.
+
+});
+
+//-----------------
+//Route PUT -Actualizar datos de un Cliente
+//-----------------
+
+router.put("/:id", (req, res)=>{
+    const id = parseInt(req.params.id); // Extrae el parámetro "id" de la URL y lo convierte a número entero.
+    const index = clientes.findIndex((p) => p.id === id);  
+    
+    if (index === -1){
+        return res.status(404).json({ mensaje: "Cliente no encontrado" });
+    }
+    const { nombre, email, telefono, direccion, fechaRegistro } = req.body;
+    clientes[index] = { id, nombre, email, telefono, direccion, fechaRegistro };
+    res.json({ mensaje: "Cliente actualizado correctamente", cliente: clientes[index] });
+});
+
+
+//-------------------
+//Route DELETE
+//-------------------
+
+router.delete("/:id",(req,res)=> {
+    const id = parseInt(req.params.id); // Extrae el parámetro "id" de la URL y lo convierte a número entero. 
+    const index = clientes.findIndex((p) => p.id === id); 
+    if (index === -1) {
+    return res.status(404).json({ mensaje: "Cliente no encontrado" });
+    } 
+    const clienteEliminado = clientes.splice(index, 1);
+    res.json({ mensaje: "Cliente eliminado correctamente", cliente: clienteEliminado })
+});
+
+
+
+
+
+
+export default router; //exporta el router para poder usarlo en otros archivos, como en index.js.
