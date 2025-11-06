@@ -3,6 +3,7 @@ import cors from "cors";        // Middleware que permite el acceso desde otros 
 import dotenv from "dotenv";    // Permite manejar variables de entorno desde un archivo .env
 import productosRouters from "./routes/productos_route.js";
 import usuariosRouters from "./routes/usuarios_route.js";
+import proveedoresRouters from "./routes/proveedores_route.js"
 
 //  Configuramos dotenv para habilitar las variables de entorno
 dotenv.config();
@@ -29,12 +30,16 @@ res.send("Servidor Pharma Supply Manager funcionando correctamente");
 //       Rutas
 //-------------------*
 
-//Productos
+//productos
 
 app.use("/api/productos", productosRouters); // Usa el router de productos con el prefijo /productos
 
 //Usuarios
 app.use("/api/usuarios", usuariosRouters); // usa el router de usuarios con el prefijo /usuarios
+
+//Proveedores
+app.use("/api/proveedores", proveedoresRouters); //usa el router de proveedores con el prefijo /proveedores
+
 
 
 app.listen(PORT, () =>{

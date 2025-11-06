@@ -38,15 +38,15 @@ router.post("/",(req,res)=>{
     if (!nombre || !laboratorio || !precio || !stock) {
         return res.status(400).json({ mensaje: "Faltan datos del producto" });// Si falta alguno, responde con error 400 (Bad Request).
     }
-    const nuevoProducto ={  // Crea un nuevo objeto producto con un id incremental
+    const nuevoproducto ={  // Crea un nuevo objeto proveedor con un id incremental
         id: productos.length +1,
         nombre,
         laboratorio,
         precio,
         stock,
     };
-    productos.push(nuevoProducto);   // Agrega el nuevo producto al array de productos existente
-    res.status(201).json({mensaje: "Producto agregado correctamente", producto: nuevoProducto});// Devuelve una respuesta 201 (Created) con un mensaje y el producto agregado
+    productos.push(nuevoproducto);   // Agrega el nuevo producto al array de productos existente
+    res.status(201).json({mensaje: "Producto agregado correctamente", producto: nuevoproducto});// Devuelve una respuesta 201 (Created) con un mensaje y el producto agregado.
 
 });
 
@@ -80,13 +80,6 @@ router.delete("/:id",(req,res)=> {
     const productoEliminado = productos.splice(index, 1);
     res.json({ mensaje: "Producto eliminado correctamente", producto: productoEliminado })
 });
-
-
-
-
-
-
-
 
 
 

@@ -1,7 +1,7 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "API REST para la gestión de stock, proveedores y productos farmacéuticos.",
+  "description": "API REST para la gestión de stock, proveedores y proveedores farmacéuticos.",
   "main": "index.js",
   "type": "module",
   "scripts": {
