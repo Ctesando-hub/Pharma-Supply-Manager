@@ -2,13 +2,8 @@ import express from "express"; //Importa el modulo Express para crear el servido
 
 const router = express.Router(); //crea un enrutador de express, que permite organizar las rutas en modulos separados.
 
-import { getProductos, getProductoByID, crearProducto, actualizarProducto, eliminarProducto } from "../controllers/productos_controller.js";
+import { getProductos, getProductoByID,getProductoByName, crearProducto, actualizarProducto, eliminarProducto } from "../controllers/productos_controller.js";
 
-let productos = [
-{ id: 1, nombre: "Paracetamol 500mg", laboratorio: "Bayer", precio: 120.0, stock: 50 },
-{ id: 2, nombre: "Ibuprofeno 400mg", laboratorio: "Bagó", precio: 150.0, stock: 30 },
-{ id: 3, nombre: "Amoxicilina 500mg", laboratorio: "Roemmers", precio: 200.0, stock: 20 },
-];
 
 //-------------------
 //Route GET - Devuelve todos los productos
@@ -19,6 +14,10 @@ router.get("/", getProductos)
 
 //GET ID (Usa el controlador)
 router.get("/:id",getProductoByID)
+
+//GET NAME (usa el controlador)
+
+router.get("/:nombre",getProductoByName)
 
 
 //--------------------

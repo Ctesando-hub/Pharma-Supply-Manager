@@ -26,6 +26,23 @@ export const getProductoByID = async (req, res) =>{
     }
 };
 
+//Controller GET ID *Obtener un producto especifico
+export const getProductoByName = async (req, res) =>{
+    try{
+        const {nombre} = req.params;
+
+        // Simular la busqueda en bd
+        const producto = { id, nombre: "PRODUCTO 1",  descripcion: "Medicamento", precio:100, stock: 300, id_proveedor: "4"};
+
+        if (!producto){
+            return res.status(404).json({ message: "producto simulado no encontrado"});
+        }
+            return res.status(200).json({ message: "Producto simulado encontrado", data: producto});
+    } catch(error){
+        return res.status(500).json({ message: "Error al buscar producto", error: error.message});
+    }
+};
+
 // Controlador para crear un nuevo producto
 export const crearProducto = async (req, res) =>{
     try{
