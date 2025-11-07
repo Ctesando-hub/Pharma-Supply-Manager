@@ -2,6 +2,8 @@ import express from "express"; //Importa el modulo Express para crear el servido
 
 const router = express.Router(); //crea un enrutador de express, que permite organizar las rutas en modulos separados.
 
+import { getProductos, getProductoByID, crearProducto, actualizarProducto, eliminarProducto } from "../controllers/productos_controller.js";
+
 let productos = [
 { id: 1, nombre: "Paracetamol 500mg", laboratorio: "Bayer", precio: 120.0, stock: 50 },
 { id: 2, nombre: "Ibuprofeno 400mg", laboratorio: "Bagó", precio: 150.0, stock: 30 },
@@ -11,77 +13,31 @@ let productos = [
 //-------------------
 //Route GET - Devuelve todos los productos
 //-------------------
+router.get("/", getProductos)
 
-router.get("/", (req, res)=>{
-        res.json(productos); 
-});
 
-//GET ID
-router.get("/:id",(req,res)=>{
-    const id = parseInt(req.params.id); // Extrae el parámetro "id" de la URL y lo convierte a número entero.
-    const producto = productos.find((p) => p.id === id); // Busca el producto cuyo id coincida con el recibido.
-    if (!producto){
-        return res.status(404).json({ mensaje: "Producto no encontrado"});
-    }
-    res.json(producto); // Si lo encuentra, envía el producto en formato JSON.
-});
+
+//GET ID (Usa el controlador)
+router.get("/:id",getProductoByID)
 
 
 //--------------------
-//Route POST -Crear nuevo producto
+//Route POST - Crear nuevo producto (usa el controlador)
 //--------------------
-
-router.post("/",(req,res)=>{
-    const {nombre, laboratorio, precio, stock} = req.body; // Extrae las propiedades del cuerpo (body) de la petición.
-
-// Validar datos
-    if (!nombre || !laboratorio || !precio || !stock) {
-        return res.status(400).json({ mensaje: "Faltan datos del producto" });// Si falta alguno, responde con error 400 (Bad Request).
-    }
-    const nuevoproducto ={  // Crea un nuevo objeto proveedor con un id incremental
-        id: productos.length +1,
-        nombre,
-        laboratorio,
-        precio,
-        stock,
-    };
-    productos.push(nuevoproducto);   // Agrega el nuevo producto al array de productos existente
-    res.status(201).json({mensaje: "Producto agregado correctamente", producto: nuevoproducto});// Devuelve una respuesta 201 (Created) con un mensaje y el producto agregado.
-
-});
+router.post("/", crearProducto);
 
 //-----------------
 //Route PUT -Actualizar un producto
 //-----------------
 
-router.put("/:id", (req, res)=>{
-    const id = parseInt(req.params.id); // Extrae el parámetro "id" de la URL y lo convierte a número entero.
-    const index = productos.findIndex((p) => p.id === id);  
-    
-    if (index === -1){
-        return res.status(404).json({ mensaje: "Producto no encontrado" });
-    }
-    const { nombre, laboratorio, precio, stock } = req.body;
-    productos[index] = { id, nombre, laboratorio, precio, stock };
-    res.json({ mensaje: "Producto actualizado correctamente", producto: productos[index] });
-});
+router.put("/:id",actualizarProducto );
 
 
 //-------------------
 //Route DELETE
 //-------------------
 
-router.delete("/:id",(req,res)=> {
-    const id = parseInt(req.params.id); // Extrae el parámetro "id" de la URL y lo convierte a número entero. 
-    const index = productos.findIndex((p) => p.id === id); 
-    if (index === -1) {
-    return res.status(404).json({ mensaje: "Producto no encontrado" });
-    } 
-    const productoEliminado = productos.splice(index, 1);
-    res.json({ mensaje: "Producto eliminado correctamente", producto: productoEliminado })
-});
-
-
+router.delete("/:id", eliminarProducto);
 
 
 
