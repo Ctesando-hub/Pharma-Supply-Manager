@@ -2,6 +2,8 @@ import express from "express"; //Importa el modulo Express para crear el servido
 
 const router = express.Router(); //crea un enrutador de express, que permite organizar las rutas en modulos separados.
 
+import {getClientes, getClientesByID, getClienteByName} from "../controllers/clientes_controller.js"
+
 let clientes = [
     {
     id: 1,
@@ -46,22 +48,18 @@ let clientes = [
 ];
 
 //-------------------
-//Route GET - Devuelve todos los clientes
+//Route GET - 
 //-------------------
 
-router.get("/", (req, res)=>{
-        res.json(clientes); 
-});
+router.get("/", getClientes); //Devuelve todos los clientes
+
 
 //GET ID
-router.get("/:id",(req,res)=>{
-    const id = parseInt(req.params.id); // Extrae el parámetro "id" de la URL y lo convierte a número entero.
-    const cliente = clientes.find((p) => p.id === id); // Busca el cliente cuyo id coincida con el recibido.
-    if (!cliente){
-        return res.status(404).json({ mensaje: "Cliente no encontrado"});
-    }
-    res.json(cliente); // Si lo encuentra, envía el cliente en formato JSON.
-});
+router.get("/:id", getClientesByID)
+
+//GET SEARCH
+router.get("/:nombre", getClienteByName);
+
 
 
 //--------------------
