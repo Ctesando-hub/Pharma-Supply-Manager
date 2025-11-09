@@ -12,7 +12,7 @@ import {crearCliente, getClientes, getClientesByID, searchClientes, actualizarCl
 router.get("/", getClientes); //Devuelve todos los clientes
 
 //GET SEARCH
-router.get("/:nombre",searchClientes);
+router.get("/search", searchClientes);
 
 //GET ID
 router.get("/:id", getClientesByID)
