@@ -2,7 +2,7 @@ import express from "express"; //Importa el modulo Express para crear el servido
 
 const router = express.Router(); //crea un enrutador de express, que permite organizar las rutas en modulos separados.
 
-import { getProductos, getProductoByID,getProductoByName, crearProducto, actualizarProducto, eliminarProducto } from "../controllers/productos_controller.js";
+import { getProductos, getProductoByID, searchProductos, crearProducto, actualizarProducto, eliminarProducto } from "../controllers/productos_controller.js";
 
 
 //-------------------
@@ -10,14 +10,11 @@ import { getProductos, getProductoByID,getProductoByName, crearProducto, actuali
 //-------------------
 router.get("/", getProductos)
 
-
+// Ruta GET /search → busca productos por nombre
+router.get("/search", searchProductos);
 
 //GET ID (Usa el controlador)
 router.get("/:id",getProductoByID)
-
-//GET NAME (usa el controlador)
-
-router.get("/:nombre",getProductoByName)
 
 
 //--------------------

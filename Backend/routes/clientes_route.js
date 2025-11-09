@@ -2,7 +2,7 @@ import express from "express"; //Importa el modulo Express para crear el servido
 
 const router = express.Router(); //crea un enrutador de express, que permite organizar las rutas en modulos separados.
 
-import {getClientes, getClientesByID, getClienteByName} from "../controllers/clientes_controller.js"
+import {getClientes, getClientesByID, searchClientes} from "../controllers/clientes_controller.js"
 
 let clientes = [
     {
@@ -53,13 +53,11 @@ let clientes = [
 
 router.get("/", getClientes); //Devuelve todos los clientes
 
+//GET SEARCH
+router.get("/:nombre",searchClientes);
 
 //GET ID
 router.get("/:id", getClientesByID)
-
-//GET SEARCH
-router.get("/:nombre", getClienteByName);
-
 
 
 //--------------------

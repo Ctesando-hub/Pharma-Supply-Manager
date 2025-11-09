@@ -26,18 +26,34 @@ export const getProductoByID = async (req, res) =>{
     }
 };
 
-//Controller GET ID *Obtener un producto especifico
-export const getProductoByName = async (req, res) =>{
+//Controller GET SEARCH 
+export const  searchProductos = async (req, res) =>{
     try{
-        const {nombre} = req.params;
+        const {nombre} = req.query; // viene de ?nombre=
 
-        // Simular la busqueda en bd
-        const producto = { id, nombre: "PRODUCTO 1",  descripcion: "Medicamento", precio:100, stock: 300, id_proveedor: "4"};
-
-        if (!producto){
-            return res.status(404).json({ message: "producto simulado no encontrado"});
+        if (!nombre) {
+            return res.status(400).json({ message: "Debe proporcionar un parámetro de búsqueda (?nombre=...)" });
         }
-            return res.status(200).json({ message: "Producto simulado encontrado", data: producto});
+
+        // Simular búsqueda en BD
+        console.log(`Buscando productos que contengan: ${nombre}`);
+
+         // Simula una búsqueda en base de datos
+    const productosSimulados = [
+        { id: 1, nombre: "Ibuprofeno", descripcion: "Analgésico y antiinflamatorio", precio: 100, stock: 200, id_proveedor: 4 },
+        { id: 2, nombre: "Paracetamol", descripcion: "Analgésico y antipirético", precio: 80, stock: 150, id_proveedor: 3 },
+        { id: 3, nombre: "Amoxicilina", descripcion: "Antibiótico", precio: 120, stock: 90, id_proveedor: 2 },
+    ];
+
+        const resultados = productosSimulados.filter(p =>
+            p.nombre.toLowerCase().includes(nombre.toLowerCase())
+        );
+
+        if (resultados.length === 0) {
+            return res.status(404).json({ message: "No se encontraron productos con ese nombre" });
+        }
+
+        return res.status(200).json({ message: "Resultados de búsqueda", data: resultados });
     } catch(error){
         return res.status(500).json({ message: "Error al buscar producto", error: error.message});
     }
