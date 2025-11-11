@@ -1,10 +1,10 @@
 
-import { getAllProductos, getProductoByIDModel, searchProductosModel, crearProductoModel, actualizarProductoModel, eliminarProductoModel } from "../models/productos_model.js";
+import {actualizarProductoService, crearProductoService, eliminarProductoService, getProductoByIDService, getProductosService, searchProductosService } from "../services/productos_service.js";
 
 // Controlador para obtener todos los productos
 export const getProductos = async (req, res) =>{
     try{
-        const productos = await getAllProductos(); //LLama al modelo para traer todos los productos
+        const productos = await getProductosService(); //LLama al servicio para traer todos los productos
         return res.status(200).json({ message: "Lista de productos obtenida correctamente", data: productos });
     } catch(error) {
         res.status(500).json({message: "Error al obtener productos", error: error.message});
@@ -18,7 +18,7 @@ export const getProductoByID = async (req, res) =>{
         const {id} = req.params;
 
         
-        const producto = await getProductoByIDModel(id);
+        const producto = await getProductoByIDService(id);
 
         if (!producto){
             return res.status(404).json({ message: "producto no encontrado"});
@@ -38,7 +38,7 @@ export const  searchProductos = async (req, res) =>{
             return res.status(400).json({ message: "Debe proporcionar un parámetro de búsqueda (?nombre=...)" });
         }
 
-        const productosBuscados = await searchProductosModel(nombre);
+        const productosBuscados = await searchProductosService(nombre);
 
         if (productosBuscados.length === 0) {
             return res.status(404).json({ message: "No se encontraron productos con ese nombre" });
@@ -53,13 +53,13 @@ export const  searchProductos = async (req, res) =>{
 // Controlador para crear un nuevo producto
 export const crearProducto = async (req, res) =>{
     try{
-        const { nombre, descripcion, precio,stock, id_proveedor} = req.body; //extraer los datos del body
+        const { nombre, descripcion, precio, id_proveedor} = req.body; //extraer los datos del body
 
         // Validamos que sean campos obligatorios
-        if(!nombre || !descripcion ||!precio || !stock || !id_proveedor){
+        if(!nombre || !descripcion ||!precio || !id_proveedor){
             return res.status(400).json({ message: "Faltan datos obligatorios"});
         }
-            const nuevoProducto = await crearProductoModel({nombre, descripcion, precio, stock , id_proveedor});
+            const nuevoProducto = await crearProductoService({nombre, descripcion, precio, id_proveedor});
             res.status(201).json({ message: "Producto creado correctamente", data: nuevoProducto});       
 
         } catch (error){
@@ -73,7 +73,7 @@ export const actualizarProducto =  async (req, res) => {
         const {id} =  req.params;
         const producto = req.body;
 
-        const productoActualizado =  await actualizarProductoModel(id, producto);
+        const productoActualizado =  await actualizarProductoService(id, producto);
         
             if (!productoActualizado) {
             return res.status(404).json({ message: "Producto no encontrado" });
@@ -92,7 +92,7 @@ export const actualizarProducto =  async (req, res) => {
 export const eliminarProducto =  async (req, res) =>{
     try{
         const {id} = req.params;
-        const eliminado = await eliminarProductoModel(id);
+        const eliminado = await eliminarProductoService(id);
 
         if (!eliminado){
             return res.status(404).json({ message:"Producto no encontrado"});
