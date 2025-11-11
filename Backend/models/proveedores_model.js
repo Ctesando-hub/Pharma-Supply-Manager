@@ -4,7 +4,19 @@ import { getConnection } from "../config/dbConnection.js";
 export const getProveedoresModel = async () => {
     const conn = await getConnection();
     try {
-    const [rows] = await conn.execute("SELECT * FROM Proveedores");
+    const [rows] = await conn.execute(`
+        SELECT 
+        p.id_proveedor,
+        p.nombre,
+        p.telefono,
+        p.email,
+        p.direccion,
+        c.nombre AS ciudad,
+        pr.nombre AS provincia
+        FROM Proveedores p
+        INNER JOIN Ciudades c ON p.id_ciudad = c.id_ciudad
+        INNER JOIN Provincias pr ON c.id_provincia = pr.id_provincia
+    `);
     return rows;
     } catch (error) {
     console.error("Error al obtener proveedores:", error.message);
@@ -18,10 +30,19 @@ export const getProveedoresModel = async () => {
 export const getProveedorByIDModel = async (id) => {
     const conn = await getConnection();
     try {
-    const [rows] = await conn.execute(
-      "SELECT * FROM Proveedores WHERE id_proveedor = ?",
-        [id]
-    );
+    const [rows] = await conn.execute(`SELECT 
+        p.id_proveedor,
+        p.nombre,
+        p.telefono,
+        p.email,
+        p.direccion,
+        c.nombre AS ciudad,
+        pr.nombre AS provincia
+        FROM Proveedores p
+        INNER JOIN Ciudades c ON p.id_ciudad = c.id_ciudad
+        INNER JOIN Provincias pr ON c.id_provincia = pr.id_provincia
+        WHERE p.id_proveedor = ?`,[id]);
+    
     if (rows.length === 0) {
         throw new Error("Proveedor no encontrado");
     }

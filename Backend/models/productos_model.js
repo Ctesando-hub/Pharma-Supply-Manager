@@ -4,24 +4,42 @@ import { getConnection } from "../config/dbConnection.js";
 export const getAllProductos = async () => {
     const conn = await getConnection();
     try {
-    const [rows] = await conn.execute("SELECT * FROM Productos");
-    return rows;
+        const [rows] = await conn.execute(`
+            SELECT 
+                p.id_producto,
+                p.nombre,
+                p.descripcion,
+                p.precio,
+                pr.nombre AS proveedor
+            FROM Productos p
+            LEFT JOIN Proveedores pr ON p.id_proveedor = pr.id_proveedor
+        `);
+        
+        return rows;
     } catch (error) {
-    console.error("Error al obtener productos:", error.message);
-    throw new Error("No se pudieron obtener los productos");
+        console.error("Error al obtener productos:", error.message);
+        throw new Error("No se pudieron obtener los productos");
     } finally {
-    await conn.end();
+        await conn.end();
     }
 };
+
 
 // Obtener producto por ID
 export const getProductoByIDModel = async (id) => {
     const conn = await getConnection();
     try {
-    const [rows] = await conn.execute(
-      "SELECT * FROM Productos WHERE id_producto = ?",
-        [id]
-    );
+    const [rows] = await conn.execute(`
+        SELECT 
+        p.id_producto,
+        p.nombre,
+        p.descripcion,
+        p.precio,
+        pr.nombre AS proveedor
+        FROM Productos p
+        LEFT JOIN Proveedores pr ON p.id_proveedor = pr.id_proveedor
+        WHERE p.id_producto = ?`, [id]);
+
     if (rows.length === 0) {
         throw new Error("Producto no encontrado");
     }
@@ -38,10 +56,15 @@ export const getProductoByIDModel = async (id) => {
 export const searchProductosModel = async (nombre) => {
     const conn = await getConnection();
     try {
-    const [rows] = await conn.execute(
-      "SELECT * FROM Productos WHERE LOWER(nombre) LIKE LOWER(?)",
-        [`%${nombre}%`]
-    );
+    const [rows] = await conn.execute(`SELECT 
+        p.id_producto,
+        p.nombre,
+        p.descripcion,
+        p.precio,
+        pr.nombre AS proveedor
+        FROM Productos p
+        LEFT JOIN Proveedores pr ON p.id_proveedor = pr.id_proveedor
+        WHERE LOWER(p.nombre) LIKE LOWER(?)`, [`%${nombre}%`]);
     return rows;
     } catch (error) {
     console.error("Error al buscar productos:", error.message);
