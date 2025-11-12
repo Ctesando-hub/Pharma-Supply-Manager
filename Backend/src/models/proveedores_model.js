@@ -1,4 +1,4 @@
-import { getConnection } from "../config/dbConnection.js";
+import { getConnection } from "../config/dbConnection.js"; 
 
 // Obtener todos los proveedores
 export const getProveedoresModel = async () => {

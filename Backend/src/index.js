@@ -58,3 +58,4 @@ app.use("/api/stock", stockRouters); //usa el router de stock con el prefijo /st
 app.listen(PORT, () =>{
     console.log(`Servidor escuchando en el puerto ${PORT}`);
 });
+
