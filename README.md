@@ -1,15 +1,15 @@
 # Pharma Supply Manager
 
-Sistema de gestión de cadena de suministro farmacéutica desarrollado con Node.js, Express y SQL Server.
+Sistema de gestión de cadena de suministro farmacéutica desarrollado con Node.js, Express y MySQL.
 
 ## Descripción
-Pharma Supply Manager permite gestionar proveedores, proveedores, sucursales y stock dentro de una red farmacéutica.  
+Pharma Supply Manager permite gestionar productos, proveedores, clientes, pedidos y stock dentro de una red farmacéutica.  
 El objetivo es optimizar la trazabilidad de los medicamentos y mejorar la eficiencia operativa.
 
 ## Tecnologías
 - Node.js  
 - Express  
-- SQL Server  
+- MySQL  
 - CORS  
 - Body-parser
 
