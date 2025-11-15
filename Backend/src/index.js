@@ -7,6 +7,8 @@ import proveedoresRouters from "./routes/proveedores_route.js";
 import clientesRouters from "./routes/clientes_route.js";
 import pedidosRouters from "./routes/pedidos_route.js";
 import stockRouters from "./routes/stock_route.js";
+import authRouters from "./routes/auth.routes.js";
+
 
 
 //  Configuramos dotenv para habilitar las variables de entorno
@@ -52,6 +54,10 @@ app.use("/api/pedidos", pedidosRouters); //usa el router de clientes con el pref
 
 //Stock
 app.use("/api/stock", stockRouters); //usa el router de stock con el prefijo /stock
+
+//auth
+app.use("/api/auth", authRouters);
+
 
 
 
