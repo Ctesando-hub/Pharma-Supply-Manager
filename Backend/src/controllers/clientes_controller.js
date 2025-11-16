@@ -6,10 +6,12 @@ import { getClientesService, getClienteByIDService, searchClienteService, crearC
 
 export const getClientes = async (req, res) => {
     try{
+    
         const clientes =  await getClientesService();
         res.status(200).json({ message: "Controlador funcionando: obteniendo toda la lista de Clientes", data: clientes});
 
     }catch (error) {
+    
         res.status(500).json({ message: "Error al obtener lista de Clientes", error: error.message});
     }
 };
@@ -19,9 +21,8 @@ export const getClientes = async (req, res) => {
 export const getClientesByID = async (req,res) => {
     try{
         const {id} = req.params;
-
         const clientes = await getClienteByIDService(id);
-
+        
           //validamos los datos
             if(!clientes) {
                 return res.status(404).json({ message: "Cliente no encontrado"});

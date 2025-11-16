@@ -8,12 +8,14 @@ export const login = async (req, res) => {
     const  {email, password } = req.body;
 
     try{
-        const user = await buscarUsuarioEmail(email);
+        const user = await buscarUsuarioEmail(email); //Buscar usuario por email
+
         if(!user) {
             return res.status(401).json({ message: "Usuario no encontrado"});
         }
          // Comparar contraseña ingresada vs hash en BD
         const passwordValida = await bcrypt.compare(password, user.password);
+
 
         if (!passwordValida) {
             return res.status(401).json({ message: "Contraseña incorrecta" });
@@ -21,23 +23,17 @@ export const login = async (req, res) => {
 
 
         // Payload del token
-        const payload = {
-            user: {
-                id: user.id_usuario,
-                email: user.email,
-                rol: user.rol
-            }
-        };
+        const payload = {id: user.id_usuario, email: user.email, rol: user.rol.toLowerCase()
+};
 
         // Generar token JWT
         const token = jwt.sign(payload, process.env.JWT_SECRET, {
             expiresIn: "1h",
         });
-
-        return res.json({ token });
+            console.log(">> Token generado correctamente");
+            return res.json({ token });
 
     } catch (error) {
-        console.error("Error en login:", error);
         return res.status(500).json({ mensaje: "Error del servidor" });
     }
 };

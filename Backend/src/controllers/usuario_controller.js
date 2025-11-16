@@ -4,6 +4,7 @@ import { getUsuarioService, getuUsuarioByIDService, searchUsuarioService, crearU
 
 export const getUsuario = async (req, res) => {
     try{
+        
         const usuarios = await getUsuarioService();
         res.status(200).json({ message: "Controlador funcionando: obteniendo toda la lista de Usuarios", data: usuarios});
 
@@ -16,9 +17,12 @@ export const getUsuario = async (req, res) => {
 //Controlador GET ID -Obtener un usuario especifico
 export const getUsuarioByID = async (req,res) => {
     try{
+
         const {id} = req.params;
 
         const usuarios = await getuUsuarioByIDService(id);
+        
+
             //validamos los datos
             if(!usuarios) {
                 return res.status(404).json({ message: "Usuario no encontrado"});
@@ -97,9 +101,11 @@ export const actualizarUsuario =  async (req, res) => {
 export const eliminarUsuario =  async (req, res) =>{
     try{
         const {id} = req.params;
+
         const usuario_eliminado = await eliminarUsuarioService(id);
+        
         if(!usuario_eliminado){
-                return res.status(404).json({ message:"Usuario no encontrado"});
+            return res.status(404).json({ message:"Usuario no encontrado"});
         }
         res.status(200).json({ message: `Usuario con el ID: ${id} eliminado correctamente`});
     } catch (error){

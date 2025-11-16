@@ -5,39 +5,43 @@ const router = express.Router();
 
 import { actualizarUsuario, crearUsuario, eliminarUsuario, getUsuario, getUsuarioByID, searchUsuario } from "../controllers/usuario_controller.js";
 
+import { auth } from "../middleware/auth_middleware.js";
+import { authorizeRole } from "../middleware/authorizeRole.js";
+
+
 //-------------------
 //Route GET 
 //-------------------
 
-router.get("/", getUsuario); // -Obtener todos los usuarios
+router.get("/", auth, authorizeRole("admin"), getUsuario); // -Obtener todos los usuarios
 
 // GET SEARCH -Obtener usuario por su nombre
-router.get("/search", searchUsuario);
+router.get("/search", auth, authorizeRole("admin"), searchUsuario);
 
 
 //GET ID -Obtener usuario por su ID
-router.get("/:id",getUsuarioByID);
+router.get("/:id", auth, authorizeRole("admin"), getUsuarioByID);
 
 
 
 //--------------------
 //Route POST -Crear nuevo Usuario
 //--------------------
-
-router.post("/",crearUsuario);
+//auth, authorizeRole("admin"),
+router.post("/", auth, authorizeRole("admin"), crearUsuario);
 
 //-----------------
 //Route PUT -Actualizar un usuario
 //-----------------
 
-router.put("/:id", actualizarUsuario);
+router.put("/:id", auth, authorizeRole("admin"), actualizarUsuario);
 
 
 //-------------------
 //Route DELETE
 //-------------------
 
-router.delete("/:id", eliminarUsuario);
+router.delete("/:id", auth, authorizeRole("admin"), eliminarUsuario);
 
 
 // -------------------------

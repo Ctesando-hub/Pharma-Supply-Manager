@@ -10,7 +10,11 @@ export const buscarUsuarioEmail = async (email) => {
             u.email,
             u.password,
             u.id_rol,
-            r.nombre AS rol
+        CASE 
+            WHEN r.nombre = 'Administrador' THEN 'admin'
+            WHEN r.nombre = 'Gerente' THEN 'gerente'
+            WHEN r.nombre = 'Empleado' THEN 'empleado'
+        END AS rol
             FROM Usuarios u
             INNER JOIN Roles r ON u.id_rol = r.id_rol
             WHERE u.email = ?

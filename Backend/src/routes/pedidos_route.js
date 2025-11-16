@@ -3,40 +3,45 @@ import express from "express"; //Importa el modulo Express para crear el servido
 const router = express.Router(); //crea un enrutador de express, que permite organizar las rutas en modulos separados.
 
 import{getPedidos, searchPedidos, getPedidosByID, crearPedidos, actualizarPedido, eliminarPedido} from "../controllers/pedidos_controller.js";
+
+import { auth } from "../middleware/auth_middleware.js";
+import { authorizeRole } from "../middleware/authorizeRole.js";
+
+
 //-------------------
 //Route GET - Devuelve todos los pedidos
 //-------------------
 
-router.get("/",getPedidos); //Devuelve todos los pedidos 
+router.get("/", auth, authorizeRole("admin", "gerente", "empleado"), getPedidos); //Devuelve todos los pedidos 
 
 // --------------------
 // GET SEARCH - Buscar pedidos por estado o cliente
 // --------------------
-router.get("/search", searchPedidos);
+router.get("/search", auth, authorizeRole("admin", "gerente", "empleado"), searchPedidos);
 
 
 //GET ID
-router.get("/:id",getPedidosByID);
+router.get("/:id", auth, authorizeRole("admin", "gerente", "empleado"), getPedidosByID);
 
 //--------------------
 //Route POST -Crear nuevo pedido
 //--------------------
 
-router.post("/", crearPedidos);
+router.post("/", auth, authorizeRole("admin", "gerente", "empleado"), crearPedidos);
 
 
 //-----------------
 //Route PUT -Actualizar datos de un Pedido
 //-----------------
 
-router.put("/:id", actualizarPedido);
+router.put("/:id",auth, authorizeRole("admin", "gerente"), actualizarPedido);
 
 
 //-------------------
 //Route DELETE
 //-------------------
 
-router.delete("/:id",eliminarPedido);
+router.delete("/:id", auth, authorizeRole("admin"),eliminarPedido);
 
 
 

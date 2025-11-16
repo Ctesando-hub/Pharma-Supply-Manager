@@ -4,38 +4,40 @@ const router = express.Router(); //crea un enrutador de express, que permite org
 
 import { actualizarStock, crearStock, eliminarStock, getStock, getStockByID, searchStock } from "../controllers/stock_controller.js";
 
+import { auth } from "../middleware/auth_middleware.js";
+import { authorizeRole } from "../middleware/authorizeRole.js";
+
 //-------------------
 //Route GET 
 //-------------------
 
-router.get("/", getStock); //- Devuelve lista de stock
+router.get("/", auth, authorizeRole("admin", "gerente", "empleado"), getStock); //- Devuelve lista de stock
 
 //GET SEARCH -Busca Stock por producto
-
-router.get("/search", searchStock);
+router.get("/search", auth, authorizeRole("admin", "gerente", "empleado"), searchStock);
 
 //GET ID
-router.get("/:id",getStockByID);
+router.get("/:id", auth, authorizeRole("admin", "gerente", "empleado"), getStockByID);
 
 
 //--------------------
 //Route POST -Crear nuevo stock
 //--------------------
 
-router.post("/",crearStock);
+router.post("/", auth, authorizeRole("admin", "gerente"), crearStock);
 
 //-----------------
 //Route PUT -Actualizar Stock
 //-----------------
 
-router.put("/:id", actualizarStock);
+router.put("/:id", auth, authorizeRole("admin", "gerente"), actualizarStock);
 
 
 //-------------------
 //Route DELETE
 //-------------------
 
-router.delete("/:id",eliminarStock);
+router.delete("/:id", auth, authorizeRole("admin"),eliminarStock);
 
 
 

@@ -4,37 +4,40 @@ const router = express.Router(); //crea un enrutador de express, que permite org
 
 import { getProveedores, getProveedorByID, searchProveedor, crearProveedor,actualizarProveedor, eliminarProveedor } from "../controllers/proveedores_controller.js";
 
+import { auth } from "../middleware/auth_middleware.js";
+
+import { authorizeRole } from "../middleware/authorizeRole.js";
 
 //-------------------
 //Route GET - 
 //-------------------
 
-router.get("/", getProveedores); //Devuelve todos los proveedores
+router.get("/", auth, authorizeRole("admin", "gerente", "empleado"), getProveedores); //Devuelve todos los proveedores
 
 //GET serach
-router.get("/search", searchProveedor);
+router.get("/search", auth, authorizeRole("admin", "gerente", "empleado"), searchProveedor);
 
 //GET ID
-router.get("/:id", getProveedorByID);
+router.get("/:id", auth, authorizeRole("admin", "gerente", "empleado"), getProveedorByID);
 
 //--------------------
 //Route POST -Crear nuevo proveedor
 //--------------------
 
-router.post("/", crearProveedor);
+router.post("/", auth, authorizeRole("admin", "gerente", "empleado"), crearProveedor);
 
 //-----------------
 //Route PUT -Actualizar un proveedor
 //-----------------
 
-router.put("/:id", actualizarProveedor);
+router.put("/:id", auth, authorizeRole("admin", "gerente"), actualizarProveedor);
 
 
 //-------------------
 //Route DELETE
 //-------------------
 
-router.delete("/:id",eliminarProveedor);
+router.delete("/:id", auth, authorizeRole("admin"), eliminarProveedor);
 
 
 export default router; //exporta el router para poder usarlo en otros archivos, como en index.js.
