@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import logger from "../utils/logger.js"; 
 
 /**
  * Middleware de autenticación basado en JSON Web Tokens (JWT).
@@ -26,6 +27,7 @@ export const auth = (req, res, next) => {
 
     // Si no se envió token, se deniega acceso
     if (!token) {
+        logger.warn(`Acceso denegado: no se proporcionó token.`);
         return res.status(401).json({ message: "Token requerido" });
     }
 
@@ -33,9 +35,10 @@ export const auth = (req, res, next) => {
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
         // Si es inválido o expiró → 403
         if (err) {
+            logger.error(`Token inválido o expirado. Ruta: ${req.originalUrl} | Error: ${err.message}`);
             return res.status(403).json({ message: "Token inválido" });
         }
-
+            logger.info(`Token válido. Usuario: ${decoded.email} | Rol: ${decoded.rol}`);
         // Si es correcto, guarda los datos del usuario en la request
         req.user = decoded;
         
