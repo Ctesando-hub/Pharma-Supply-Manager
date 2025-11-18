@@ -15,8 +15,8 @@ export const buscarUsuarioEmail = async (email) => {
             WHEN r.nombre = 'Gerente' THEN 'gerente'
             WHEN r.nombre = 'Empleado' THEN 'empleado'
         END AS rol
-            FROM Usuarios u
-            INNER JOIN Roles r ON u.id_rol = r.id_rol
+            FROM usuarios u
+            INNER JOIN roles r ON u.id_rol = r.id_rol
             WHERE u.email = ?
             LIMIT 1`, [email]);
 

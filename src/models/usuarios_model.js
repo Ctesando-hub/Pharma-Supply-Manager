@@ -14,9 +14,9 @@ export const getUsuariosModel = async () => {
         s.nombre AS sucursal,
         u.activo,
         u.fecha_creacion
-        FROM Usuarios u
-        INNER JOIN Roles r ON r.id_rol = u.id_rol
-        INNER JOIN Sucursales s ON s.id_sucursal = u.id_sucursal
+        FROM usuarios u
+        INNER JOIN roles r ON r.id_rol = u.id_rol
+        INNER JOIN sucursales s ON s.id_sucursal = u.id_sucursal
         ORDER BY u.id_usuario ASC`);
     return rows;
     } catch (error) {
@@ -40,9 +40,9 @@ export const getUsuarioByIDModel = async (id) => {
         s.nombre AS sucursal,
         u.activo,
         u.fecha_creacion
-        FROM Usuarios u
-        INNER JOIN Roles r ON r.id_rol = u.id_rol
-        INNER JOIN Sucursales s ON s.id_sucursal = u.id_sucursal
+        FROM usuarios u
+        INNER JOIN roles r ON r.id_rol = u.id_rol
+        INNER JOIN sucursales s ON s.id_sucursal = u.id_sucursal
         WHERE u.id_usuario = ?`,[id]);
     
     if (rows.length === 0) {
@@ -62,7 +62,7 @@ export const searchUsuarioModel = async (nombre) => {
     const conn = await getConnection();
     try {
     const [rows] = await conn.execute(
-      "SELECT * FROM Usuarios WHERE LOWER(nombre) LIKE LOWER(?)",
+      "SELECT * FROM usuarios WHERE LOWER(nombre) LIKE LOWER(?)",
         [`%${nombre}%`]
     );
     return rows;
@@ -81,7 +81,7 @@ export const crearUsuarioModel = async (usuario) => {
     const conn = await getConnection();
     try {
     const [result] = await conn.execute(
-        "INSERT INTO Usuarios ( nombre, apellido, email, password, id_rol, id_sucursal, activo, fecha_creacion) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+        "INSERT INTO usuarios ( nombre, apellido, email, password, id_rol, id_sucursal, activo, fecha_creacion) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
         [ nombre, apellido, email, password, id_rol, id_sucursal, activo, fecha_creacion]
     );
     return { id: result.insertId, ...usuario };
@@ -101,7 +101,7 @@ export const actualizarUsuarioModel = async (id, usuario) => {
     const conn = await getConnection();
     try {
     const [result] = await conn.execute(
-        "UPDATE Usuarios SET nombre=?, apellido=?, email=?, password=?, id_rol=?, id_sucursal=?, activo=?, fecha_creacion=? WHERE id_usuario=?",
+        "UPDATE usuarios SET nombre=?, apellido=?, email=?, password=?, id_rol=?, id_sucursal=?, activo=?, fecha_creacion=? WHERE id_usuario=?",
         [ nombre, apellido, email, password, id_rol, id_sucursal, activo, fecha_creacion, id]
     );
     if (result.affectedRows === 0) {
@@ -121,7 +121,7 @@ export const eliminarUsuarioModel = async (id) => {
     const conn = await getConnection();
     try {
     const [result] = await conn.execute(
-        "DELETE FROM Usuarios WHERE id_usuario = ?",
+        "DELETE FROM usuarios WHERE id_usuario = ?",
         [id]
     );
     if (result.affectedRows === 0) {

@@ -13,9 +13,9 @@ export const getProveedoresModel = async () => {
         p.direccion,
         c.nombre AS ciudad,
         pr.nombre AS provincia
-        FROM Proveedores p
-        INNER JOIN Ciudades c ON p.id_ciudad = c.id_ciudad
-        INNER JOIN Provincias pr ON c.id_provincia = pr.id_provincia
+        FROM proveedores p
+        INNER JOIN ciudades c ON p.id_ciudad = c.id_ciudad
+        INNER JOIN provincias pr ON c.id_provincia = pr.id_provincia
     `);
     return rows;
     } catch (error) {
@@ -38,9 +38,9 @@ export const getProveedorByIDModel = async (id) => {
         p.direccion,
         c.nombre AS ciudad,
         pr.nombre AS provincia
-        FROM Proveedores p
-        INNER JOIN Ciudades c ON p.id_ciudad = c.id_ciudad
-        INNER JOIN Provincias pr ON c.id_provincia = pr.id_provincia
+        FROM proveedores p
+        INNER JOIN ciudades c ON p.id_ciudad = c.id_ciudad
+        INNER JOIN provincias pr ON c.id_provincia = pr.id_provincia
         WHERE p.id_proveedor = ?`,[id]);
     
     if (rows.length === 0) {
@@ -60,7 +60,7 @@ export const searchProveedoresModel = async (nombre) => {
     const conn = await getConnection();
     try {
     const [rows] = await conn.execute(
-      "SELECT * FROM Proveedores WHERE LOWER(nombre) LIKE LOWER(?)",
+      "SELECT * FROM proveedores WHERE LOWER(nombre) LIKE LOWER(?)",
         [`%${nombre}%`]
     );
     return rows;
@@ -78,7 +78,7 @@ export const crearProveedorModel = async (proveedor) => {
     const conn = await getConnection();
     try {
     const [result] = await conn.execute(
-        "INSERT INTO Proveedores (nombre, telefono, email, direccion, id_ciudad) VALUES (?, ?, ?, ?, ?)",
+        "INSERT INTO proveedores (nombre, telefono, email, direccion, id_ciudad) VALUES (?, ?, ?, ?, ?)",
         [nombre, telefono, email, direccion, id_ciudad]
     );
     return { id: result.insertId, ...proveedor };
@@ -96,7 +96,7 @@ export const actualizarProveedorModel = async (id, proveedor) => {
     const conn = await getConnection();
     try {
     const [result] = await conn.execute(
-        "UPDATE Proveedores SET nombre=?, telefono=?, email=?, direccion=?, id_ciudad=? WHERE id_proveedor=?",
+        "UPDATE proveedores SET nombre=?, telefono=?, email=?, direccion=?, id_ciudad=? WHERE id_proveedor=?",
         [nombre, telefono, email, direccion, id_ciudad, id]
     );
     if (result.affectedRows === 0) {
@@ -116,7 +116,7 @@ export const eliminarProveedorModel = async (id) => {
     const conn = await getConnection();
     try {
     const [result] = await conn.execute(
-        "DELETE FROM Proveedores WHERE id_proveedor = ?",
+        "DELETE FROM proveedores WHERE id_proveedor = ?",
         [id]
     );
     if (result.affectedRows === 0) {

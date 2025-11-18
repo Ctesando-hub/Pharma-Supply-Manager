@@ -15,10 +15,10 @@ export const getClientesModel = async () => {
         t.id_tipo AS tipo,
         c.nombre AS ciudad,
         pr.nombre AS provincia
-        FROM Clientes cl
-        INNER JOIN Ciudades c ON cl.id_ciudad = c.id_ciudad
-        INNER JOIN Provincias pr ON c.id_provincia = pr.id_provincia
-        INNER JOIN Tiposcliente t ON cl.id_tipo = t.id_tipo
+        FROM clientes cl
+        INNER JOIN ciudades c ON cl.id_ciudad = c.id_ciudad
+        INNER JOIN provincias pr ON c.id_provincia = pr.id_provincia
+        INNER JOIN tiposcliente t ON cl.id_tipo = t.id_tipo
         ORDER BY cl.id_cliente ASC`);
     return rows;
     } catch (error) {
@@ -43,10 +43,10 @@ export const getClienteByIDModel = async (id) => {
         t.id_tipo AS tipo,
         c.nombre AS ciudad,
         pr.nombre AS provincia
-        FROM Clientes cl
-        INNER JOIN Ciudades c ON cl.id_ciudad = c.id_ciudad
-        INNER JOIN Provincias pr ON c.id_provincia = pr.id_provincia
-        INNER JOIN Tiposcliente t ON cl.id_tipo = t.id_tipo
+        FROM clientes cl
+        INNER JOIN ciudades c ON cl.id_ciudad = c.id_ciudad
+        INNER JOIN provincias pr ON c.id_provincia = pr.id_provincia
+        INNER JOIN tiposcliente t ON cl.id_tipo = t.id_tipo
         WHERE cl.id_cliente = ?`,[id]);
     
     if (rows.length === 0) {
@@ -75,10 +75,10 @@ export const searchClienteModel = async (nombre) => {
         t.id_tipo AS tipo,
         c.nombre AS ciudad,
         pr.nombre AS provincia
-        FROM Clientes cl
-        INNER JOIN Ciudades c ON cl.id_ciudad = c.id_ciudad
-        INNER JOIN Provincias pr ON c.id_provincia = pr.id_provincia
-        INNER JOIN Tiposcliente t ON cl.id_tipo = t.id_tipo
+        FROM clientes cl
+        INNER JOIN ciudades c ON cl.id_ciudad = c.id_ciudad
+        INNER JOIN provincias pr ON c.id_provincia = pr.id_provincia
+        INNER JOIN tiposcliente t ON cl.id_tipo = t.id_tipo
         WHERE LOWER(cl.nombre) LIKE LOWER(?)`, [`%${nombre}%`]);
     return rows;
     } catch (error) {
@@ -94,7 +94,7 @@ export const crearClienteModel = async (cliente) => {
     const conn = await getConnection();
     try {
     const [result] = await conn.execute(
-        "INSERT INTO Clientes (nombre, cuit, telefono, direccion, email, id_ciudad, id_tipo) VALUES (?, ?, ?, ?, ?, ?, ?)",
+        "INSERT INTO clientes (nombre, cuit, telefono, direccion, email, id_ciudad, id_tipo) VALUES (?, ?, ?, ?, ?, ?, ?)",
         [nombre, cuit, telefono, direccion, email, id_ciudad, id_tipo]);
 
     return { id: result.insertId, ...cliente };
@@ -113,7 +113,7 @@ export const actualizarClienteModel = async (id, cliente) => {
     const conn = await getConnection();
     try {
     const [result] = await conn.execute(
-        "UPDATE Clientes SET nombre=?, cuit=?, direccion=?, telefono=?, email=?, id_ciudad=?, id_tipo=? WHERE id_cliente=?",
+        "UPDATE clientes SET nombre=?, cuit=?, direccion=?, telefono=?, email=?, id_ciudad=?, id_tipo=? WHERE id_cliente=?",
         [nombre, cuit, telefono, direccion, email, id_ciudad, id_tipo, id]
     );
     if (result.affectedRows === 0) {
@@ -134,7 +134,7 @@ export const eliminarClienteModel = async (id) => {
     const conn = await getConnection();
     try {
     const [result] = await conn.execute(
-        "DELETE FROM Clientes WHERE id_cliente = ?",
+        "DELETE FROM clientes WHERE id_cliente = ?",
         [id]
     );
     if (result.affectedRows === 0) {

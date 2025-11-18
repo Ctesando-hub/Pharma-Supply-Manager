@@ -62,8 +62,8 @@ export const searchProductosModel = async (nombre) => {
         p.descripcion,
         p.precio,
         pr.nombre AS proveedor
-        FROM Productos p
-        LEFT JOIN Proveedores pr ON p.id_proveedor = pr.id_proveedor
+        FROM productos p
+        LEFT JOIN proveedores pr ON p.id_proveedor = pr.id_proveedor
         WHERE LOWER(p.nombre) LIKE LOWER(?)`, [`%${nombre}%`]);
     return rows;
     } catch (error) {
@@ -80,7 +80,7 @@ export const crearProductoModel = async (producto) => {
     const conn = await getConnection();
     try {
     const [result] = await conn.execute(
-        "INSERT INTO Productos (nombre, descripcion, precio, id_proveedor) VALUES (?, ?, ?, ?)",
+        "INSERT INTO productos (nombre, descripcion, precio, id_proveedor) VALUES (?, ?, ?, ?)",
         [nombre, descripcion, precio, id_proveedor]
     );
     return { id: result.insertId, ...producto };
@@ -98,7 +98,7 @@ export const actualizarProductoModel = async (id, producto) => {
     const conn = await getConnection();
     try {
     const [result] = await conn.execute(
-        "UPDATE Productos SET nombre=?, descripcion=?, precio=?, id_proveedor=? WHERE id_producto=?",
+        "UPDATE productos SET nombre=?, descripcion=?, precio=?, id_proveedor=? WHERE id_producto=?",
         [nombre, descripcion, precio, id_proveedor, id]
     );
     if (result.affectedRows === 0) {
@@ -118,7 +118,7 @@ export const eliminarProductoModel = async (id) => {
     const conn = await getConnection();
     try {
     const [result] = await conn.execute(
-        "DELETE FROM Productos WHERE id_producto = ?",
+        "DELETE FROM productos WHERE id_producto = ?",
         [id]
     );
     if (result.affectedRows === 0) {

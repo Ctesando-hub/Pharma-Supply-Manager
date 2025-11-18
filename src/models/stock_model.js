@@ -59,8 +59,8 @@ export const searchStockModel = async (nombre) => {
         s.cantidad_disponible,
         s.punto_reposicion,
         s.ultima_actualizacion
-        FROM Stock s
-        INNER JOIN Productos p ON s.id_producto = p.id_producto
+        FROM stock s
+        INNER JOIN productos p ON s.id_producto = p.id_producto
         WHERE LOWER(p.nombre) LIKE LOWER(?)`, [`%${nombre}%`]);
     return rows;
     } catch (error) {
@@ -78,7 +78,7 @@ export const crearStockModel = async (stock) => {
     const conn = await getConnection();
     try {
     const [resultado] = await conn.execute(
-        "INSERT INTO Stock (id_producto, cantidad_disponible, punto_reposicion, ultima_actualizacion) VALUES (?, ?, ?, ?)",
+        "INSERT INTO stock (id_producto, cantidad_disponible, punto_reposicion, ultima_actualizacion) VALUES (?, ?, ?, ?)",
         [id_producto, cantidad_disponible, punto_reposicion, ultima_actualizacion]);
 
     return { id: resultado.insertId, ...stock };
@@ -100,7 +100,7 @@ export const actualizarStockModel = async (id, stock) => {
 
     try {
     const [resultado] = await conn.execute(
-        "UPDATE Stock SET id_producto=?, cantidad_disponible=?, punto_reposicion=?, ultima_actualizacion=? WHERE id_stock=?",
+        "UPDATE stock SET id_producto=?, cantidad_disponible=?, punto_reposicion=?, ultima_actualizacion=? WHERE id_stock=?",
         [id_producto, cantidad_disponible, punto_reposicion, ultima_actualizacion, id]);
     
         if (resultado.affectedRows === 0) {
@@ -122,7 +122,7 @@ export const eliminarStockModel = async (id) => {
     const conn = await getConnection();
     try {
     const [result] = await conn.execute(
-        "DELETE FROM Stock WHERE id_stock = ?",[id]);
+        "DELETE FROM stock WHERE id_stock = ?",[id]);
 
     if (result.affectedRows === 0) {
         throw new Error("Stock no encontrado");

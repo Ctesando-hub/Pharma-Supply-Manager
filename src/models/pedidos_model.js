@@ -97,7 +97,7 @@ export const crearPedidoModel = async (pedido) => {
     const conn = await getConnection();
     try {
     const [result] = await conn.execute(
-        "INSERT INTO Pedidos (fecha, total, id_cliente, id_usuario, id_sucursal, id_estado) VALUES (?, ?, ?, ?, ?, ?)",
+        "INSERT INTO pedidos (fecha, total, id_cliente, id_usuario, id_sucursal, id_estado) VALUES (?, ?, ?, ?, ?, ?)",
         [fecha, total, id_cliente, id_usuario, id_sucursal, id_estado]
     );
     return { id: result.insertId, ...pedido};
@@ -118,7 +118,7 @@ export const actualizarPedidoModel = async (id, pedido) => {
 
     try {
     const [result] = await conn.execute(
-        "UPDATE Pedidos SET fecha=?, total=?, id_cliente=?, id_usuario=?, id_sucursal=?, id_estado=? WHERE id_pedido=?",
+        "UPDATE pedidos SET fecha=?, total=?, id_cliente=?, id_usuario=?, id_sucursal=?, id_estado=? WHERE id_pedido=?",
         [fecha, total, id_cliente, id_usuario, id_sucursal, id_estado, id]
     );
     if (result.affectedRows === 0) {
@@ -140,7 +140,7 @@ export const eliminarPedidoModel = async (id) => {
     const conn = await getConnection();
     try {
     const [result] = await conn.execute(
-        "DELETE FROM Pedidos WHERE id_pedido = ?",[id]);
+        "DELETE FROM pedidos WHERE id_pedido = ?",[id]);
 
             if (result.affectedRows === 0) {
         throw new Error("Producto no encontrado");
