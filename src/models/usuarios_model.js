@@ -62,8 +62,18 @@ export const searchUsuarioModel = async (nombre) => {
     const conn = await getConnection();
     try {
     const [rows] = await conn.execute(
-      "SELECT * FROM usuarios WHERE LOWER(nombre) LIKE LOWER(?)",
-        [`%${nombre}%`]
+        `SELECT u.id_usuario,
+                u.nombre,
+                u.apellido,
+                u.email,
+                r.nombre AS rol,
+                s.nombre AS sucursal,
+                u.activo,
+                u.fecha_creacion
+                FROM usuarios u
+                INNER JOIN roles r ON r.id_rol = u.id_rol
+                INNER JOIN sucursales s ON s.id_sucursal = u.id_sucursal WHERE LOWER(nombre) LIKE LOWER(?)`,
+                [`%${nombre}%`]
     );
     return rows;
     } catch (error) {

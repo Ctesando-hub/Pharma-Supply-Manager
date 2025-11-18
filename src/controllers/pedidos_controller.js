@@ -126,7 +126,7 @@ export const actualizarPedido = async (req, res) => {
 export const eliminarPedido =  async (req, res) =>{
     try{
         const {id} = req.params;
-        ogger.info(`DELETE /pedidos/${id} → Eliminando pedido`);
+        loggerogger.info(`DELETE /pedidos/${id} → Eliminando pedido`);
 
         const pedido_eliminado = await eliminarPedidosService(id);
 
