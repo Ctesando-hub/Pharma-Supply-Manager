@@ -70,9 +70,9 @@ export const searchUsuarioModel = async (nombre) => {
                 s.nombre AS sucursal,
                 u.activo,
                 u.fecha_creacion
-                FROM usuarios u \
-                INNER JOIN roles r ON r.id_rol = u.id_rol \
-                INNER JOIN sucursales s ON s.id_sucursal = u.id_sucursal \ WHERE LOWER(nombre) LIKE LOWER(?)`,
+                FROM usuarios u 
+                INNER JOIN roles r ON r.id_rol = u.id_rol 
+                INNER JOIN sucursales s ON s.id_sucursal = u.id_sucursal  WHERE LOWER(u.nombre) LIKE LOWER(?)`,
                 [`%${nombre}%`]
     );
     return rows;
