@@ -116,10 +116,12 @@ export const actualizarProducto =  async (req, res) => {
 //Controlador para eliminar un producto
 
 export const eliminarProducto =  async (req, res) =>{
-    logger.info(`DELETE /productos/${id} - Eliminando producto`);
+    
     try{
         const {id} = req.params;
+        logger.info(`DELETE /productos/${id} - Eliminando producto`);
         const eliminado = await eliminarProductoService(id);
+
 
         if (!eliminado){
             logger.warn(`Producto ID ${id} no encontrado para eliminar`);

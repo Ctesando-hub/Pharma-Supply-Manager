@@ -11,7 +11,7 @@ export const getAllProductos = async () => {
                 p.descripcion,
                 p.precio,
                 pr.nombre AS proveedor
-            FROM Productos p
+            FROM productos p
             LEFT JOIN Proveedores pr ON p.id_proveedor = pr.id_proveedor
         `);
         
@@ -36,8 +36,8 @@ export const getProductoByIDModel = async (id) => {
         p.descripcion,
         p.precio,
         pr.nombre AS proveedor
-        FROM Productos p
-        LEFT JOIN Proveedores pr ON p.id_proveedor = pr.id_proveedor
+        FROM productos p
+        LEFT JOIN proveedores pr ON p.id_proveedor = pr.id_proveedor
         WHERE p.id_producto = ?`, [id]);
 
     if (rows.length === 0) {
