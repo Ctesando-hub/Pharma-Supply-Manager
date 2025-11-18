@@ -6,7 +6,9 @@
 
 // Importamos el paquete mysql2 con soporte de promesas
 import mysql from 'mysql2/promise';
+import dotenv from 'dotenv';
 
+dotenv.config();
 
 // Función para obtener la conexión
 export async function getConnection() {
