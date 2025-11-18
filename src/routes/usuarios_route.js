@@ -16,7 +16,7 @@ import { authorizeRole } from "../middleware/authorizeRole.js";
 router.get("/", auth, authorizeRole("admin"), getUsuario); // -Obtener todos los usuarios
 
 // GET SEARCH -Obtener usuario por su nombre
-router.get("/search", auth, authorizeRole("admin"), searchUsuario);
+router.get("/search/:nombre", auth, authorizeRole("admin"), searchUsuario);
 
 
 //GET ID -Obtener usuario por su ID
