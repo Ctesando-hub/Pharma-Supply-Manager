@@ -10,7 +10,7 @@ import { getUsuariosModel, getUsuarioByIDModel, searchUsuarioModel, crearUsuario
 
 const mapUser = (user) => {
     return {
-        ...user,
+        ...user,// Copia todas las propiedades originales del objeto "user"
         activo: user.activo === 1   // Convierte 1→true y 0→false
     };
 };
@@ -21,7 +21,7 @@ export const getUsuarioService = async () =>{
     return usuarios.map(mapUser);
 };
 
-//--------SERVICIO GET BY ------------*
+
 //--------SERVICIO GET BY ID ------------*
 export const getuUsuarioByIDService = async (id) => {
     const usuario = await getUsuarioByIDModel(id);

@@ -1,0 +1,30 @@
+# --------------------------
+# CONFIG LOCAL (para trabajar en tu PC)
+# --------------------------
+# DB_HOST=localhost
+# DB_USER=root
+# DB_PASSWORD=root
+# DB_NAME=pharma_supply_manager
+# DB_PORT=3306
+
+# --------------------------
+# CONFIG PRODUCCIÓN (Railway)
+# --------------------------
+DB_HOST=xxxx.xxxxxx.xxxxxx.
+DB_USER=root
+DB_PASSWORD=**********************
+DB_NAME=railway
+DB_PORT=
+
+DB_URL=mysql://root:*****************pxXqm@mysql.railway.internal:3306/railway
+
+# --------------------------
+# OTROS AJUSTES
+# --------------------------
+PORT=3000
+NODE_ENV=production
+CORS_ORIGIN=https://pharma-supply-manager-production.up.railway.app
+
+#jwt
+JWT_SECRET=algo_super_secreto
+JWT_EXPIRES_IN=1h

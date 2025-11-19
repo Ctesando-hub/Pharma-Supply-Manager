@@ -1,12 +1,12 @@
 // auth_controller valida el usuario y password para generar el token => incluye rol
 
-import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
-import { buscarUsuarioEmail } from "../models/auth_model.js";
-import logger from "../utils/logger.js";
+import jwt from "jsonwebtoken"; // Importa la librería jsonwebtoken para generar y verificar tokens JWT
+import bcrypt from "bcryptjs"; // Importa bcryptjs para comparar contraseñas hasheadas
+import { buscarUsuarioEmail } from "../models/auth_model.js"; // Importa la función que busca un usuario por email en la base de datos
+import logger from "../utils/logger.js"; // Importa el logger configurado (Winston) para registrar eventos
 
-export const login = async (req, res) => {
-    const  {email, password } = req.body;
+export const login = async (req, res) => { // Exporta la función login para que pueda ser usada como controlador
+    const  {email, password } = req.body; // Extrae email y password del cuerpo de la petición
     logger.info(`Intento de login recibido: email=${email}`);
 
     try{
@@ -26,7 +26,7 @@ export const login = async (req, res) => {
         }
 
 
-        // Payload del token
+        // Payload del token - Crea el objeto con los datos que van dentro del JWT
         const payload = {id: user.id_usuario, email: user.email, rol: user.rol.toLowerCase()
 };
 

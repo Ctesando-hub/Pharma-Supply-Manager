@@ -131,7 +131,7 @@ export const eliminarPedido =  async (req, res) =>{
         const pedido_eliminado = await eliminarPedidosService(id);
 
         logger.info(`DELETE /pedidos/${id} → Pedido eliminado correctamente`);
-        res.status(200).json({ message: `Pedido con el ID: ${id} eliminado correctamente`, data: pedido_eliminado});
+        res.status(200).json({ message: `Pedido con el ID: ${id} eliminado correctamente`});
 
     } catch (error){
         logger.error(`Error en DELETE /pedidos/${req.params.id}:`, error);
