@@ -128,7 +128,7 @@ export const eliminarProducto =  async (req, res) =>{
             return res.status(404).json({ message:"Producto no encontrado"});
         }
         logger.info(`Producto ID ${id} eliminado`);
-        res.status(200).json({ message: "Producto eliminado correctamente", data: eliminado});
+        res.status(200).json({ message: "Producto eliminado correctamente"});
 
     } catch (error){
         logger.error("Error al eliminar producto", { error: error.message });

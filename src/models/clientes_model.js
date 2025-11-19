@@ -12,7 +12,7 @@ export const getClientesModel = async () => {
         cl.telefono,
         cl.direccion,
         cl.email,
-        t.id_tipo AS tipo,
+        t.nombre_tipo AS tipo,
         c.nombre AS ciudad,
         pr.nombre AS provincia
         FROM clientes cl
@@ -40,7 +40,7 @@ export const getClienteByIDModel = async (id) => {
         cl.telefono,
         cl.direccion,
         cl.email,
-        t.id_tipo AS tipo,
+        t.nombre_tipo AS tipo,
         c.nombre AS ciudad,
         pr.nombre AS provincia
         FROM clientes cl
@@ -72,7 +72,7 @@ export const searchClienteModel = async (nombre) => {
         cl.telefono,
         cl.direccion,
         cl.email,
-        t.id_tipo AS tipo,
+        t.nombre_tipo AS tipo,
         c.nombre AS ciudad,
         pr.nombre AS provincia
         FROM clientes cl

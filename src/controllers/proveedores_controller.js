@@ -58,7 +58,7 @@ export const searchProveedor = async (req, res) =>{
             return res.status(404).json({ message: "No se encontraron proveedores con ese nombre" });
         }
         logger.info(`Proveedores encontrados: ${ProveedoresBuscados.length}`);
-        return res.status(200).json({ message: "Resultados de búsqueda", data: ProveedoresBuscados });
+        return res.status(200).json({ message: "Resultados de búsqueda" });
 
     } catch(error){
         logger.error(`Error SEARCH /proveedores: ${error.message}`);
