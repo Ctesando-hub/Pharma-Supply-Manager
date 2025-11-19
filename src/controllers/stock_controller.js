@@ -126,7 +126,7 @@ export const eliminarStock =  async (req, res) =>{
             res.status(404).json({message: "Stock no encontrado"});
         }
         logger.info(`Stock ID ${id} eliminado correctamente`);
-        res.status(200).json({ message: `Stock con el ID: ${id} eliminado correctamente`, data: stockEliminado});
+        res.status(200).json({ message: `Stock con el ID: ${id} eliminado correctamente`});
 
     } catch (error){
         logger.error(`Error al eliminar Stock: ${error.message}`);

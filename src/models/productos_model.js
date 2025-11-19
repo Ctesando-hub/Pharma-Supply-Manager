@@ -12,7 +12,7 @@ export const getAllProductos = async () => {
                 p.precio,
                 pr.nombre AS proveedor
             FROM productos p
-            LEFT JOIN Proveedores pr ON p.id_proveedor = pr.id_proveedor
+            LEFT JOIN proveedores pr ON p.id_proveedor = pr.id_proveedor
         `);
         
         return rows;

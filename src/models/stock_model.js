@@ -11,7 +11,7 @@ export const getAllStockModel = async () => {
         s.cantidad_disponible,
         s.punto_reposicion,
         s.ultima_actualizacion
-        FROM Stock s
+        FROM stock s
         INNER JOIN Productos p ON s.id_producto = p.id_producto
         ORDER BY s.id_stock ASC`);
     return rows;
@@ -33,7 +33,7 @@ export const getStockByIDModel = async (id) => {
         s.cantidad_disponible,
         s.punto_reposicion,
         s.ultima_actualizacion
-        FROM Stock s
+        FROM stock s
         INNER JOIN Productos p ON s.id_producto = p.id_producto
         WHERE s.id_stock = ?`,[id]);
     

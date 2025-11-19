@@ -23,13 +23,14 @@ export const getProveedorByID = async (req,res) => {
         const {id} = req.params;
         logger.info(`GET /proveedores/${id} - Buscando proveedor`);
 
+        const proveedores = await getProveedorByIDService(id);
+
         //validamos los datos
             if(!proveedores) {
                 logger.warn(`Proveedor con ID ${id} no encontrado`);
                 return res.status(404).json({ message: "Proveedor no encontrado"});
             }
     
-        const proveedores = await getProveedorByIDService(id);
         logger.info(`Proveedor con ID ${id} encontrado`);    
         return res.status(200).json({ message: "Proveedor encontrado", data: proveedores});
 
