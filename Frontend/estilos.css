@@ -1,0 +1,283 @@
+:root {
+    --azul-marino: #0b1c2d;
+    --azul-marino-oscuro: #081423;
+    --blanco: #ffffff;
+    --magenta: #e6007e;
+    --gris-texto: #444;
+}
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    color: var(--gris-texto);
+}
+
+h1::after
+{
+    content: "";
+    display: block;
+    width: 110px;
+    height: 4px;
+    background-color: var(--magenta);
+    margin-top: 12px;
+    border-radius: 2px;
+}
+
+
+
+.navbar-custom {
+    background-color: var(--azul-marino);
+    color: var(--blanco);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 32px;
+}
+
+/* Lado izquierdo */
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+/* Caja del logo */
+.logo-box {
+    background-color: var(--blanco);
+    padding: 6px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Logo */
+.logo {
+    width: 80px;   /* 👈 acá está la clave */
+    height: auto;
+}
+
+/* Nombre del sistema */
+.software-name {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+
+
+.user-text {
+    font-size: 0.9rem;
+    opacity: 0.85;
+}
+
+.login-link {
+    color: var(--blanco);
+    background-color: var(--magenta);
+    padding: 12px 26px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    min-height: 42px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.login-link:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(230, 0, 126, 0.4);
+}
+
+.hero-section {
+    position: relative;
+    padding: 60px 0;
+    background-color: #ffffff; /* limpio */
+    overflow: hidden;
+}
+
+/* TEXTO */
+.hero-text h1 {
+    font-size: 2.4rem; /* un poco más chico */
+    font-weight: 700;
+    color: var(--azul-marino);
+}
+
+.hero-text p {
+    font-size: 1.05rem;
+    margin: 16px 0;
+    color: #333;
+}
+
+/* IMAGEN / MOCKUP */
+.hero-image {
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: -30px;
+    }
+
+
+.hero-image img {
+    width: 100%;
+    height: auto;
+}
+
+
+.features-section {
+    background-color: #0b1c2d;
+    color: white;
+}
+
+.section-title {
+    position: relative;
+    display: inline-block;
+}
+
+.section-title::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -10px;
+    width: 40%;
+    height: 4px;
+    background-color: var(--magenta);
+    border-radius: 2px;
+}
+
+
+.carousel-item img {
+    max-height: 400px;
+    object-fit: cover;
+}
+
+.carousel-caption {
+    background: rgba(0,0,0,0.5);
+    border-radius: 10px;
+    padding: 1rem;
+}
+.carousel h2::after {
+    content: "";
+    display: block;
+    width: 40px;
+    height: 3px;
+    opacity: 0.9;
+    background-color: #d63384; /* magenta */
+    margin: 10px auto 0;
+}
+
+
+.footer {
+    background-color: var(--azul-marino-oscuro);
+    color: var(--blanco);
+    padding: 32px 24px;
+    margin-top: 80px;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.footer-title {
+    font-weight: 600;
+    font-size: 16px;
+    position: relative;
+}
+
+.footer-title::after {
+    content: "";
+    display: block;
+    width: 40px;
+    height: 3px;
+    background-color: var(--magenta);
+    margin-top: 6px;
+    border-radius: 2px;
+}
+
+.footer-text {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #cfd6dd;
+    max-width: 420px;
+}
+
+.footer-copy {
+    font-size: 13px;
+    color: #b8c1c9;
+}
+
+/* Fondo */
+.login-body {
+    background: linear-gradient(135deg, #0b1c2d, #112f4a);
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Card */
+.login-card {
+    border-radius: 16px;
+    border: none;
+}
+
+/* Botón principal */
+.btn-primary {
+    background-color: #e91e63;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #d81b60;
+}
+
+/* Animación tipo bandera */
+@keyframes flameWave {
+    0% {
+        transform: rotate(0deg) translateX(0);
+    }
+    15% {
+        transform: rotate(2deg) translateX(2px);
+    }
+    30% {
+        transform: rotate(-2deg) translateX(-2px);
+    }
+    45% {
+        transform: rotate(1.5deg) translateX(1px);
+    }
+    60% {
+        transform: rotate(-1deg) translateX(-1px);
+    }
+    80% {
+        transform: rotate(0.5deg) translateX(0.5px);
+    }
+    100% {
+        transform: rotate(0deg) translateX(0);
+    }
+}
+
+/* Aplicación al logo */
+.logo.flame {
+    animation: flameWave 2s ease-out 1;
+    transform-origin: left center; /* 👈 clave: como bandera */
+}
+
+.back-link {
+    position: absolute;
+    top: 24px;
+    left: 24px;
+    color: var(--magenta);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    opacity: 0.9;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.back-link:hover {
+    opacity: 1;
+    transform: translateX(-3px);
+}
+
