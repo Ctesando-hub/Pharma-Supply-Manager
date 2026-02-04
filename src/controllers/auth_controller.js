@@ -4,6 +4,8 @@ import jwt from "jsonwebtoken"; // Importa la librería jsonwebtoken para genera
 import bcrypt from "bcryptjs"; // Importa bcryptjs para comparar contraseñas hasheadas
 import { buscarUsuarioEmail } from "../models/auth_model.js"; // Importa la función que busca un usuario por email en la base de datos
 import logger from "../utils/logger.js"; // Importa el logger configurado (Winston) para registrar eventos
+import cloudinary from "../config/cloudinary.js";
+
 
 export const login = async (req, res) => { // Exporta la función login para que pueda ser usada como controlador
     const  {email, password } = req.body; // Extrae email y password del cuerpo de la petición
@@ -42,3 +44,17 @@ export const login = async (req, res) => { // Exporta la función login para que
         return res.status(500).json({ mensaje: "Error del servidor" });
     }
 };
+
+
+// -*-*-*-*-*-*--REGISTROS-*-*-*-*-*-**-
+
+export const register = async (req, res) =>{
+    const{ nombre, apellido, email, password, rol, sucursal} = req.body;
+
+    looger.info(`Intento de registro: email=${email}`);
+
+   // try{
+        //validar campos obligatorios
+       // if( !nombre || !apellido || !email ||)
+   // }
+}

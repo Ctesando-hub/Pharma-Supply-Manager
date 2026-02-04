@@ -29,3 +29,25 @@ export const buscarUsuarioEmail = async (email) => {
         await conn.end();
     }
 }
+
+
+export const crearUsuario =  async (user) =>{
+    const conn = await getConnection();
+
+    try{
+        await conn.execute(
+            `INSERT INTO usuarios
+            (nombre, apellido, email, password, id_rol, id_sucursal, foto_url)
+            VALUES (?, ?, ?, ?, ?, ?, ?)`,
+            [
+                user.nombre, user.apellido, user.email, user.password, user.rol, user.sucursal || null, user.foto_url
+            ]
+        );
+
+    } catch(error){
+        console.error("Error en crearUsuario:", error.message);
+        throw new Error("Error: No se pudo crear el usuario");
+    }finally{
+        await conn.end();
+    }
+};
