@@ -86,13 +86,13 @@ export const searchUsuarioModel = async (nombre) => {
 
 // Crear un nuevo Usuario
 export const crearUsuarioModel = async (usuario) => {
-    const { nombre, apellido, email, password, id_rol, id_sucursal, activo, fecha_creacion} = usuario;
+    const { nombre, apellido, email, password, id_rol, id_sucursal, activo} = usuario;
 
     const conn = await getConnection();
     try {
     const [result] = await conn.execute(
-        "INSERT INTO usuarios ( nombre, apellido, email, password, id_rol, id_sucursal, activo, fecha_creacion) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-        [ nombre, apellido, email, password, id_rol, id_sucursal, activo, fecha_creacion]
+        "INSERT INTO usuarios ( nombre, apellido, email, password, id_rol, id_sucursal, activo) VALUES (?, ?, ?, ?, ?, ?, ?)",
+        [ nombre, apellido, email, password, id_rol, id_sucursal, activo]
     );
     return { id: result.insertId, ...usuario };
 

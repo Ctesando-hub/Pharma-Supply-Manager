@@ -9,7 +9,7 @@ import pedidosRouters from "./routes/pedidos_route.js";
 import stockRouters from "./routes/stock_route.js";
 import authRouters from "./routes/auth.routes.js";
 
-
+console.log("ESTE ES EL INDEX DEL BACKEND");
 
 //  Configuramos dotenv para habilitar las variables de entorno
 dotenv.config();
@@ -25,11 +25,7 @@ app.use(express.json());    // Permite recibir y procesar datos en formato JSON 
 // Si existe una variable de entorno PORT, la usamos. Si no, usamos el puerto 3000.
 const PORT = process.env.PORT || 3000;
 
-//  Ruta principal de prueba (endpoint raíz)
-// Sirve para comprobar que el servidor funciona correctamente.
-app.get("/", (req, res) => {
-res.send("Servidor Pharma Supply Manager funcionando correctamente");
-});
+
 
 
 //-------------------*
@@ -60,6 +56,9 @@ app.use("/api/auth", authRouters);
 
 
 
+app.get("/", (req, res) => {
+    res.send("Servidor Pharma Supply Manager funcionando correctamente");
+});
 
 app.listen(PORT, () =>{
     console.log(`Servidor escuchando en el puerto ${PORT}`);

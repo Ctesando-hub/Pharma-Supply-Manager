@@ -7,7 +7,5 @@ const router = Router();
 // LOGIN
 router.post("/login", login);
 
-//REGISTER (foto)
-router.post("/register", upload.single("foto"), register);
 
 export default router;

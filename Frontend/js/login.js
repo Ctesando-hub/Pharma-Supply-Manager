@@ -1,24 +1,29 @@
 
 document.addEventListener("DOMContentLoaded", () =>{  //Ejecuta el codigo cuando el HTML este cargado
-    const form =document.getElementById("registerForm");
+    const form =document.getElementById("formLogin");
     
     form.addEventListener("submit", async (e) =>{ //Escucha el evento click de Registrar, es asincronica porque va a usar await
         e.preventDefault(); //Evita que se recarge la pag y envie datos por HTML tradicional sino el fetch no serviria
 
-        const formData = new FormData(form); //FormData es un objeto que lee todos los inputs del form. Sirve para enviar datos por fetch
+        const email =  document.getElementById("email").value ;
+        const password = document.getElementById("password").value;
 
         try{  //manejo de errores
-            const response =  await fetch("http://localhost:3000/api/auth/register", { //Hace una peticion HTTP al backend
+            const response =  await fetch("http://localhost:3000/api/auth/login", { //Hace una peticion HTTP al backend
                 method: "POST",
-                body: formData  //cuando usamos FormData no hace falta enviar header
+                headers: {
+                    "Content-type": "application/json"
+                },
+                body: JSON.stringify({email, password})
             });
             const data = await response.json(); //lee la repuesta del servidor. Convierte a repuesta del backend en un JSON
 
             if (response.ok){ // status 200
-                alert("Usuario registrado correctamente"); //mensaje de exito
-                window.location.href = "login.html"; // lo envia al login
+                localStorage.setItem("token", data.token)
+                localStorage.setItem("rol", data.rol);
+                window.location.href = "panel.html"; // lo envia al panel
             }else {
-                alert(data.message || "Error al registrar"); //muestra o un mensaje generico o un mensaje personalizado
+                alert(data.message || "Error al Iniciar Sesion"); //muestra o un mensaje generico o un mensaje personalizado
             }
         } catch (error){ //captura el error
         console.error(error);

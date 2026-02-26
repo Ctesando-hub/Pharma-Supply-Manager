@@ -72,15 +72,15 @@ export const searchUsuario = async (req, res) => {
 export const crearUsuario = async (req, res) =>{
     try{
         logger.info("POST /usuarios → creando nuevo usuario");
-        const {nombre, apellido, email, password, id_rol, id_sucursal, activo, fecha_creacion} = req.body; //extraer los datos del body
+        const {nombre, apellido, email, password, id_rol, id_sucursal, activo} = req.body; //extraer los datos del body
 
         // Validamos que sean campos obligatorios
-        if(!nombre ||!apellido ||!email ||!password ||!id_rol ||!id_sucursal ||activo === undefined ||fecha_creacion === undefined ){
+        if(!nombre ||!apellido ||!email ||!password ||!id_rol ||!id_sucursal ||activo === undefined){
             logger.warn("Faltan datos obligatorios en crearUsuario");
             return res.status(400).json({ message: "Faltan datos obligatorios"});
         }
 
-            const nuevoUsuario = await crearUsuarioService({ nombre, apellido, email, password, id_rol, id_sucursal, activo, fecha_creacion});
+            const nuevoUsuario = await crearUsuarioService({ nombre, apellido, email, password, id_rol, id_sucursal, activo});
             logger.info(`Usuario creado correctamente`);
             res.status(201).json({ message: "Usuario creado correctamente", data: nuevoUsuario});       
 
