@@ -93,18 +93,82 @@ export const searchPedidoModel = async (nombre) => {
 
 // Crear un nuevo Pedido
 export const crearPedidoModel = async (pedido) => {
-    const { fecha, total, id_cliente, id_usuario, id_sucursal, id_estado } = pedido;
+    const {total, id_cliente, id_usuario, id_sucursal, id_estado, productos} = pedido;
+
+    console.log("PEDIDO RECIBIDO EN MODEL:", pedido);
+console.log("PRODUCTOS EN MODEL:", productos);
+console.log("TIPO:", typeof productos);
     const conn = await getConnection();
     try {
+        await conn.beginTransaction();
+
+        //Primero verifica el stock de los productos
+        for (const producto of productos){
+            const [stockActual] = await conn.execute(
+                `SELECT cantidad_disponible FROM stock WHERE id_producto = ?`,
+                [producto.id_producto]
+            );
+            
+            if (stockActual.length === 0) {
+                throw new Error(`PRODUCTO_NO_EXISTE`);
+            }
+
+            if(stockActual[0].cantidad_disponible < producto.cantidad){
+                throw new Error(`NO_HAY_STOCK`);
+            }
+        }
+
+        //Crear el pedido
     const [result] = await conn.execute(
-        "INSERT INTO pedidos (fecha, total, id_cliente, id_usuario, id_sucursal, id_estado) VALUES (?, ?, ?, ?, ?, ?)",
-        [fecha, total, id_cliente, id_usuario, id_sucursal, id_estado]
+        "INSERT INTO pedidos (total, id_cliente, id_usuario, id_sucursal, id_estado) VALUES (?, ?, ?, ?, ?)",
+        [total, id_cliente, id_usuario, id_sucursal, id_estado]
     );
-    return { id: result.insertId, ...pedido};
+    const idPedido =  result.insertId;
+
+    
+
+    //Insertar productos en detalles_pedidos y descontar stock
+    for( const producto of productos ){
+
+        await conn.execute(
+            `INSERT INTO detalles_pedidos
+            (id_pedido, id_producto, cantidad, precio_unitario)
+            VALUES(?, ? , ?, ?)`,
+            [
+                idPedido,
+                producto.id_producto,
+                producto.cantidad,
+                producto.precio_unitario
+            ]
+        );
+
+        await conn.execute(
+            `UPDATE stock
+            SET cantidad_disponible = cantidad_disponible - ?
+            WHERE id_producto = ?`,
+            [
+                producto.cantidad,
+                producto.id_producto
+            ]
+        );
+    }
+
+    await conn.commit();
+    return {id_pedido: idPedido};
 
     } catch (error) {
-    console.error("Error al crear pedido:", error.message);
-    throw new Error("No se pudo crear el pedido");
+    
+        await conn.rollback();
+
+        if (error.message === "NO_HAY_STOCK"){
+            throw new Error("No hay stock suficiente");
+        }
+        if(error.message === "PRODUCTO_NO_EXISTE"){
+            throw new Error("Uno de los productos no existe");
+        }
+
+        console.error("Error al crear pedido:", error.message);
+        throw new Error("No se pudo crear el pedido");
 
     } finally {
     await conn.end();
@@ -113,20 +177,57 @@ export const crearPedidoModel = async (pedido) => {
 
 // Actualizar producto
 export const actualizarPedidoModel = async (id, pedido) => {
-    const { fecha, total, id_cliente, id_usuario, id_sucursal, id_estado } = pedido;
+    const {total, id_cliente, id_usuario, id_sucursal, id_estado } = pedido;
     const conn = await getConnection();
 
     try {
+        await conn.beginTransaction();
+        
+        //Obtener el estado del pedido actual
+        const [pedidoActual] = await conn.execute(
+            "SELECT id_estado FROM pedidos WHERE id_pedido = ?", [id]
+        );
+
+        if (pedidoActual.length === 0) {
+            throw new Error("Pedido no encontrado");
+        }
+
+        const estadoActual = pedidoActual[0].id_estado;
+
+        //si el pedido pasa a cancelado
+        if(id_estado === 4 && estadoActual !==4){
+
+            //obtener producto del pedido
+            const [productos] = await conn.execute(
+                "SELECT id_producto, cantidad FROM detalles_pedidos WHERE id_pedido = ?", [id]
+            );
+
+            //Devolver el stock
+            for (const producto of productos) {
+                await conn,execute(
+                    `UPDATE stock
+                    SET cantidad_disponible = cantidad_disponible + ?
+                    WHERE id_producto = ?`,
+                    [producto.cantidad, producto.id_producto]
+                    
+                );
+            }
+        }
+
+        //Actuallizar el pedido
     const [result] = await conn.execute(
-        "UPDATE pedidos SET fecha=?, total=?, id_cliente=?, id_usuario=?, id_sucursal=?, id_estado=? WHERE id_pedido=?",
-        [fecha, total, id_cliente, id_usuario, id_sucursal, id_estado, id]
+        "UPDATE pedidos SET total=?, id_cliente=?, id_usuario=?, id_sucursal=?, id_estado=? WHERE id_pedido=?",
+        [total, id_cliente, id_usuario, id_sucursal, id_estado, id]
     );
     if (result.affectedRows === 0) {
         throw new Error("Pedido no encontrado");
     }
+    await conn.commit();
     return { id, ...pedido };
 
     } catch (error) {
+
+        await conn.rollback();
     console.error("Error al actualizar pedido:", error.message);
     throw new Error("No se pudo actualizar el pedido");
 

@@ -70,17 +70,22 @@ export const searchPedidos = async (req, res) => {
 //Controlador para crear un nuevo pedido
 export const crearPedidos = async (req, res) =>{
     try{
-        logger.info("POST /pedidos → Datos recibidos:", req.body);
+       // logger.info("POST /pedidos → Datos recibidos:", req.body);
+    console.log("BODY RECIBIDO:", req.body);
 
-        const { fecha, total, id_cliente, id_usuario, id_sucursal, id_estado } = req.body; //extraer los datos del body
+        const {total, id_cliente, id_usuario, id_sucursal, id_estado, productos } = req.body; //extraer los datos del body
 
         // Validamos que sean campos obligatorios
-        if( !fecha ||!total ||!id_cliente || !id_usuario ||!id_sucursal || !id_estado ){
+        if(!total ||!id_cliente || !id_usuario ||!id_sucursal || !id_estado ){
             logger.warn("POST /pedidos → Faltan datos obligatorios");
             return res.status(400).json({ message: "Faltan datos obligatorios"});
         }
-
-        const nuevoPedido = await crearPedidosService({fecha, total, id_cliente, id_usuario, id_sucursal, id_estado});
+        if(!productos || !Array.isArray(productos) || productos.length === 0){
+            logger.warn("POST /pedidos → El pedido debe contener productos");
+            return res.status(400).json({ message: "Debe incluir al menos un producto"});
+}
+        console.log("PRODUCTOS CONTROLLER:", productos);
+        const nuevoPedido = await crearPedidosService({total, id_cliente, id_usuario, id_sucursal, id_estado, productos});
     
         logger.info("POST /pedidos → Pedido creado exitosamente", nuevoPedido);
         res.status(201).json({ message: "Pedido creado correctamente", data: nuevoPedido});       
@@ -99,9 +104,9 @@ export const actualizarPedido = async (req, res) => {
         logger.info(`PUT /pedidos/${id} → Datos recibidos para actualizar`, req.body);
 
         // Validamos campos obligatorios
-        const { fecha, total, id_cliente, id_usuario, id_sucursal, id_estado } = pedido;
+        const {total, id_cliente, id_usuario, id_sucursal, id_estado } = pedido;
 
-        if (!fecha || !total || !id_cliente || !id_usuario || !id_sucursal || !id_estado) {
+        if (!total || !id_cliente || !id_usuario || !id_sucursal || !id_estado) {
             logger.warn(`PUT /pedidos/${id} → Faltan datos obligatorios`);
             return res.status(400).json({ message: "Faltan datos obligatorios" });
         }
