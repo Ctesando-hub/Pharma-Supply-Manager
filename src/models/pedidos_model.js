@@ -93,31 +93,55 @@ export const searchPedidoModel = async (nombre) => {
 
 // Crear un nuevo Pedido
 export const crearPedidoModel = async (pedido) => {
-    const {total, id_cliente, id_usuario, id_sucursal, id_estado, productos} = pedido;
+    const {id_cliente, id_usuario, id_sucursal, id_estado, productos} = pedido;
 
     console.log("PEDIDO RECIBIDO EN MODEL:", pedido);
-console.log("PRODUCTOS EN MODEL:", productos);
-console.log("TIPO:", typeof productos);
+    console.log("PRODUCTOS EN MODEL:", productos);
+    console.log("TIPO:", typeof productos);
+
     const conn = await getConnection();
     try {
         await conn.beginTransaction();
 
-        //Primero verifica el stock de los productos
-        for (const producto of productos){
-            const [stockActual] = await conn.execute(
+        let total = 0;
+
+        //Guardar la informacion ya validada
+        const productosProcesados  = [];
+
+        //validar + traer precio + stock
+        for (const producto of productos) {
+
+            //  TRAER PRECIO DESDE BD
+            const [productoDB] = await conn.execute(
+                `SELECT precio FROM productos WHERE id_producto = ?`,
+                [producto.id_producto]
+            );
+
+            if (productoDB.length === 0) {
+                throw new Error("PRODUCTO_NO_EXISTE");
+            }
+
+            const precio_unitario = productoDB[0].precio;
+
+        //verifica el stock de los productos
+        const [stockActual] = await conn.execute(
                 `SELECT cantidad_disponible FROM stock WHERE id_producto = ?`,
                 [producto.id_producto]
             );
             
-            if (stockActual.length === 0) {
-                throw new Error(`PRODUCTO_NO_EXISTE`);
-            }
-
             if(stockActual[0].cantidad_disponible < producto.cantidad){
                 throw new Error(`NO_HAY_STOCK`);
             }
-        }
 
+            //calcular total real
+            total += producto.cantidad * precio_unitario;
+            productosProcesados.push({
+                id_producto: producto.id_producto,
+                cantidad: producto.cantidad,
+                precio_unitario
+            });
+
+        }
         //Crear el pedido
     const [result] = await conn.execute(
         "INSERT INTO pedidos (total, id_cliente, id_usuario, id_sucursal, id_estado) VALUES (?, ?, ?, ?, ?)",
@@ -125,10 +149,8 @@ console.log("TIPO:", typeof productos);
     );
     const idPedido =  result.insertId;
 
-    
-
     //Insertar productos en detalles_pedidos y descontar stock
-    for( const producto of productos ){
+    for( const producto of productosProcesados ){
 
         await conn.execute(
             `INSERT INTO detalles_pedidos
@@ -144,9 +166,11 @@ console.log("TIPO:", typeof productos);
 
         await conn.execute(
             `UPDATE stock
-            SET cantidad_disponible = cantidad_disponible - ?
+            SET cantidad_disponible = cantidad_disponible - ?,
+            cantidad_reservada = cantidad_reservada + ?
             WHERE id_producto = ?`,
             [
+                producto.cantidad,
                 producto.cantidad,
                 producto.id_producto
             ]
@@ -176,26 +200,28 @@ console.log("TIPO:", typeof productos);
 };
 
 // Actualizar producto
-export const actualizarPedidoModel = async (id, pedido) => {
-    const {total, id_cliente, id_usuario, id_sucursal, id_estado } = pedido;
-    const conn = await getConnection();
+export const actualizarPedidoModel = async (id, pedido) => { //export permite usar funcion en otros archivos, pedido es el objeto que viene del controller
+    const {id_cliente, id_usuario, id_sucursal, id_estado } = pedido; //destructuracion del pedido
+    const conn = await getConnection(); //conexion con bd
 
     try {
-        await conn.beginTransaction();
+        await conn.beginTransaction(); //todas las ejecuciones se tratan como una unidad
         
         //Obtener el estado del pedido actual
         const [pedidoActual] = await conn.execute(
             "SELECT id_estado FROM pedidos WHERE id_pedido = ?", [id]
         );
 
-        if (pedidoActual.length === 0) {
+        if (pedidoActual.length === 0) { //verificamos si existe el pedido
             throw new Error("Pedido no encontrado");
         }
 
-        const estadoActual = pedidoActual[0].id_estado;
+        const estadoActual = pedidoActual[0].id_estado; //usamos [0] porque usamos el1er resultado de la bd
 
         //si el pedido pasa a cancelado
-        if(id_estado === 4 && estadoActual !==4){
+        console.log("id_estado:", id_estado, typeof id_estado);
+        console.log("estadoActual:", estadoActual, typeof estadoActual);
+        if (Number(id_estado) === 4 && Number(estadoActual) !== 4){ //para evitar devolver 2 veces el stock: si el nuevo estado es cancelado Y antes no estaba cancelado
 
             //obtener producto del pedido
             const [productos] = await conn.execute(
@@ -203,36 +229,43 @@ export const actualizarPedidoModel = async (id, pedido) => {
             );
 
             //Devolver el stock
-            for (const producto of productos) {
-                await conn,execute(
-                    `UPDATE stock
-                    SET cantidad_disponible = cantidad_disponible + ?
-                    WHERE id_producto = ?`,
-                    [producto.cantidad, producto.id_producto]
-                    
-                );
-            }
+            console.log("PRODUCTOS DEL PEDIDO:", productos);
+            for (const producto of productos) { //recorremos cada producto del pedido
+                const [resultStock] = await conn.execute(
+            `UPDATE stock
+            SET 
+            cantidad_disponible = cantidad_disponible + ?,
+            cantidad_reservada = GREATEST(cantidad_reservada - ?, 0)
+                WHERE id_producto = ?`, [producto.cantidad, producto.cantidad, producto.id_producto]
+);
+        console.log("UPDATE STOCK:", {
+        producto: producto.id_producto,
+        affectedRows: resultStock.affectedRows
+    });
         }
+    
+            }
+    
 
         //Actuallizar el pedido
     const [result] = await conn.execute(
-        "UPDATE pedidos SET total=?, id_cliente=?, id_usuario=?, id_sucursal=?, id_estado=? WHERE id_pedido=?",
-        [total, id_cliente, id_usuario, id_sucursal, id_estado, id]
+        "UPDATE pedidos SET id_cliente=?, id_usuario=?, id_sucursal=?, id_estado=? WHERE id_pedido=?",
+        [id_cliente, id_usuario, id_sucursal, id_estado, id]
     );
-    if (result.affectedRows === 0) {
+    if (result.affectedRows === 0) { //verifica si se actualizo
         throw new Error("Pedido no encontrado");
     }
-    await conn.commit();
-    return { id, ...pedido };
+    await conn.commit(); //confirma los cambios
+    return { id, ...pedido }; //devuelve la repuesta
 
-    } catch (error) {
+    } catch (error) { //si algo falla manejamos errores
 
-        await conn.rollback();
+        await conn.rollback(); //Esto deshace todo lo que pasó dentro de la transacción
     console.error("Error al actualizar pedido:", error.message);
     throw new Error("No se pudo actualizar el pedido");
 
     } finally {
-    await conn.end();
+    await conn.end(); //Siempre cerramos la conexión a la base. Esto es muy importante para evitar fugas de conexiones
     }
 };
 

@@ -7,6 +7,7 @@ import proveedoresRouters from "./routes/proveedores_route.js";
 import clientesRouters from "./routes/clientes_route.js";
 import pedidosRouters from "./routes/pedidos_route.js";
 import stockRouters from "./routes/stock_route.js";
+import compraRouters from "./routes/compras_route.js"
 import authRouters from "./routes/auth.routes.js";
 
 console.log("ESTE ES EL INDEX DEL BACKEND");
@@ -50,6 +51,9 @@ app.use("/api/pedidos", pedidosRouters); //usa el router de clientes con el pref
 
 //Stock
 app.use("/api/stock", stockRouters); //usa el router de stock con el prefijo /stock
+
+//Compras
+app.use("/api/compras", compraRouters); //usa el router de compras con el prefijo /compras
 
 //auth
 app.use("/api/auth", authRouters);

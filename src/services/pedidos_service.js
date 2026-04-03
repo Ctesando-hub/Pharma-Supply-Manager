@@ -14,7 +14,40 @@ export const searchPedidoService = async (nombre) => {
 };
 
 export const crearPedidosService = async (pedido) => {
-    return await crearPedidoModel(pedido);
+    const {id_cliente, id_usuario, id_sucursal, productos} = pedido;
+
+     // Validación de datos obligatorios
+    if (!id_cliente || !id_usuario || !id_sucursal) {
+        throw new Error("Faltan datos obligatorios");
+    }
+
+    if(!productos || !Array.isArray(productos)||productos.length === 0){
+        throw new Error("El pedido debe tener al menos un producto");
+    }
+    let total = 0;
+    for (const producto of productos){
+        if(!producto.id_producto == null || !producto.cantidad == null){
+            throw new Error("Producto invalido");
+        }
+          //  Validación lógica
+        if (producto.cantidad <= 0) {
+            throw new Error("La cantidad debe ser mayor a 0");
+        }
+
+        if (producto.precio_unitario < 0) {
+            throw new Error("El precio no puede ser negativo");
+        }
+        total += producto.cantidad * producto.precio_unitario;
+    }
+    const id_estado = 1; //siempre sera pendiente 
+    return await crearPedidoModel({
+        total,
+        id_cliente,
+        id_usuario,
+        id_sucursal,
+        id_estado,
+        productos
+    });
 };
 
 export const actualizarPedidoService = async (id, pedido) => {
