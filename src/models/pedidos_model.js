@@ -245,6 +245,30 @@ export const actualizarPedidoModel = async (id, pedido) => { //export permite us
         }
     
             }
+            // si el pedido pasa a COMPLETADO
+if (Number(id_estado) === 3 && Number(estadoActual) !== 3){
+
+    const [productos] = await conn.execute(
+        "SELECT id_producto, cantidad FROM detalles_pedidos WHERE id_pedido = ?", [id]
+    );
+
+    console.log("PRODUCTOS DEL PEDIDO (COMPLETADO):", productos);
+
+    for (const producto of productos) {
+
+        const [resultStock] = await conn.execute(
+            `UPDATE stock
+            SET cantidad_reservada = GREATEST(cantidad_reservada - ?, 0)
+            WHERE id_producto = ?`,
+            [producto.cantidad, producto.id_producto]
+        );
+
+        console.log("UPDATE STOCK COMPLETADO:", {
+            producto: producto.id_producto,
+            affectedRows: resultStock.affectedRows
+        });
+    }
+}
     
 
         //Actuallizar el pedido
