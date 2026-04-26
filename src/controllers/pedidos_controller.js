@@ -70,7 +70,7 @@ export const searchPedidos = async (req, res) => {
 //Controlador para crear un nuevo pedido
 export const crearPedidos = async (req, res) =>{
     try{
-       // logger.info("POST /pedidos → Datos recibidos:", req.body);
+
     console.log("BODY RECIBIDO:", req.body);
 
         const {id_cliente, id_usuario, id_sucursal, productos } = req.body; //extraer los datos del body
