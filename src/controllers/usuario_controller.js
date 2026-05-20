@@ -90,7 +90,7 @@ export const crearUsuario = async (req, res) =>{
     }
 };
 
-//Controlador para actualizar Stock
+//Controlador para actualizar Usuario
 export const actualizarUsuario =  async (req, res) => {
     try{
         const {id} =  req.params;
@@ -115,7 +115,7 @@ export const actualizarUsuario =  async (req, res) => {
 
 };
 
-//Controlador para eliminar un cliente
+//Controlador para eliminar un usuario
 
 export const eliminarUsuario =  async (req, res) =>{
     try{

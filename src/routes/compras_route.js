@@ -27,7 +27,7 @@ router.get("/:id", auth, authorizeRole("admin", "gerente", "empleado"), getCompr
 //Route POST -Crear nueva compra
 //--------------------
 
-router.post("/", auth, authorizeRole("admin", "gerente", "empleado"), crearCompras);
+router.post("/", auth, authorizeRole("admin", "gerente"), crearCompras);
 
 
 //-----------------

@@ -92,7 +92,7 @@ export const crearUsuarioModel = async (usuario) => {
     try {
     const [result] = await conn.execute(
         "INSERT INTO usuarios ( nombre, apellido, email, password, id_rol, id_sucursal, activo) VALUES (?, ?, ?, ?, ?, ?, ?)",
-        [ nombre, apellido, email, password, id_rol, id_sucursal, activo]
+        [ nombre, apellido, email, password, id_rol, id_sucursal, 1]
     );
     return { id: result.insertId, ...usuario };
 

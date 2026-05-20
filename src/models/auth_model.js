@@ -7,6 +7,8 @@ export const buscarUsuarioEmail = async (email) => {
         const [rows] = await conn.execute(
             `SELECT 
             u.id_usuario,
+            u.nombre,
+            u.apellido,
             u.email,
             u.password,
             u.id_rol,

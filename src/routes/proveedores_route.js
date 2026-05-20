@@ -24,7 +24,7 @@ router.get("/:id", auth, authorizeRole("admin", "gerente", "empleado"), getProve
 //Route POST -Crear nuevo proveedor
 //--------------------
 
-router.post("/", auth, authorizeRole("admin", "gerente", "empleado"), crearProveedor);
+router.post("/", auth, authorizeRole("admin", "gerente"), crearProveedor);
 
 //-----------------
 //Route PUT -Actualizar un proveedor
