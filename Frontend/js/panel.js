@@ -1,9 +1,11 @@
+    import { alertSuccess, alertError, confirmDelete } from "./alerts.js"
+    
     const token = localStorage.getItem("token"); // Obtiene el token de autenticación guardado en el navegador
     const rol = localStorage.getItem("rol"); // Obtiene el rol del usuario guardado en el navegador
     const nombre = localStorage.getItem("nombre"); //Obtiene el nombre del usuario y apellido
     const apellido = localStorage.getItem("apellido");
     const API_URL = "http://localhost:3000";
-
+console.log("panel cargado");
 
 document.addEventListener("DOMContentLoaded", () =>{ // Espera a que todo el HTML del documento esté cargado antes de ejecutar el JS
     //Seguridad basica del frontend
@@ -16,6 +18,8 @@ document.addEventListener("DOMContentLoaded", () =>{ // Espera a que todo el HTM
     mostrarUsuario();
 
     registrarEventos();
+
+    inicializarPasswordToggle();
 
 });
 
@@ -163,8 +167,6 @@ function mostrarSeccion(seccion) {
     document.getElementById(seccion).classList.remove("d-none");
 }
 
-
-
 //MANEJAR MODULO
 function manejarModulo(modulo) {
 
@@ -239,9 +241,10 @@ function registrarEventos(){
         if (e.target.id === "btnGuardarUsuario") {
             guardarUsuario();
         }
+
     });
 }
-// TRAER USUARIOS
+// TRAER USUARIOS 
 async function cargarUsuarios() {
 
     try {
@@ -288,8 +291,6 @@ async function cargarUsuarios() {
 //SALIR DE SECCION USUARIOS
 function volverHomePanel() {
 
-    console.log("CLICK VOLVER OK");
-
     // OCULTAR TODAS LAS SECCIONES
     document.querySelectorAll(".module-section").forEach(s => {
         s.classList.add("d-none");
@@ -303,11 +304,11 @@ function volverHomePanel() {
 //FUNCION ELIMINAR USUARIOS
 async function eliminarUsuario(id) {
     try{ // manejo de bloque 
-        const confirmar = confirm("¿Seguro que querés eliminar este usuario?"); //muestra un poup del navegador con mensaje
+        const confirmar = await confirmDelete("¿Seguro que querés eliminar este usuario?"); //muestra un poup del navegador con mensaje
 
-        if(!confirmar) return;
-        const res = await fetch(`${API_URL}/api/usuarios/${id}`, { //peticion al backend
-            method: "DELETE",
+        if (!confirmar.isConfirmed) return;
+        const res = await fetch(`${API_URL}/api/usuarios/${id}/eliminar`, { //peticion al backend
+            method: "PATCH",
             headers: { // cabecera HTTP, metaddata del la request
                 "Content-Type": "application/json", //lo que se envia es json
                 "Authorization": `Bearer ${token}` //envio del token (Bearer es el esquema de autenticacion y token esta guardado en el localStorage)
@@ -316,18 +317,18 @@ async function eliminarUsuario(id) {
         const data = await res.json(); //convierte la repuesta del backend en un objeto JS
 
         if(!res.ok){ //si hay error muestra el mensaje
-            alert(data.message || "Error al eliminar usuario");
+            await alertError(data.message || "Error al eliminar usuario");
             return; //corta la ejecucion si hubo error
         }
 
-        alert(data.message); //mensaje de exito
+        await alertSuccess(data.message); //mensaje de exito
 
         //refrescar tabla
         cargarUsuarios();
 
     }catch (error){ //captura el error
         console.error("Error eliminando usuario:", error); //mensaje debbug
-        alert("Error de conexión con el servidor");
+        await alertError("Error de conexión con el servidor");
     }
 };
 
@@ -337,8 +338,14 @@ function abrirModalNuevoUsuario() {
     // limpiar formulario
     limpiarFormulario();
 
+    // ocultar estado
+    document.getElementById("contenedorEstado").classList.add("d-none");
+    document.getElementById("contenedorPassword").style.display = "block";
+
     // cambiar título
     document.querySelector("#usuarioModal .modal-title").innerText = "Nuevo Usuario";
+
+    document.getElementById("modalIcon").className = "bi bi-person-plus-fill icon-modal";
 
     // abrir modal
     const modal = new bootstrap.Modal(document.getElementById("usuarioModal"));
@@ -346,12 +353,14 @@ function abrirModalNuevoUsuario() {
 }
  //FUNCION LIMPIAR FORMULARIO
 function limpiarFormulario() {
+    document.getElementById("usuarioId").value = "";
     document.getElementById("nombre").value = "";
     document.getElementById("apellido").value = "";
     document.getElementById("email").value = "";
     document.getElementById("password").value = "";
     document.getElementById("rol").value = "1";
     document.getElementById("sucursal").value = "1";
+    document.getElementById("activo").value = "1";
 }
     //FUNCION OBTENER VALORES DEL FORMULARIO
 function obtenerUsuarioFormulario() {
@@ -369,10 +378,40 @@ async function guardarUsuario() {
 
     try {
 
-        const usuario = obtenerUsuarioFormulario();
+        const id = document.getElementById("usuarioId").value;
+        console.log("ID usuario:", id);
 
-        const res = await fetch(`${API_URL}/api/usuarios`, {
-            method: "POST",
+        const getValue = (idEl, fallback = "") => {
+            const el = document.getElementById(idEl);
+            return el ? el.value : fallback;
+        };
+
+        const activoEl = document.getElementById("activo");
+        const password = document.getElementById("password").value;
+
+        const usuario = {
+            nombre: document.getElementById("nombre").value,
+            apellido: document.getElementById("apellido").value,
+            email: document.getElementById("email").value,
+            id_rol: document.getElementById("rol").value,
+            id_sucursal: document.getElementById("sucursal").value,
+            activo: document.getElementById("activo").value,
+            
+
+        };
+            // password solo en crear usuario
+            if (!id && password) {
+                usuario.password = password;
+            }
+
+        const url = id
+            ? `${API_URL}/api/usuarios/${id}`
+            : `${API_URL}/api/usuarios`;
+
+        const method = id ? "PUT" : "POST";
+        console.log("USUARIO A ENVIAR:", usuario);
+        const res = await fetch(url, {
+            method,
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`
@@ -383,22 +422,92 @@ async function guardarUsuario() {
         const data = await res.json();
 
         if (!res.ok) {
-            alert(data.message || "Error al crear usuario");
+            await alertError(data.message || "Error al guardar usuario");
             return;
         }
 
-        alert("Usuario creado correctamente");
+        await  alertSuccess(id ? "Usuario actualizado" : "Usuario creado");
 
-        // cerrar modal
-        const modalEl = document.getElementById("usuarioModal");
-        const modal = bootstrap.Modal.getInstance(modalEl);
-        modal.hide();
-
-        // recargar tabla
+        cerrarModal();
         cargarUsuarios();
 
     } catch (error) {
-        console.error("Error creando usuario:", error);
+        console.error(error);
         alert("Error de conexión");
     }
+}
+     //FUNCION EDITAR USUARIO
+async function editarUsuario(id) {
+
+    try {
+        const res = await fetch(`${API_URL}/api/usuarios/${id}`, {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        const data = await res.json();
+
+        if (!res.ok || !data?.data) {
+            await alertError(data.message || "Error al obtener usuario");
+            return;
+        }
+
+        const u = data.data;
+
+        // ID oculto
+        document.getElementById("usuarioId").value = u.id_usuario;
+
+        // Campos
+        document.getElementById("nombre").value = u.nombre || "";
+        document.getElementById("apellido").value = u.apellido || "";
+        document.getElementById("email").value = u.email || "";
+        document.getElementById("contenedorPassword").style.display = "none";
+        document.getElementById("rol").value = u.id_rol;
+        document.getElementById("sucursal").value = u.id_sucursal;
+        document.getElementById("activo").value = u.activo;
+        document.getElementById("contenedorEstado").style.display = "block";// mostrar estado solo en edición
+        
+        // título dinámico
+        document.querySelector("#usuarioModal .modal-title").innerText = "Editar Usuario";
+
+        document.getElementById("modalIcon").className = "bi bi-pencil-square icon-modal";
+
+        // abrir modal
+        const modalEl = document.getElementById("usuarioModal");
+        const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+        modal.show();
+
+    } catch (error) {
+        console.error(error);
+        await alertError("Error de conexión con el servidor");
+    }
+}
+function cerrarModal() {
+
+    const modalEl = document.getElementById("usuarioModal");
+    const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+
+    modal.hide();
+
+    limpiarFormulario();
+}
+
+function inicializarPasswordToggle(){
+
+    const toggle = document.getElementById("togglePassword");
+    const input = document.getElementById("password");
+
+    if(!toggle || !input) return;
+
+    toggle.addEventListener("click", () => {
+
+        if(input.type === "password"){
+            input.type = "text";
+        } else {
+            input.type = "password";
+        }
+
+    });
+
 }

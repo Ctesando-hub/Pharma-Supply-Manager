@@ -163,5 +163,4 @@ La API se encuentra desplegada en Railway con:
 
 **Carolina Tesando**\
 Estudiante de Tecnicatura Superior en Desarrollo de Software -- IFTS 24\
-Apasionada por el desarrollo backend, bases de datos y soluciones
-eficientes.
+Apasionada por el desarrollo backend, bases de datos y analisis de Datos.

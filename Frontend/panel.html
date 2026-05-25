@@ -311,134 +311,112 @@
     </div>
 
     </section>
-    <!-- MODAL USUARIO -->
+<!-- MODAL USUARIO -->
 <div class="modal fade" id="usuarioModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
-    <div class="modal-content">
+        <div class="modal-content">
 
-        <!-- HEADER -->
-        <div class="modal-header">
-            <i class="bi bi-person-plus-fill icon-modal"></i>
-        <h5 class="modal-title">Nuevo Usuario</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            <!-- HEADER -->
+            <div class="modal-header">
+
+                <i id="modalIcon" class="bi bi-person-plus-fill icon-modal"></i>
+
+                <h5 class="modal-title">Usuario</h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <!-- BODY -->
+            <div class="modal-body">
+
+                <input type="hidden" id="usuarioId">
+
+                <input type="text"
+                    id="nombre"
+                    class="form-control mb-2"
+                    placeholder="Nombre">
+
+                <input type="text"
+                    id="apellido"
+                    class="form-control mb-2"
+                    placeholder="Apellido">
+
+                <input type="email"
+                    id="email"
+                    class="form-control mb-2"
+                    placeholder="Email">
+
+        <div id="contenedorPassword">
+            <div class="password-wrapper position-relative mb-2">
+                <input type="password"
+                id="password"
+                class="form-control pe-5"
+                placeholder="Contraseña">
+
+            </div>
         </div>
 
-    <!-- BODY  MODAL-->
-    <div class="modal-body">
+                <label class="form-label">Rol</label>
 
-        <!-- ID oculto (para edición futura) -->
-        <input type="hidden" id="usuarioId">
+                <select id="rol" class="form-select mb-2">
+                    <option value="1">Administrador</option>
+                    <option value="2">Empleado</option>
+                    <option value="3">Gerente</option>
+                </select>
 
-        <!-- NOMBRE -->
-        <input type="text" id="nombre" class="form-control mb-2" placeholder="Nombre">
+                <label class="form-label">Sucursal</label>
 
-        <!-- APELLIDO -->
-        <input type="text" id="apellido" class="form-control mb-2" placeholder="Apellido">
+                <select id="sucursal" class="form-select mb-2">
+                    <option value="1">Sucursal Central Río Cuarto</option>
+                    <option value="2">Sucursal Córdoba Centro</option>
+                    <option value="3">Sucursal Nueva Córdoba</option>
+                    <option value="4">Sucursal Rosario Norte</option>
+                    <option value="5">Sucursal Santa Fe Capital</option>
+                    <option value="6">Sucursal Mendoza Centro</option>
+                    <option value="7">Sucursal Godoy Cruz</option>
+                    <option value="8">Sucursal Buenos Aires Norte</option>
+                    <option value="9">Sucursal Buenos Aires Sur</option>
+                    <option value="10">Sucursal Rosario Sur</option>
+                </select>
 
-        <!-- EMAIL -->
-        <input type="email" id="email" class="form-control mb-2" placeholder="Email">
+                <div id="contenedorEstado">
 
-        <!-- PASSWORD -->
-        <input type="password" id="password" class="form-control mb-2" placeholder="Contraseña">
+                    <label class="form-label">Estado</label>
 
-        <!-- ROL -->
-        <label class="form-label">Rol</label>
-        <select id="rol" class="form-control mb-2">
-            <option value="1">Administrador</option>
-            <option value="2">Empleado</option>
-            <option value="3">Gerente</option>
-        </select>
+                    <select id="activo" class="form-select mb-2">
+                        <option value="1">Activo</option>
+                        <option value="0">Inactivo</option>
+                    </select>
 
-        <!-- SUCURSAL -->
-        <label class="form-label">Sucursal</label>
-        <select id="sucursal" class="form-control mb-2">
-            <option value="1">Sucursal Central Río Cuarto</option>
-            <option value="2">Sucursal Córdoba Centro</option>
-            <option value="3">Sucursal Nueva Córdoba</option>
-            <option value="4">Sucursal Rosario Norte</option>
-            <option value="5">Sucursal Santa Fe Capital</option>
-            <option value="6">Sucursal Mendoza Centro</option>
-            <option value="7">Sucursal Godoy Cruz</option>
-            <option value="8">Sucursal Buenos Aires Norte</option>
-            <option value="9">Sucursal Buenos Aires Sur</option>
-            <option value="10">Sucursal Rosario Sur</option>
-        </select>
+                </div>
 
-    </div>
+            </div>
 
-    <!-- FOOTER Modal-->
-        <div class="modal-footer">
-        <button class="btn btn-secondary" data-bs-dismiss="modal">
-            Cancelar
-        </button>
+            <!-- FOOTER -->
+            <div class="modal-footer">
 
-        <button class="btn btn-primary" id="btnGuardarUsuario">
-            Guardar
-        </button>
-        </div>
+                <button class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                    Cancelar
+                </button>
+
+                <button class="btn btn-primary"
+                        id="btnGuardarUsuario">
+                    Guardar
+                </button>
+
+            </div>
 
         </div>
     </div>
 </div>
-
-<!--  BODY MODAL EDITAR -->
-<div class="modal-body">
-
-    <input type="hidden" id="usuarioId">
-
-    <!-- NOMBRE -->
-    <input type="text" id="nombre-editar" class="form-control mb-2" placeholder="Nombre">
-
-    <!-- APELLIDO -->
-    <input type="text" id="apellido-editar" class="form-control mb-2" placeholder="Apellido">
-
-    <!-- EMAIL -->
-    <input type="email" id="email-editar" class="form-control mb-2" placeholder="Email">
-
-    <!-- PASSWORD -->
-    <input type="password" id="password-editar" class="form-control mb-2" placeholder="Contraseña">
-
-    <!-- ROL -->
-    <label class="form-label">Rol</label>
-
-    <select id="rol-editar" title="rol" class="form-control mb-2">
-        <option value="1">Administrador</option>
-        <option value="2">Empleado</option>
-        <option value="3">Gerente</option>
-    </select>
-
-    <!-- SUCURSAL -->
-    <label class="form-label">Sucursal</label>
-
-    <select id="sucursal-editar" title="sucursal" class="form-control mb-2">
-        <option value="1">Sucursal Central Río Cuarto</option>
-        <option value="2">Sucursal Córdoba Centro</option>
-        <option value="3">Sucursal Nueva Córdoba</option>
-        <option value="4">Sucursal Rosario Norte</option>
-        <option value="5">Sucursal Santa Fe Capital</option>
-        <option value="6">Sucursal Mendoza Centro</option>
-        <option value="7">Sucursal Godoy Cruz</option>
-        <option value="8">Sucursal Buenos Aires Norte</option>
-        <option value="9">Sucursal Buenos Aires Sur</option>
-        <option value="10">Sucursal Rosario Sur</option>
-    </select>
-
-    <!-- ESTADO -->
-    <div id="contenedorEstado" class="d-none"></div>
-
-        <label class="form-label">Estado</label>
-
-        <select id="activo" name ="activo" title="activo" class="form-control mb-2">
-            <option value="1">Activo</option>
-            <option value="0">Inactivo</option>
-        </select>
-
-    </div>
-
-</div>
-
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script src="js/panel.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="module" src="./js/panel.js"></script>
 </body>
 </html>

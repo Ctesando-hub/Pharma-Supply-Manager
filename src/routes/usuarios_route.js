@@ -38,10 +38,10 @@ router.put("/:id", auth, authorizeRole("admin"), actualizarUsuario);
 
 
 //-------------------
-//Route DELETE
+//Route PATCH PARA BORRADO LOGICO
 //-------------------
 
-router.delete("/:id", auth, authorizeRole("admin"), eliminarUsuario);
+router.patch("/:id/eliminar", auth, authorizeRole("admin"), eliminarUsuario);
 
 
 // -------------------------

@@ -54,7 +54,7 @@ export const crearUsuarioService = async (usuario) => {
 };
 
 //---------------SERVICIO PUT USUARIOS-----------*
-export const actualizarUsuarioService = async (id, usuario) => {
+/*export const actualizarUsuarioService = async (id, usuario) => {
 
     if (usuario.password) {
         const saltRounds = 10;
@@ -66,6 +66,13 @@ export const actualizarUsuarioService = async (id, usuario) => {
     }
 
     return await actualizarUsuarioModel(id, usuario); //Actualizar en MySQL
+};*/
+export const actualizarUsuarioService = async (id, usuario) => {
+    if (usuario.activo !== undefined) {
+        usuario.activo = usuario.activo == 1 ? 1 : 0;
+    }
+
+    return await actualizarUsuarioModel(id, usuario);
 };
 
 //---------SERVICIO DELETE----------*

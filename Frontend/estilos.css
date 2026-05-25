@@ -1348,3 +1348,17 @@ MONITOR PANEL
     background-color: #c0392b;
     color: white;
 }
+
+.password-wrapper{
+    position: relative;
+}
+
+#togglePassword{
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #7b8190;
+    font-size: 1rem;
+}

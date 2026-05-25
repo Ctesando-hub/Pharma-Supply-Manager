@@ -17,6 +17,7 @@ export const getUsuariosModel = async () => {
         FROM usuarios u
         INNER JOIN roles r ON r.id_rol = u.id_rol
         INNER JOIN sucursales s ON s.id_sucursal = u.id_sucursal
+        WHERE u.eliminado IS NULL
         ORDER BY u.id_usuario ASC`);
     return rows;
     } catch (error) {
@@ -43,7 +44,8 @@ export const getUsuarioByIDModel = async (id) => {
         FROM usuarios u
         INNER JOIN roles r ON r.id_rol = u.id_rol
         INNER JOIN sucursales s ON s.id_sucursal = u.id_sucursal
-        WHERE u.id_usuario = ?`,[id]);
+        WHERE u.id_usuario = ? AND u.eliminado IS NULL`,[id]);
+        
     
     if (rows.length === 0) {
         throw new Error("Usuario no encontrado");
@@ -72,8 +74,10 @@ export const searchUsuarioModel = async (nombre) => {
                 u.fecha_creacion
                 FROM usuarios u 
                 INNER JOIN roles r ON r.id_rol = u.id_rol 
-                INNER JOIN sucursales s ON s.id_sucursal = u.id_sucursal  WHERE LOWER(u.nombre) LIKE LOWER(?)`,
+                INNER JOIN sucursales s ON s.id_sucursal = u.id_sucursal  WHERE LOWER(u.nombre) LIKE LOWER(?)
+                AND u.eliminado IS NULL`,
                 [`%${nombre}%`]
+            
     );
     return rows;
     } catch (error) {
@@ -107,12 +111,12 @@ export const crearUsuarioModel = async (usuario) => {
 
 // Actualizar Usuario
 export const actualizarUsuarioModel = async (id, usuario) => {
-    const {  nombre, apellido, email, password, id_rol, id_sucursal, activo, fecha_creacion } = usuario;
+    const { nombre, apellido, email, id_rol, id_sucursal, activo} = usuario;
     const conn = await getConnection();
     try {
     const [result] = await conn.execute(
-        "UPDATE usuarios SET nombre=?, apellido=?, email=?, password=?, id_rol=?, id_sucursal=?, activo=?, fecha_creacion=? WHERE id_usuario=?",
-        [ nombre, apellido, email, password, id_rol, id_sucursal, activo, fecha_creacion, id]
+        "UPDATE usuarios SET nombre=?, apellido=?, email=?, id_rol=?, id_sucursal=?, activo=? WHERE id_usuario=?",
+        [ nombre, apellido, email, id_rol, id_sucursal, activo, id]
     );
     if (result.affectedRows === 0) {
         throw new Error("Usuario no encontrado");
@@ -131,11 +135,14 @@ export const eliminarUsuarioModel = async (id) => {
     const conn = await getConnection();
     try {
     const [result] = await conn.execute(
-        "DELETE FROM usuarios WHERE id_usuario = ?",
+        `UPDATE usuarios 
+            SET eliminado = NOW() 
+            WHERE id_usuario = ?
+            AND eliminado IS NULL`,
         [id]
     );
     if (result.affectedRows === 0) {
-        throw new Error("Usuario no encontrado");
+        throw new Error("Usuario no encontrado o ya eliminado");
     }
     return { message: "Usuario eliminado correctamente" };
     } catch (error) {
