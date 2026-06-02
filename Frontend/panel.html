@@ -181,6 +181,63 @@
         <button class="btn-volver-panel">
     ← Volver
         </button>
+        <!-- FILTROS -->
+    <div class="card p-3 mb-4 shadow-sm">
+
+        <div class="row g-3 align-items-end">
+
+            <!-- BUSQUEDA -->
+            <div class="col-md-4">
+                <label class="form-label">Buscar usuario</label>
+                <input
+                    type="text"
+                    id="inputBusquedaUsuario"
+                    class="form-control"
+                    placeholder="ID o nombre">
+            </div>
+
+            <!-- ROL -->
+            <div class="col-md-3">
+                <label class="form-label">Rol</label>
+                <select id="filtroRol" title="rol" class="form-select">
+                    <option value="">Todos</option>
+                    <option value="1">Administrador</option>
+                    <option value="2">Gerente</option>
+                    <option value="3">Empleado</option>
+                </select>
+            </div>
+
+            <!-- ESTADO -->
+            <div class="col-md-3">
+
+                <label class="form-label d-block">Estado</label>
+
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" id="estadoTodos" title="todos" type="radio" name="estadoUsuario" value="" checked>
+                    <label class="form-check-label">Todos</label>
+                </div>
+
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" id="estadoActivo" title="activo" type="radio" name="estadoUsuario" value="1">
+                    <label class="form-check-label">Activos</label>
+                </div>
+
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" id="estadoInactivo" title="inactivo" type="radio" name="estadoUsuario" value="0">
+                    <label class="form-check-label">Inactivos</label>
+                </div>
+
+            </div>
+
+            <!-- BOTON BUSCAR -->
+            <div class="col-md-2">
+                <button id="btnBuscarUsuarios" class="btn btn-primary w-100">
+                    Buscar
+                </button>
+            </div>
+
+        </div>
+    </div>
 
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>Usuarios</h2>
@@ -207,6 +264,192 @@
     </table>
 
 </section>
+
+<!--=========Seccion CLIENTES==========-->
+    <section id="clientesSection" class="container-fluid p-4 module-section d-none">
+        <button class="btn-volver-panel">
+    ← Volver
+        </button>
+        <!-- FILTROS -->
+    <div class="card p-3 mb-4 shadow-sm">
+
+        <div class="row g-3 align-items-end">
+
+            <!-- BUSQUEDA -->
+            <div class="col-md-3">
+                <label class="form-label">Buscar Cliente</label>
+                <input
+                    type="text"
+                    id="inputBusquedaCliente"
+                    class="form-control"
+                    placeholder="ID, nombre o CUIT">
+            </div>
+
+            <!-- TIPO -->
+            <div class="col-md-2">
+                <label class="form-label">Tipo</label>
+                <select id="filtroTipo" title="tipo" class="form-select">
+                    <option value="">Todos</option>
+                    <option value="1">Farmacia/Droguería</option>
+                    <option value="2">Hospital</option>
+                    <option value="3">Clínica Privada</option>
+                    <option value="4">Laboratorio</option>
+                </select>
+            </div>
+
+            <!-- CIUDAD-->
+            <div class="col-md-2">
+                <label class="form-label">Ciudad</label>
+                <select id="filtroCiudad" title="ciudad" class="form-select">
+                    <option value="">Todas</option>
+                    <option value="1">Río Cuarto</option>
+                    <option value="2">Córdoba</option>
+                    <option value="3">Rosario</option>
+                    <option value="4">Santa Fe</option>
+                    <option value="5">Mendoza</option>
+                    <option value="6">Buenos Aires</option>
+                </select>
+            </div>
+
+            <!-- CIUDAD-->
+            <div class="col-md-2">
+                <label class="form-label">Provincia</label>
+                <select id="filtroProvincia" title="provincia" class="form-select">
+                    <option value="">Todas</option>
+                    <option value="1">Córdoba</option>
+                    <option value="2">Buenos Aires</option>
+                    <option value="3">Santa Fe</option>
+                    <option value="4">Mendoza</option>
+                    
+                </select>
+            </div>
+            
+
+            <!-- BOTON BUSCAR -->
+            <div class="col-md-3">
+                <button id="btnBuscarClientes" class="btn btn-primary w-100">
+                    Buscar
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Clientes</h2>
+
+        <button class="btn btn-nuevo" id="btnNuevoCliente">
+            + Nuevo Cliente
+        </button>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>CUIT</th>
+                <th>Teléfono</th>
+                <th>Dirección</th>
+                <th>Email</th>
+                <th>Ciudad</th>
+                <th>Provincia</th>
+                <th>Tipo</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody id="tablaClientes"></tbody>
+    </table>
+
+</section>
+
+<!--=========Seccion PROVEEDORES==========-->
+    <section id="proveedoresSection" class="container-fluid p-4 module-section d-none">
+        <button class="btn-volver-panel">
+    ← Volver
+        </button>
+        <!-- FILTROS -->
+    <div class="card p-3 mb-4 shadow-sm">
+
+        <div class="row g-3 align-items-end">
+
+            <!-- BUSQUEDA -->
+            <div class="col-md-3">
+                <label class="form-label">Buscar Proveedor</label>
+                <input
+                    type="text"
+                    id="inputBusquedaProveedor"
+                    class="form-control"
+                    placeholder="ID o nombre">
+            </div>
+
+            <!-- CIUDAD-->
+            <div class="col-md-2">
+                <label class="form-label">Ciudad</label>
+                <select id="filtroCiudadPr" title="ciudad" class="form-select">
+                    <option value="">Todas</option>
+                    <option value="1">Río Cuarto</option>
+                    <option value="2">Córdoba</option>
+                    <option value="3">Rosario</option>
+                    <option value="4">Santa Fe</option>
+                    <option value="5">Mendoza</option>
+                    <option value="6">Buenos Aires</option>
+                </select>
+            </div>
+
+            <!-- PROVINCIAS-->
+            <div class="col-md-2">
+                <label class="form-label">Provincia</label>
+                <select id="filtroProvinciaPr" title="provincia" class="form-select">
+                    <option value="">Todas</option>
+                    <option value="1">Córdoba</option>
+                    <option value="2">Buenos Aires</option>
+                    <option value="3">Santa Fe</option>
+                    <option value="4">Mendoza</option>
+                    
+                </select>
+            </div>
+            
+
+            <!-- BOTON BUSCAR -->
+            <div class="col-md-3">
+                <button id="btnBuscarProveedores" class="btn btn-primary w-100">
+                    Buscar
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Proveedores</h2>
+
+        <button class="btn btn-nuevo" id="btnNuevoProveedores">
+            + Nuevo Proveedor
+        </button>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Teléfono</th>
+                <th>Email</th>
+                <th>Dirección</th>
+                <th>Ciudad</th>
+                <th>Provincia</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody id="tablaProveedores"></tbody>
+    </table>
+
+</section>
+
+
 
     <!-- ================= ACTIVITY + MONITOR ================= -->
     <section class="container-fluid p-4">
@@ -312,7 +555,7 @@
 
     </section>
 <!-- MODAL USUARIO -->
-<div class="modal fade" id="usuarioModal" tabindex="-1" aria-hidden="true">
+<div class=" modal fade modal-new" id="usuarioModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
 
@@ -404,8 +647,98 @@
                     Cancelar
                 </button>
 
-                <button class="btn btn-primary"
+                <button class="btn btn-primary btn-guardar"
                         id="btnGuardarUsuario">
+                    Guardar
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- MODAL CLIENTE -->
+<div class=" modal fade modal-new" id="clienteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- HEADER -->
+            <div class="modal-header">
+
+                <i id="modalIcon" class="bi bi-person-plus-fill icon-modal"></i>
+
+                <h5 class="modal-title">Cliente</h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <!-- BODY -->
+            <div class="modal-body">
+
+                <input type="hidden" id="clienteId">
+
+                <input type="text"
+                    id="nombrecli"
+                    class="form-control mb-2"
+                    placeholder="Nombre">
+
+                <input type="text"
+                    id="cuit"
+                    class="form-control mb-2"
+                    placeholder="XX-XXXXXXXX-X">
+
+                    <input type="text"
+                    id="telefono"
+                    class="form-control mb-2"
+                    placeholder="111234-5678">
+
+                    <input type="text"
+                    id="direccion"
+                    class="form-control mb-2"
+                    placeholder="Ej. Av. Corrientes 1234">
+
+                <input type="email"
+                    id="emailcli"
+                    class="form-control mb-2"
+                    placeholder="Email">
+
+                <label class="form-label">Ciudad</label>
+
+                <select id="ciudad" class="form-select mb-2">
+                    <option value="1">Río Cuarto</option>
+                    <option value="2">Córdoba</option>
+                    <option value="3">Rosario</option>
+                    <option value="4">Santa Fe</option>
+                    <option value="5">Mendoza</option>
+                    <option value="6">Buenos Aires</option>
+                </select>
+
+                <label class="form-label">Tipo</label>
+
+                <select id="tipo" class="form-select mb-2">
+                    <option value="1">Farmacia</option>
+                    <option value="2">Hospital</option>
+                    <option value="3">Clínica Privada</option>
+                    <option value="4">Laboratorio</option>
+                    <option value="5">DrogueríaN</option>
+                </select>
+                
+            </div>
+
+            <!-- FOOTER -->
+            <div class="modal-footer">
+
+                <button class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                    Cancelar
+                </button>
+
+                <button class="btn btn-primary btn-guardar"
+                        id="btnGuardarClientes">
                     Guardar
                 </button>
 

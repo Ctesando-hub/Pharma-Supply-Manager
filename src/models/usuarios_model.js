@@ -88,6 +88,149 @@ export const searchUsuarioModel = async (nombre) => {
     }
 };
 
+ // Obtener usuarios por rol
+export const getUsuariosByRolModel = async (rol) => {
+
+    const conn = await getConnection();
+
+    try {
+
+        const [rows] = await conn.execute(`
+            SELECT 
+                u.id_usuario,
+                u.nombre,
+                u.apellido,
+                u.email,
+                r.nombre AS rol,
+                s.nombre AS sucursal,
+                u.activo,
+                u.fecha_creacion
+            FROM usuarios u
+            INNER JOIN roles r ON r.id_rol = u.id_rol
+            INNER JOIN sucursales s ON s.id_sucursal = u.id_sucursal
+            WHERE u.id_rol = ?
+            AND u.eliminado IS NULL
+            ORDER BY u.id_usuario ASC
+        `, [rol]);
+
+        return rows;
+
+    } catch (error) {
+
+        console.error(
+            "Error al obtener usuarios por rol:",
+            error.message
+        );
+
+        throw new Error(
+            "No se pudieron obtener los usuarios por rol"
+        );
+
+    } finally {
+
+        await conn.end();
+    }
+};
+
+//Buscar usuarios por estado
+export const getUsuariosByEstadoModel = async (estado) => {
+
+    const conn = await getConnection();
+
+    try {
+
+        const [rows] = await conn.execute(`
+            SELECT 
+                u.id_usuario,
+                u.nombre,
+                u.apellido,
+                u.email,
+                r.nombre AS rol,
+                s.nombre AS sucursal,
+                u.activo,
+                u.fecha_creacion
+            FROM usuarios u
+            INNER JOIN roles r ON r.id_rol = u.id_rol
+            INNER JOIN sucursales s ON s.id_sucursal = u.id_sucursal
+            WHERE u.activo = ?
+            AND u.eliminado IS NULL
+            ORDER BY u.id_usuario ASC
+        `, [estado]);
+
+        return rows;
+
+    } catch (error) {
+
+        console.error(
+            "Error al obtener usuarios por estado:",
+            error.message
+        );
+
+        throw new Error(
+            "No se pudieron obtener los usuarios por estado"
+        );
+
+    } finally {
+
+        await conn.end();
+    }
+};
+
+//Buscar usuario con filtros/ combinados
+export const getUsuariosFiltrosModel = async ({ nombre, apellido, rol, estado }) => {
+
+    const conn = await getConnection();
+
+    try {
+
+        let query = `
+            SELECT 
+                u.id_usuario,
+                u.nombre,
+                u.apellido,
+                u.email,
+                r.nombre AS rol,
+                s.nombre AS sucursal,
+                u.activo,
+                u.fecha_creacion
+            FROM usuarios u
+            INNER JOIN roles r ON r.id_rol = u.id_rol
+            INNER JOIN sucursales s ON s.id_sucursal = u.id_sucursal
+            WHERE u.eliminado IS NULL
+        `;
+
+        const params = [];
+
+        if (nombre) {
+            query += `AND (u.nombre LIKE ? OR u.apellido LIKE ?)`;
+            params.push(`%${nombre}%`, `%${nombre}%`);
+}
+
+        if (rol) {
+            query += " AND u.id_rol = ?";
+            params.push(rol);
+        }
+
+        if (estado !== undefined && estado !== "") {
+            query += " AND u.activo = ?";
+            params.push(estado);
+        }
+
+        const [rows] = await conn.execute(query, params);
+
+        return rows;
+
+    } catch (error) {
+
+        console.error("Error filtros usuarios:", error.message);
+        throw new Error("No se pudieron filtrar los usuarios");
+
+    } finally {
+
+        await conn.end();
+    }
+};
+
 // Crear un nuevo Usuario
 export const crearUsuarioModel = async (usuario) => {
     const { nombre, apellido, email, password, id_rol, id_sucursal, activo} = usuario;

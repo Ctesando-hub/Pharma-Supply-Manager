@@ -1,4 +1,4 @@
-import { getUsuarioService, getuUsuarioByIDService, searchUsuarioService, crearUsuarioService, actualizarUsuarioService, eliminarUsuarioService } from "../services/usuarios_service.js";
+import { getUsuarioService, getuUsuarioByIDService, searchUsuarioService, getUsuarioByRolService, getUsuariosByEstadoService, getUsuariosFiltrosService, crearUsuarioService, actualizarUsuarioService, eliminarUsuarioService } from "../services/usuarios_service.js";
 import logger from "../utils/logger.js";
 
 // Controlador GET Traer todos los usuarios
@@ -64,6 +64,109 @@ export const searchUsuario = async (req, res) => {
     } catch(error){
         logger.error("Error en searchUsuario:", error);
         return res.status(500).json({ message: "Error al buscar usuario", error: error.message});
+    }
+};
+
+// Controlador GET - Buscar usuarios por rol
+export const getUsuariosByRol = async (req, res) => {
+
+    try {
+
+        const { rol } = req.params;
+
+        logger.info(`GET /usuarios/rol/${rol}`);
+
+        const usuariosBuscadosRol =
+            await getUsuarioByRolService(rol);
+
+        if (usuariosBuscadosRol.length === 0) {
+
+            logger.warn(
+                `No se encontraron usuarios para rol="${rol}"`
+            );
+
+            return res.status(404).json({
+                message: "No se encontraron usuarios con ese rol"
+            });
+        }
+
+        logger.info(
+            `Resultados encontrados: ${usuariosBuscadosRol.length}`
+        );
+
+        return res.status(200).json({
+            message: "Usuarios encontrados",
+            data: usuariosBuscadosRol
+        });
+
+    } catch (error) {
+
+        logger.error("Error en getUsuariosByRol:", error);
+
+        return res.status(500).json({
+            message: "Error al buscar usuarios por rol",
+            error: error.message
+        });
+    }
+};
+
+//controlador para buscar usuario por estado
+export const getUsuariosByEstado = async (req, res) =>{
+    try {
+
+        const { estado } = req.params;
+        logger.info(`GET /usuarios/estado/${estado}`);
+
+        const usuariosBuscadosEstados = await getUsuariosByEstadoService(estado);
+
+        if (usuariosBuscadosEstados.length === 0) {
+            logger.warn(`No se encontraron usuarios para el estado "${estado}"`);
+
+            return res.status(404).json({
+                message: "No se encontraron usuarios con ese estado"
+            });
+        }
+        logger.info( `Resultados encontrados: ${usuariosBuscadosEstados.length}`)
+        return res.status(200).json({
+            message: "Usuarios encontrados",
+            data: usuariosBuscadosEstados
+        });
+
+    } catch (error) {
+        logger.error(`Error en getUsuariosByEstado: ${error.message}`);
+        return res.status(500).json({
+            message: "Error al buscar usuarios por estado",
+            error: error.message
+        });
+    }
+}
+// FILTROS COMBINADOS
+export const getUsuariosFiltros = async (req, res) => {
+
+    try {
+
+        const { nombre, apellido, rol, estado } = req.query;
+
+        const usuarios = await getUsuariosFiltrosService({
+            nombre,
+            apellido,
+            rol,
+            estado
+        });
+        logger.info( `Resultados encontrados: ${usuarios.length}`)
+        return res.status(200).json({
+            message: "Filtros aplicados correctamente",
+            data: usuarios
+        });
+
+    } catch (error) {
+
+        console.error("Error filtros:", error);
+        logger.error(`Error en getUsuariosFiltro: ${error.message}`);
+        return res.status(500).json({
+            message: "Error al filtrar usuarios",
+            error: error.message
+        });
     }
 };
 

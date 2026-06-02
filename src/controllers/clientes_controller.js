@@ -1,5 +1,5 @@
 import { getClientesService, getClienteByIDService, searchClienteService, crearClienteService, actualizarClienteService,
-    eliminarClienteService } from "../services/clientes_service.js";
+    eliminarClienteService, getClientesFiltrosService } from "../services/clientes_service.js";
 import logger from "../utils/logger.js";
 
 // Controlador GET Traer todos los clientes
@@ -65,6 +65,36 @@ export const searchClientes = async (req, res) =>{
     } catch(error){
         logger.error(`GET /clientes/search - Error: ${error.message}`);
         return res.status(500).json({ message: "Error al buscar cliente", error: error.message});
+    }
+};
+// FILTROS COMBINADOS
+export const getClientesFiltros = async (req, res) => {
+
+    try {
+
+        const { nombre, cuit, ciudad, provincia, tipo } = req.query;
+
+        const clientes = await getClientesFiltrosService({
+            nombre,
+            cuit,
+            ciudad,
+            provincia,
+            tipo
+        });
+        logger.info( `Resultados encontrados: ${clientes.length}`)
+        return res.status(200).json({
+            message: "Filtros aplicados correctamente",
+            data: clientes
+        });
+
+    } catch (error) {
+
+        console.error("Error filtros:", error);
+        logger.error(`Error en getClientesFiltro: ${error.message}`);
+        return res.status(500).json({
+            message: "Error al filtrar clientes",
+            error: error.message
+        });
     }
 };
 

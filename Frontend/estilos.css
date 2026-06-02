@@ -1197,112 +1197,176 @@ MONITOR PANEL
     transform: translateY(-2px);
 }
 /* =========================
-    MODAL USUARIOS
+    MODAL  
 ========================= */
 
-#usuarioModal .modal-content{
+.modal-new .modal-content{
     border: none;
-    border-radius: 20px;
+    border-radius: 18px;
     overflow: hidden;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-    background: rgba(255,255,255,0.96);
-    -webkit-backdrop-filter: blur(20px);
-    backdrop-filter: blur(20px);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.18);
+    background: rgba(255,255,255,0.98);
+    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(18px);
+    transform: translateY(0);
+    transition: all 0.25s ease;
 }
 
 /* HEADER */
-#usuarioModal .modal-header{
+.modal-new .modal-header{
     background: linear-gradient(135deg, #052b5b, #001b3d);
     border-bottom: none;
-    padding: 1.2rem 1.5rem;
+    padding: 1.3rem 1.6rem;
 }
 
-#usuarioModal .modal-title{
-    color: white;
+/* TITULO */
+.modal-new .modal-title{
+    color: #ffffff;
     font-family: 'Manrope', sans-serif;
     font-weight: 700;
-    font-size: 1.1rem;
+    font-size: 1.15rem;
+    letter-spacing: 0.3px;
 }
 
 /* BOTON CERRAR */
-#usuarioModal .btn-close{
+.modal-new .btn-close{
     filter: invert(1);
-    opacity: 0.9;
+    opacity: 0.85;
+    transition: 0.2s;
+}
+
+.modal-new .btn-close:hover{
+    opacity: 1;
+    transform: rotate(90deg);
 }
 
 /* BODY */
-#usuarioModal .modal-body{
-    padding: 1.8rem;
+.modal-new .modal-body{
+    padding: 2rem;
+    background: #fafbfc;
 }
 
 /* LABELS */
-#usuarioModal .form-label{
+.modal-new .form-label{
     font-size: 0.72rem;
     font-weight: 700;
     letter-spacing: 0.08em;
-    color: #7b8190;
+    color: #6c7484;
     text-transform: uppercase;
-    margin-bottom: 0.4rem;
+    margin-bottom: 0.45rem;
 }
 
 /* INPUTS */
-#usuarioModal .form-control{
-    border: none;
+.modal-new .form-control,
+.modal-new .form-select{
+    border: 1px solid transparent;
     border-radius: 12px;
-    background: #f2f4f8;
-    min-height: 45px;
+    background: #f3f5f9;
+    min-height: 44px;
     font-size: 0.92rem;
-    color: #24324a;
-    transition: 0.2s;
+    color: #1f2d3d;
+    transition: all 0.2s ease;
+    box-shadow: none;
+}
+
+/* HOVER INPUT */
+.modal-new .form-control:hover,
+.modal-new .form-select:hover{
+    background: #eef1f6;
 }
 
 /* FOCUS */
-#usuarioModal .form-control:focus{
-    background: white;
-    box-shadow: 0 0 0 3px rgba(226, 0, 116, 0.15);
+.modal-new .form-control:focus,
+.modal-new .form-select:focus{
+    background: #ffffff;
     border: 1px solid #e20074;
+    box-shadow: 0 0 0 4px rgba(226, 0, 116, 0.12);
+    outline: none;
 }
 
 /* SELECT */
-#usuarioModal select.form-control{
+.modal-new select.form-control{
     cursor: pointer;
 }
 
+
 /* FOOTER */
-#usuarioModal .modal-footer{
+.modal-new .modal-footer{
     border-top: none;
-    padding: 1rem 1.8rem 1.5rem;
+    padding: 1rem 2rem 1.6rem;
+    background: #fafbfc;
 }
 
 /* BOTON CANCELAR */
-#usuarioModal .btn-secondary{
+.modal-new .btn-secondary{
     background: transparent;
     border: 1px solid #d5d9e2;
-    color: #24324a;
+    color: #2c3e50;
     border-radius: 12px;
     padding: 10px 22px;
     font-weight: 600;
+    transition: 0.2s;
+}
+.modal-new .btn-secondary:hover{
+    background: #f2f4f8;
 }
 
 /* BOTON GUARDAR */
-#usuarioModal .btn-primary{
-    background: #e20074;
+.modal-new .btn-primary{
+    background: linear-gradient(135deg, #e20074, #c10063);
     border: none;
     border-radius: 12px;
-    padding: 10px 24px;
+    padding: 10px 26px;
     font-weight: 700;
-    box-shadow: 0 6px 16px rgba(226, 0, 116, 0.25);
-    transition: 0.2s;
+    box-shadow: 0 8px 18px rgba(226, 0, 116, 0.28);
+    transition: all 0.2s ease;
 }
 
-#usuarioModal .btn-primary:hover{
-    background: #c10063;
+/* HOVER BOTON GUARDAR */
+#btnBuscarUsuarios, #btnBuscarClientes {
+    background-color: #1f3b66;
+    border: none;
+    color: white;
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+/* HOVER */
+#btnBuscarUsuarios:hover,
+#btnBuscarClientes:hover {
+    background-color: #163053;
     transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(31, 59, 102, 0.25);
+}
+
+/* ACTIVE (click) */
+#btnBuscarUsuarios:active,
+#btnBuscarClientes:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+.modal-new .btn-primary:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 12px 25px rgba(226, 0, 116, 0.35);
+}
+
+/* ACTIVE BOTON */
+.modal-new .btn-primary:active{
+    transform: translateY(0);
 }
 
 /* ESPACIADO ENTRE COLUMNAS */
-#usuarioModal .row{
-    row-gap: 1rem;
+.modal-new .row{
+    row-gap: 1.1rem;
+}
+
+/* MEJORA VISUAL INPUT GROUP  */
+.modal-new .input-group-text{
+    background: #f3f5f9;
+    border: none;
+    border-radius: 12px;
 }
 
 .icon-modal{
@@ -1310,7 +1374,7 @@ MONITOR PANEL
     margin-right: 8px;
     font-size: 1rem;
 }
-/* BOTÓN NUEVO USUARIO (principal) */
+/* BOTÓN CREAR (principal) */
 .btn-nuevo {
     background-color: #e20074;
     color: white;
@@ -1324,27 +1388,28 @@ MONITOR PANEL
 }
 
 /* BOTÓN EDITAR */
-.btn-editar {
+.btn-editar, .btn-editarcl {
     background-color: rgba(58, 95, 148, 0.22);
     color: #1f3b5c;
     border: 1px solid rgba(58, 95, 148, 0.5);
     transition: 0.3s;
 }
 
-.btn-editar:hover {
+.btn-editar:hover, .btn-editarcl:hover {
     background-color: #3a5f94;
     color: white;
 }
 
 /* BOTÓN ELIMINAR */
-.btn-eliminar {
+.btn-eliminar, .btn-eliminarcl {
     background-color: rgba(214, 69, 69, 0.15);
     color: #a12f2f;
     border: 1px solid rgba(214, 69, 69, 0.4);
     transition: 0.3s;
 }
 
-.btn-eliminar:hover {
+
+.btn-eliminar:hover, .btn-eliminarcl:hover {
     background-color: #c0392b;
     color: white;
 }
@@ -1362,3 +1427,24 @@ MONITOR PANEL
     color: #7b8190;
     font-size: 1rem;
 }
+
+/*cartel alertas*/
+.swal-small {
+    font-size: 0.9rem;
+    padding: 10px;
+}
+
+/*columna tabla clientes*/
+#clientesSection tbody td {
+    white-space: nowrap;
+    
+}
+
+/*columna acciones*/
+#clientesSection .acciones {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    justify-content: center;
+}
+

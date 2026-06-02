@@ -8,7 +8,11 @@ export const alertSuccess = (title, text = "") => {
         icon: "success",
         title,
         text,
-        confirmButtonColor: "#e20074"
+        width: "320px",
+        confirmButtonColor: "#e20074",
+        customClass: {
+            popup: "swal-small"
+        }
     });
 };
 
@@ -20,7 +24,11 @@ export const alertError = (title, text = "") => {
         icon: "error",
         title,
         text,
-        confirmButtonColor: "#e20074"
+        width: "320px",
+        confirmButtonColor: "#e20074",
+        customClass: {
+            popup: "swal-small"
+        }
     });
 };
 
@@ -32,10 +40,14 @@ export const confirmDelete = (text = "¿Estás seguro?") => {
         title: "Confirmación",
         text,
         icon: "warning",
+        width: "320px",
         showCancelButton: true,
         confirmButtonColor: "#e20074",
         cancelButtonColor: "#6c757d",
         confirmButtonText: "Sí, eliminar",
-        cancelButtonText: "Cancelar"
+        cancelButtonText: "Cancelar",
+        customClass: {
+            popup: "swal-small"
+        }
     });
 };

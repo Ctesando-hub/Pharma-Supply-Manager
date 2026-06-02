@@ -12,13 +12,14 @@ export const getClientesModel = async () => {
         cl.telefono,
         cl.direccion,
         cl.email,
-        t.nombre_tipo AS tipo,
+        t.nombre AS tipo,
         c.nombre AS ciudad,
         pr.nombre AS provincia
         FROM clientes cl
         INNER JOIN ciudades c ON cl.id_ciudad = c.id_ciudad
         INNER JOIN provincias pr ON c.id_provincia = pr.id_provincia
         INNER JOIN tiposcliente t ON cl.id_tipo = t.id_tipo
+        WHERE cl.cliente_eliminado IS NULL
         ORDER BY cl.id_cliente ASC`);
     return rows;
     } catch (error) {
@@ -40,14 +41,14 @@ export const getClienteByIDModel = async (id) => {
         cl.telefono,
         cl.direccion,
         cl.email,
-        t.nombre_tipo AS tipo,
+        t.nombre AS tipo,
         c.nombre AS ciudad,
         pr.nombre AS provincia
         FROM clientes cl
         INNER JOIN ciudades c ON cl.id_ciudad = c.id_ciudad
         INNER JOIN provincias pr ON c.id_provincia = pr.id_provincia
         INNER JOIN tiposcliente t ON cl.id_tipo = t.id_tipo
-        WHERE cl.id_cliente = ?`,[id]);
+        WHERE cl.id_cliente = ? AND cl.cliente_eliminado IS NULL`, [id]);
     
     if (rows.length === 0) {
         throw new Error("Cliente no encontrado");
@@ -72,20 +73,84 @@ export const searchClienteModel = async (nombre) => {
         cl.telefono,
         cl.direccion,
         cl.email,
-        t.nombre_tipo AS tipo,
+        t.nombre AS tipo,
         c.nombre AS ciudad,
         pr.nombre AS provincia
         FROM clientes cl
         INNER JOIN ciudades c ON cl.id_ciudad = c.id_ciudad
         INNER JOIN provincias pr ON c.id_provincia = pr.id_provincia
         INNER JOIN tiposcliente t ON cl.id_tipo = t.id_tipo
-        WHERE LOWER(cl.nombre) LIKE LOWER(?)`, [`%${nombre}%`]);
+        WHERE LOWER(cl.nombre) LIKE LOWER(?)
+        AND cl.cliente_eliminado IS NULL`,[`%${nombre}%`]);
+        
     return rows;
     } catch (error) {
     console.error("Error al buscar clientes:", error.message);
     throw new Error("No se pudieron buscar los clientes");
     } finally {
     await conn.end();
+    }
+};
+
+//Buscar cliente con filtros/ combinados
+export const getClientesFiltrosModel = async ({ nombre, cuit, ciudad, provincia, tipo }) => {
+
+    const conn = await getConnection();
+
+    try {
+
+        let query = `
+            SELECT 
+                cl.id_cliente,
+                cl.nombre,
+                cl.cuit,
+                cl.telefono,
+                cl.direccion,
+                cl.email,
+                c.nombre AS ciudad,
+                p.nombre AS provincia,
+                t.nombre AS tipo
+                
+            FROM clientes cl
+            INNER JOIN ciudades c ON cl.id_ciudad = c.id_ciudad
+            INNER JOIN provincias p ON c.id_provincia = p.id_provincia
+            INNER JOIN tiposcliente t ON cl.id_tipo = t.id_tipo
+            WHERE cl.cliente_eliminado IS NULL`;
+
+        const params = [];
+
+        if (nombre) {
+            query += ` AND (cl.nombre LIKE ? OR cl.cuit LIKE ?)`;
+            params.push(`%${nombre}%`, `%${nombre}%`);
+}
+
+        if (ciudad) {
+            query += " AND cl.id_ciudad = ?";
+            params.push(ciudad);
+        }
+
+        if(provincia) {
+            query += " AND p.id_provincia = ?";
+            params.push(provincia);
+        }
+
+        if(tipo) {
+            query += " AND cl.id_tipo = ?";
+            params.push(tipo);
+        }
+
+        const [rows] = await conn.execute(query, params);
+
+        return rows;
+
+    } catch (error) {
+
+        console.error("Error filtros clientes:", error.message);
+        throw new Error("No se pudieron filtrar los clientes");
+
+    } finally {
+
+        await conn.end();
     }
 };
 // Crear un nuevo cliente
@@ -134,7 +199,10 @@ export const eliminarClienteModel = async (id) => {
     const conn = await getConnection();
     try {
     const [result] = await conn.execute(
-        "DELETE FROM clientes WHERE id_cliente = ?",
+            `UPDATE clientes 
+            SET cliente_eliminado = NOW() 
+            WHERE id_cliente = ?
+            AND cliente_eliminado IS NULL`,
         [id]
     );
     if (result.affectedRows === 0) {

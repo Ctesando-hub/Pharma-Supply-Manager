@@ -1,7 +1,7 @@
 // Importa todas las funciones del modelo relacionadas con clientes.
 // Estas funciones son las que realmente hacen las consultas SQL a la base de datos.
 
-import { getClientesModel, getClienteByIDModel, searchClienteModel, crearClienteModel, actualizarClienteModel, 
+import { getClientesModel, getClienteByIDModel, searchClienteModel, crearClienteModel, actualizarClienteModel, getClientesFiltrosModel, 
     eliminarClienteModel } from "../models/clientes_model.js"; 
 
 export const getClientesService = async () =>{
@@ -14,6 +14,10 @@ export const getClienteByIDService = async (id) => {
 
 export const searchClienteService = async (nombre) => {
     return await searchClienteModel(nombre);
+};
+//-----------SERVICIO GET FILTROS------------*
+export const getClientesFiltrosService = async (filtros) => {
+    return await getClientesFiltrosModel(filtros);
 };
 
 export const crearClienteService = async (cliente) => {

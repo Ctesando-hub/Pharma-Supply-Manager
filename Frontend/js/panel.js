@@ -178,7 +178,8 @@ function manejarModulo(modulo) {
             break;
 
         case "clientes":
-            console.log("Clientes aún no implementado");
+            mostrarSeccion("clientesSection");
+            cargarClientes();
             break;
 
         case "productos":
@@ -225,11 +226,21 @@ function registrarEventos(){
             const id = e.target.dataset.id;
             editarUsuario(id);
         }
+        // BOTON EDITAR CLIENTE
+        if (e.target.classList.contains("btn-editarcl")) {
+            const id = e.target.dataset.id;
+            editarCliente(id);
+        }
 
-        // BOTON ELIMINAR
+        // BOTON ELIMINAR USUARIO
         if (e.target.classList.contains("btn-eliminar")) {
             const id = e.target.dataset.id;
             eliminarUsuario(id);
+        }
+         // BOTON ELIMINAR CLIENTE
+        if (e.target.classList.contains("btn-eliminarcl")) {
+            const id = e.target.dataset.id;
+            eliminarCliente(id);
         }
 
         // NUEVO USUARIO
@@ -240,6 +251,26 @@ function registrarEventos(){
         // GUARDAR USUARIO
         if (e.target.id === "btnGuardarUsuario") {
             guardarUsuario();
+        }
+
+        // GUARDAR CLIENTE
+        if (e.target.id === "btnGuardarClientes") {
+            guardarCliente();
+        }
+
+        // BUSCAR USUARIOS
+        if (e.target.id === "btnBuscarUsuarios") {
+            buscarUsuarios();
+        }
+
+        //BUSCAR CLIENTES
+        if (e.target.id === "btnBuscarClientes") {
+            buscarClientes();
+        }    
+
+         // NUEVO CLIENTE -MODAL
+        if (e.target.id === "btnNuevoCliente") {
+            abrirModalNuevoCliente();
         }
 
     });
@@ -288,7 +319,7 @@ async function cargarUsuarios() {
     }
 }
 
-//SALIR DE SECCION USUARIOS
+//SALIR DE SECCION 
 function volverHomePanel() {
 
     // OCULTAR TODAS LAS SECCIONES
@@ -508,6 +539,473 @@ function inicializarPasswordToggle(){
             input.type = "password";
         }
 
+    });
+
+}
+
+async function buscarUsuarios() {
+
+    try {
+
+        const inputBusqueda = document.getElementById("inputBusquedaUsuario");
+        const valorBusqueda = inputBusqueda.value.trim();
+
+        const rol = document.getElementById("filtroRol").value;
+
+        const estado = document.querySelector('input[name="estadoUsuario"]:checked').value;
+
+        let response;
+
+        //  BUSQUEDA POR ID (PRIORIDAD MAXIMA)
+        if (valorBusqueda !== "" && !isNaN(valorBusqueda)) {
+
+            response = await fetch(
+                `${API_URL}/api/usuarios/${valorBusqueda}`,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    }
+                }
+            );
+
+        }
+
+        //  FILTROS COMBINADOS
+        else {
+
+            const params = new URLSearchParams();
+
+            if (valorBusqueda !== "") {
+                params.append("nombre", valorBusqueda);
+            }
+
+            if (rol !== "") {
+                params.append("rol", rol);
+            }
+
+            if (estado !== "") {
+                params.append("estado", estado);
+            }
+
+            response = await fetch(
+                `${API_URL}/api/usuarios/filtros?${params.toString()}`,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    }
+                }
+            );
+        }
+
+        if (!response.ok) {
+            throw new Error(`Error HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        const usuarios = Array.isArray(data.data)
+            ? data.data
+            : [data.data];
+
+            if (usuarios.length === 0) {
+                alertError("Sin resultados","No se encontraron usuarios con esos parámetros");
+                 mostrarUsuarios([]); // limpia tabla
+                return;
+            }
+
+        mostrarUsuarios(usuarios);
+
+        // LIMPIAR
+        inputBusqueda.value = "";
+        document.getElementById("filtroRol").value = "";
+
+        document.querySelector(
+            'input[name="estadoUsuario"][value=""]'
+        ).checked = true;
+
+    } catch (error) {
+        console.error(error);
+        alertError("Error al buscar usuarios");
+    }
+}
+function mostrarUsuarios(usuarios) {
+
+    const tbody = document.getElementById("tablaUsuarios");
+
+    if (!tbody) return;
+
+    tbody.innerHTML = "";
+
+    usuarios.forEach(u => {
+        tbody.innerHTML += `
+            <tr>
+                <td>${u.id_usuario}</td>
+                <td>${u.nombre} ${u.apellido}</td>
+                <td>${u.email}</td>
+                <td>${u.rol}</td>
+                <td>${u.sucursal}</td>
+                <td>${u.activo ? "Activo" : "Inactivo"}</td>
+                <td>
+                    <button class="btn btn-sm btn-editar" data-id="${u.id_usuario}">
+                        Editar
+                    </button>
+
+                    <button class="btn btn-sm btn-eliminar" data-id="${u.id_usuario}">
+                        Eliminar
+                    </button>
+                </td>
+            </tr>
+        `;
+    });
+
+}
+//-----------------CLIENTES--------------
+// TRAER CLIENTES
+async function cargarClientes() {
+
+    try {
+        const res = await fetch(`${API_URL}/api/clientes`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        const data = await res.json();
+
+        console.log("CLIENTES:", data);
+
+        const tbody = document.getElementById("tablaClientes");
+
+        if (!tbody) return;
+
+        tbody.innerHTML = "";
+
+        data.data.forEach(cl => {
+            tbody.innerHTML += `
+                <tr>
+                    <td>${cl.id_cliente}</td>
+                    <td>${cl.nombre}</td>
+                    <td>${cl.cuit}</td>
+                    <td>${cl.telefono}</td>
+                    <td>${cl.direccion}</td>
+                    <td>${cl.email}</td>
+                    <td>${cl.ciudad}</td>
+                    <td>${cl.provincia}</td>
+                    <td>${cl.tipo}</td>
+                    
+                    <td class="acciones">
+                        <button class="btn btn-sm btn-editarcl" data-id="${cl.id_cliente}">Editar</button>
+                        <button class="btn btn-sm btn-eliminarcl" data-id="${cl.id_cliente}">Eliminar</button>
+                    </td>
+                </tr>
+            `;
+        });
+
+    } catch (error) {
+        console.error("Error cargando clientes:", error);
+    }
+}
+
+//FUNCION ELIMINAR CLIENTES
+async function eliminarCliente(id) {
+    try{ // manejo de bloque 
+        const confirmar = await confirmDelete("¿Seguro que querés eliminar este cliente?"); //muestra un poup del navegador con mensaje
+
+        if (!confirmar.isConfirmed) return;
+        const res = await fetch(`${API_URL}/api/clientes/${id}/eliminar`, { //peticion al backend
+            method: "PATCH",
+            headers: { // cabecera HTTP, metaddata del la request
+                "Content-Type": "application/json", //lo que se envia es json
+                "Authorization": `Bearer ${token}` //envio del token (Bearer es el esquema de autenticacion y token esta guardado en el localStorage)
+            }
+        });
+        const data = await res.json(); //convierte la repuesta del backend en un objeto JS
+
+        if(!res.ok){ //si hay error muestra el mensaje
+            await alertError(data.message || "Error al eliminar cliente");
+            return; //corta la ejecucion si hubo error
+        }
+
+        await alertSuccess(data.message); //mensaje de exito
+
+        //refrescar tabla
+        cargarClientes();
+
+    }catch (error){ //captura el error
+        console.error("Error eliminando cliente:", error); //mensaje debbug
+        await alertError("Error de conexión con el servidor");
+    }
+};
+
+//FUNCION LIMPIAR FORMULARIO CLIENTE
+function limpiarFormularioCli() {
+    const ids = [
+        "clienteId",
+        "nombrecli",
+        "cuit",
+        "telefono",
+        "direccion",
+        "emailcli"
+    ];
+
+    ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = "";
+    });
+
+    document.getElementById("ciudad").value = "1";
+    document.getElementById("tipo").value = "1";
+}
+
+//FUNCION MOSTRAR FORMULARIO NUEVO CLIENTE
+function abrirModalNuevoCliente() {
+
+    // limpiar formulario
+    limpiarFormularioCli();
+
+    // cambiar título
+    document.querySelector("#clienteModal .modal-title").innerText = "Nuevo Cliente";
+
+    document.getElementById("modalIcon").className = "bi bi-person-plus-fill icon-modal";
+
+    // abrir modal
+    const modal = new bootstrap.Modal(document.getElementById("clienteModal"));
+    modal.show();
+}
+
+function cerrarModalCli() {
+
+    const modalEl = document.getElementById("clienteModal");
+    const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+
+    modal.hide();
+
+    limpiarFormularioCli();
+}
+  //FUNCION OBTENER VALORES DEL FORMULARIO
+function obtenerClienteFormulario() {
+    return {
+        nombre: document.getElementById("nombrecli").value,
+        cuit: document.getElementById("cuit").value,
+        telefono: document.getElementById("telefono").value,
+        direccion: document.getElementById("direccion").value,
+        email: document.getElementById("emailcli").value,
+        id_ciudad: document.getElementById("ciudad").value,
+        id_tipo: document.getElementById("tipo").value,
+
+    };
+}
+async function guardarCliente() {
+
+    try {
+
+        const id = document.getElementById("clienteId").value;
+
+        const cliente = obtenerClienteFormulario();
+
+        const url = id
+            ? `${API_URL}/api/clientes/${id}`
+            : `${API_URL}/api/clientes`;
+
+        const method = id ? "PUT" : "POST";
+
+        const res = await fetch(url, {
+            method,
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(cliente)
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            await alertError(data.message || "Error al guardar cliente");
+            return;
+        }
+
+        await alertSuccess(id ? "Cliente actualizado" : "Cliente creado");
+
+        cerrarModalCli();
+        cargarClientes();
+
+    } catch (error) {
+        console.error(error);
+        alert("Error de conexión");
+    }
+}
+  //FUNCION EDITAR CLIENTE
+async function editarCliente(id) {
+
+    try {
+        const res = await fetch(`${API_URL}/api/clientes/${id}`, {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        const data = await res.json();
+
+        if (!res.ok || !data?.data) {
+            await alertError(data.message || "Error al obtener cliente");
+            return;
+        }
+
+        const cl = data.data;
+
+        // ID oculto
+        document.getElementById("clienteId").value = cl.id_cliente;
+
+        // Campos
+        document.getElementById("nombrecli").value = cl.nombre || "";
+        document.getElementById("cuit").value = cl.cuit || "";
+        document.getElementById("telefono").value = cl.telefono || "";
+        document.getElementById("direccion").value = cl.direccion || "";
+        document.getElementById("emailcli").value = cl.email || "";
+        document.getElementById("ciudad").value = cl.id_ciudad;
+        document.getElementById("tipo").value = cl.id_tipo;
+        
+        // título dinámico
+        document.querySelector("#clienteModal .modal-title").innerText = "Editar Cliente";
+
+        document.getElementById("modalIcon").className = "bi bi-pencil-square icon-modal";
+
+        // abrir modal
+        const modalEl = document.getElementById("clienteModal");
+        const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+        modal.show();
+
+    } catch (error) {
+        console.error(error);
+        await alertError("Error de conexión con el servidor");
+    }
+}
+
+//FUNCION BUSQUEDA FILTRO CLIENTE
+async function buscarClientes() {
+
+    try {
+
+        const inputBusquedaCl = document.getElementById("inputBusquedaCliente");
+        const valorBusquedaCl = inputBusquedaCl.value.trim();
+
+        const ciudad = document.getElementById("filtroCiudad").value;
+        const provincia = document.getElementById("filtroProvincia").value;
+        const tipo = document.getElementById("filtroTipo").value;
+
+        let response;
+
+        //  BUSQUEDA POR ID (PRIORIDAD MAXIMA)
+        if (valorBusquedaCl !== "" && !isNaN(valorBusquedaCl)) {
+
+            response = await fetch(
+                `${API_URL}/api/clientes/${valorBusquedaCl}`,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    }
+                }
+            );
+
+        }
+
+        //  FILTROS COMBINADOS
+        else {
+
+            const params = new URLSearchParams();
+
+            if (valorBusquedaCl !== "") {
+                params.append("nombre", valorBusquedaCl);
+            }
+
+            if (ciudad !== "") {
+                params.append("ciudad", ciudad);
+            }
+
+            if (provincia !== "") {
+                params.append("provincia", provincia);
+            }
+
+            if(tipo !== ""){
+                params.append("tipo", tipo);
+            }
+
+            response = await fetch(
+                `${API_URL}/api/clientes/filtros?${params.toString()}`,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    }
+                }
+            );
+        }
+
+        if (!response.ok) {
+            throw new Error(`Error HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        const clientes = Array.isArray(data.data)
+            ? data.data
+            : [data.data];
+
+            if (clientes.length === 0) {
+                alertError("Sin resultados","No se encontraron clientes con esos parámetros");
+                 mostrarClientes([]); // limpia tabla
+                return;
+            }
+
+        mostrarClientes(clientes);
+
+        // LIMPIAR
+        inputBusquedaCl.value = "";
+        document.getElementById("filtroCiudad").value = "";
+        document.getElementById("filtroProvincia").value = "";
+        document.getElementById("filtroTipo").value = "";   
+
+    } catch (error) {
+        console.error(error);
+        alertError("Error al buscar clientes");
+    }
+}
+function mostrarClientes(clientes) {
+
+    const tbody = document.getElementById("tablaClientes");
+
+    if (!tbody) return;
+
+    tbody.innerHTML = "";
+
+    clientes.forEach(cl => {
+        tbody.innerHTML += `
+            <tr>
+                <td>${cl.id_cliente}</td>
+                <td>${cl.nombre}
+                <td>${cl.telefono} 
+                <td>${cl.direccion}</td>
+                <td>${cl.email}</td>
+                <td>${cl.ciudad}</td>
+                <td>${cl.provincia}</td>
+                <td>${cl.tipo}</td>
+                <td>
+                    <button class="btn btn-sm btn-editarcl" data-id="${cl.id_cliente}">
+                        Editar
+                    </button>
+
+                    <button class="btn btn-sm btn-eliminarcl" data-id="${cl.id_cliente}">
+                        Eliminar
+                    </button>
+                </td>
+            </tr>
+        `;
     });
 
 }

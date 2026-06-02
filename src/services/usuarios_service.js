@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs"; //Libreria para hashear passwords
 
-import { getUsuariosModel, getUsuarioByIDModel, searchUsuarioModel, crearUsuarioModel, actualizarUsuarioModel, eliminarUsuarioModel } from "../models/usuarios_model.js";
+import { getUsuariosModel, getUsuarioByIDModel, searchUsuarioModel, getUsuariosByEstadoModel, crearUsuarioModel, actualizarUsuarioModel, getUsuariosByRolModel,getUsuariosFiltrosModel, eliminarUsuarioModel } from "../models/usuarios_model.js";
 
 
 //---------funcion para mapear usuario-------------*
@@ -33,6 +33,27 @@ export const searchUsuarioService = async (nombre) => {
     const usuario = await searchUsuarioModel(nombre);
     return usuario.map(mapUser);
 };
+
+//----------SERVICIO GET BY ROL------------*
+export const getUsuarioByRolService = async (rol) => {
+
+    return await getUsuariosByRolModel(rol);
+
+};
+
+//---------SERVICIO GET BY ESTADO-----------*
+
+export const getUsuariosByEstadoService = async (estado) =>{
+    return await getUsuariosByEstadoModel(estado);
+}
+
+
+//-----------SERVICIO GET FILTROS------------*
+export const getUsuariosFiltrosService = async (filtros) => {
+    return await getUsuariosFiltrosModel(filtros);
+};
+
+
 
 //------------SERVICIO POST ----------*
 // Flujo de este servicio:
