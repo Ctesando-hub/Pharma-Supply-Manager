@@ -183,11 +183,13 @@ function manejarModulo(modulo) {
             break;
 
         case "productos":
-            console.log("Productos aún no implementado");
+            mostrarSeccion("productosSection");
+            cargarProductos();
             break;
 
             case "proveedores":
-            console.log("Productos aún no implementado");
+            mostrarSeccion("proveedoresSection");
+            cargarProveedores();
             break;
 
             case "stock":
@@ -221,7 +223,7 @@ function registrarEventos(){
             volverHomePanel();
         }
 
-        // BOTON EDITAR
+        // BOTON EDITAR USUARIO
         if (e.target.classList.contains("btn-editar")) {
             const id = e.target.dataset.id;
             editarUsuario(id);
@@ -230,6 +232,11 @@ function registrarEventos(){
         if (e.target.classList.contains("btn-editarcl")) {
             const id = e.target.dataset.id;
             editarCliente(id);
+        }
+        // BOTON EDITAR PROVEEDOR
+        if (e.target.classList.contains("btn-editarpr")) {
+            const id = e.target.dataset.id;
+            editarProveedor(id);
         }
 
         // BOTON ELIMINAR USUARIO
@@ -243,9 +250,25 @@ function registrarEventos(){
             eliminarCliente(id);
         }
 
+          // BOTON ELIMINAR PROVEEDOR
+        if (e.target.classList.contains("btn-eliminarpr")) {
+            const id = e.target.dataset.id;
+            eliminarProveedor(id);
+        }
+
         // NUEVO USUARIO
         if (e.target.id === "btnNuevoUsuario") {
             abrirModalNuevoUsuario();
+        }
+
+        // NUEVO CLIENTE -MODAL
+        if (e.target.id === "btnNuevoCliente") {
+            abrirModalNuevoCliente();
+        }
+
+         // NUEVO PROVEEDOR -MODAL
+        if (e.target.id === "btnNuevoProveedores") {
+            abrirModalNuevoProveedor();
         }
 
         // GUARDAR USUARIO
@@ -258,6 +281,11 @@ function registrarEventos(){
             guardarCliente();
         }
 
+         // GUARDAR PROVEEDOR
+        if (e.target.id === "btnGuardarProveedores") {
+            guardarProveedor();
+        }
+
         // BUSCAR USUARIOS
         if (e.target.id === "btnBuscarUsuarios") {
             buscarUsuarios();
@@ -266,12 +294,22 @@ function registrarEventos(){
         //BUSCAR CLIENTES
         if (e.target.id === "btnBuscarClientes") {
             buscarClientes();
-        }    
+        } 
+        
+        //BUSCAR PROVEEDORES
+        if (e.target.id === "btnBuscarProveedores") {
+            buscarProveedor();
+        }  
+        
+        // CLICK IMAGEN PRODUCTO
+        if (e.target.classList.contains("img-producto-mini")) {
 
-         // NUEVO CLIENTE -MODAL
-        if (e.target.id === "btnNuevoCliente") {
-            abrirModalNuevoCliente();
-        }
+            const url = e.target.dataset.url;
+
+            if (url) {
+                window.open(url, "_blank");
+            }
+}
 
     });
 }
@@ -376,7 +414,7 @@ function abrirModalNuevoUsuario() {
     // cambiar título
     document.querySelector("#usuarioModal .modal-title").innerText = "Nuevo Usuario";
 
-    document.getElementById("modalIcon").className = "bi bi-person-plus-fill icon-modal";
+    document.querySelector("#usuarioModal .modalIcon").className = "modalIcon bi bi-person-plus-fill icon-modal";
 
     // abrir modal
     const modal = new bootstrap.Modal(document.getElementById("usuarioModal"));
@@ -502,7 +540,7 @@ async function editarUsuario(id) {
         // título dinámico
         document.querySelector("#usuarioModal .modal-title").innerText = "Editar Usuario";
 
-        document.getElementById("modalIcon").className = "bi bi-pencil-square icon-modal";
+        document.querySelector("#usuarioModal .modalIcon").className ="modalIcon bi bi-pencil-square icon-modal";
 
         // abrir modal
         const modalEl = document.getElementById("usuarioModal");
@@ -770,7 +808,7 @@ function abrirModalNuevoCliente() {
     // cambiar título
     document.querySelector("#clienteModal .modal-title").innerText = "Nuevo Cliente";
 
-    document.getElementById("modalIcon").className = "bi bi-person-plus-fill icon-modal";
+    document.querySelector("#clienteModal .modalIcon").className = "modalIcon bi bi-person-plus-fill icon-modal";
 
     // abrir modal
     const modal = new bootstrap.Modal(document.getElementById("clienteModal"));
@@ -873,7 +911,7 @@ async function editarCliente(id) {
         // título dinámico
         document.querySelector("#clienteModal .modal-title").innerText = "Editar Cliente";
 
-        document.getElementById("modalIcon").className = "bi bi-pencil-square icon-modal";
+        document.querySelector("#clienteModal .modalIcon").className ="modalIcon bi bi-pencil-square icon-modal";
 
         // abrir modal
         const modalEl = document.getElementById("clienteModal");
@@ -988,8 +1026,9 @@ function mostrarClientes(clientes) {
         tbody.innerHTML += `
             <tr>
                 <td>${cl.id_cliente}</td>
-                <td>${cl.nombre}
-                <td>${cl.telefono} 
+                <td>${cl.nombre}</td>
+                <td>${cl.cuit}</td>
+                <td>${cl.telefono}</td> 
                 <td>${cl.direccion}</td>
                 <td>${cl.email}</td>
                 <td>${cl.ciudad}</td>
@@ -1008,4 +1047,434 @@ function mostrarClientes(clientes) {
         `;
     });
 
+}
+
+//--------------PROVEEDORES--------------
+// TRAER PROVEEDORES
+async function cargarProveedores() {
+
+    try {
+        const res = await fetch(`${API_URL}/api/proveedores`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        const data = await res.json();
+
+        console.log("PROVEEDORES:", data);
+
+        const tbody = document.getElementById("tablaProveedores");
+
+        if (!tbody) return;
+
+        tbody.innerHTML = "";
+
+        data.data.forEach(pr => {
+            tbody.innerHTML += `
+                <tr>
+                    <td>${pr.id_proveedor}</td>
+                    <td>${pr.nombre}</td>
+                    <td>${pr.telefono}</td>
+                    <td>${pr.email}</td>
+                    <td>${pr.direccion}</td>
+                    <td>${pr.ciudad}</td>
+                    <td>${pr.provincia}</td>
+    
+                    <td class="acciones">
+                        <button class="btn btn-sm btn-editarpr" data-id="${pr.id_proveedor}">Editar</button>
+                        <button class="btn btn-sm btn-eliminarpr" data-id="${pr.id_proveedor}">Eliminar</button>
+                    </td>
+                </tr>
+            `;
+        });
+
+    } catch (error) {
+        console.error("Error cargando proveedor:", error);
+    }
+}
+
+//FUNCION ELIMINAR PROVEEDOR
+async function eliminarProveedor(id) {
+
+    try{ // manejo de bloque 
+        const confirmar = await confirmDelete("¿Seguro que querés eliminar este proveedor?"); //muestra un poup del navegador con mensaje
+
+        if (!confirmar.isConfirmed) return;
+        const res = await fetch(`${API_URL}/api/proveedores/${id}/eliminar`, { //peticion al backend
+            method: "PATCH",
+            headers: { // cabecera HTTP, metaddata del la request
+                "Content-Type": "application/json", //lo que se envia es json
+                "Authorization": `Bearer ${token}` //envio del token (Bearer es el esquema de autenticacion y token esta guardado en el localStorage)
+            }
+        });
+        const data = await res.json(); //convierte la repuesta del backend en un objeto JS
+
+        if(!res.ok){ //si hay error muestra el mensaje
+            await alertError(data.message || "Error al eliminar proveedor");
+            return; //corta la ejecucion si hubo error
+        }
+
+        await alertSuccess(data.message); //mensaje de exito
+
+        //refrescar tabla
+        cargarProveedores();
+
+    }catch (error){ //captura el error
+        console.error("Error eliminando proveedor:", error); //mensaje debbug
+        await alertError("Error de conexión con el servidor");
+    }
+};
+
+//FUNCION LIMPIAR FORMULARIO PROVEEDOR
+function limpiarFormularioPr() {
+    const ids = [
+        "proveedorId",
+        "nombrepr",
+        "telefonopr",
+        "emailpr",
+        "direccionpr",
+
+    ];
+
+    ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = "";
+    });
+
+    document.getElementById("ciudadpr").value = "1";
+}
+
+//FUNCION MOSTRAR FORMULARIO NUEVO PROVEEDOR
+function abrirModalNuevoProveedor() {
+
+    // limpiar formulario
+    limpiarFormularioPr();
+
+    // cambiar título
+    document.querySelector("#proveedorModal .modal-title").innerText = "Nuevo Proveedor";
+
+    document.querySelector("#proveedorModal .modalIcon").className = "modalIcon bi bi-person-plus-fill icon-modal";
+
+    // abrir modal
+    const modal = new bootstrap.Modal(document.getElementById("proveedorModal"));
+    modal.show();
+}
+
+function cerrarModalPr() {
+
+    const modalEl = document.getElementById("proveedorModal");
+    const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+
+    modal.hide();
+
+    limpiarFormularioPr();
+}
+  //FUNCION OBTENER VALORES DEL FORMULARIO
+function obtenerProveedorFormulario() {
+    return {
+        nombre: document.getElementById("nombrepr").value,
+        telefono: document.getElementById("telefonopr").value,
+        email: document.getElementById("emailpr").value,
+        direccion: document.getElementById("direccionpr").value,
+        id_ciudad: document.getElementById("ciudadpr").value,
+
+    };
+}
+async function guardarProveedor() {
+
+    try {
+
+        const id = document.getElementById("proveedorId").value;
+
+        const proveedor = obtenerProveedorFormulario();
+
+        const url = id
+            ? `${API_URL}/api/proveedores/${id}`
+            : `${API_URL}/api/proveedores`;
+
+        const method = id ? "PUT" : "POST";
+
+        const res = await fetch(url, {
+            method,
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(proveedor)
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            await alertError(data.message || "Error al guardar proveedor");
+            return;
+        }
+
+        await alertSuccess(id ? "Proveedor actualizado" : "Proveedor creado");
+
+        cerrarModalPr();
+        cargarProveedores();
+
+    } catch (error) {
+        console.error(error);
+        alert("Error de conexión");
+    }
+}
+
+async function editarProveedor(id) {
+
+    try {
+        const res = await fetch(`${API_URL}/api/proveedores/${id}`, {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        const data = await res.json();
+
+        if (!res.ok || !data?.data) {
+            await alertError(data.message || "Error al obtener proveedor");
+            return;
+        }
+
+        const pr = data.data;
+
+        // ID oculto
+        document.getElementById("proveedorId").value = pr.id_proveedor;
+
+        // Campos
+        document.getElementById("nombrepr").value = pr.nombre || "";
+        document.getElementById("telefonopr").value = pr.telefono || "";
+        document.getElementById("emailpr").value = pr.email || "";
+        document.getElementById("direccionpr").value = pr.direccion || ""; 
+        document.getElementById("ciudadpr").value = pr.id_ciudad;
+        
+        // título dinámico
+        document.querySelector("#proveedorModal .modal-title").innerText = "Editar Proveedor";
+
+        document.querySelector("#proveedorModal .modalIcon").className ="modalIcon bi bi-pencil-square icon-modal";
+
+        // abrir modal
+        const modalEl = document.getElementById("proveedorModal");
+        const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+        modal.show();
+
+    } catch (error) {
+        console.error(error);
+        await alertError("Error de conexión con el servidor");
+    }
+}
+
+//FUNCION BUSQUEDA FILTRO PROVEEDOR
+async function buscarProveedor() {
+
+    try {
+
+        const inputBusquedaPr = document.getElementById("inputBusquedaProveedor");
+        const valorBusquedaPr = inputBusquedaPr.value.trim();
+
+        const ciudad = document.getElementById("filtroCiudadPr").value;
+        const provincia = document.getElementById("filtroProvinciaPr").value;
+
+        let response;
+
+        //  BUSQUEDA POR ID (PRIORIDAD MAXIMA)
+        if (valorBusquedaPr !== "" && !isNaN(valorBusquedaPr)) {
+
+            response = await fetch(
+                `${API_URL}/api/clientes/${valorBusquedaPr}`,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    }
+                }
+            );
+
+        }
+
+        //  FILTROS COMBINADOS
+        else {
+
+            const params = new URLSearchParams();
+
+            if (valorBusquedaPr !== "") {
+                params.append("nombre", valorBusquedaPr);
+            }
+
+            if (ciudad !== "") {
+                params.append("ciudad", ciudad);
+            }
+
+            if (provincia !== "") {
+                params.append("provincia", provincia);
+            }
+
+            response = await fetch(
+                `${API_URL}/api/proveedores/filtros?${params.toString()}`,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    }
+                }
+            );
+        }
+
+        if (!response.ok) {
+            throw new Error(`Error HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        const proveedores = Array.isArray(data.data)
+            ? data.data
+            : [data.data];
+
+            if (proveedores.length === 0) {
+                alertError("Sin resultados","No se encontraron proveedores con esos parámetros");
+                 mostrarProveedores([]); // limpia tabla
+                return;
+            }
+
+        mostrarProveedores(proveedores);
+
+        // LIMPIAR
+        inputBusquedaPr.value = "";
+        document.getElementById("filtroCiudadPr").value = "";
+        document.getElementById("filtroProvinciaPr").value = "";  
+
+    } catch (error) {
+        console.error(error);
+        alertError("Error al buscar proveedores");
+    }
+}
+
+function mostrarProveedores(proveedores) {
+
+    const tbody = document.getElementById("tablaProveedores");
+
+    if (!tbody) return;
+
+    tbody.innerHTML = "";
+
+    proveedores.forEach(pr => {
+        tbody.innerHTML += `
+            <tr>
+                <td>${pr.id_proveedor}</td>
+                <td>${pr.nombre}</td>
+                <td>${pr.telefono}</td>
+                <td>${pr.email}</td> 
+                <td>${pr.direccion}</td> 
+                <td>${pr.ciudad}</td>
+                <td>${pr.provincia}</td>
+    
+                <td>
+                    <button class="btn btn-sm btn-editarpr" data-id="${pr.id_proveedor}">
+                        Editar
+                    </button>
+
+                    <button class="btn btn-sm btn-eliminarpr" data-id="${pr.id_proveedor}">
+                        Eliminar
+                    </button>
+                </td>
+            </tr>`;
+    });
+
+}
+
+//------------PRODUCTOS---------*//
+async function cargarProveedoresSelect() {
+
+    try {
+        const res = await fetch(`${API_URL}/api/proveedores`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        const data = await res.json();
+
+        const select = document.getElementById("proveedorProducto");
+
+        if (!select) return;
+
+        select.innerHTML = `<option value="">Seleccionar proveedor</option>`;
+
+        data.data.forEach(p => {
+            select.innerHTML += `
+                <option value="${p.id_proveedor}">
+                    ${p.nombre}
+                </option>
+            `;
+        });
+
+    } catch (error) {
+        console.error("Error cargando proveedores:", error);
+    }
+}
+// TRAER PRODUCTOS -GET
+async function cargarProductos() {
+
+    try {
+        const res = await fetch(`${API_URL}/api/productos`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        const data = await res.json();
+
+        console.log("PRODUCTOS:", data);
+
+        const tbody = document.getElementById("tablaProductos");
+
+        if (!tbody) return;
+
+        tbody.innerHTML = "";
+
+        data.data.forEach(p => {
+            tbody.innerHTML += `
+            <tr>
+                <td>
+                <img 
+                    src="${p.imagen_url}" 
+                    class="img-producto-mini"
+                    data-url="${p.imagen_url}">
+                </td>
+
+                <td>${p.id_producto}</td>
+                <td>${p.nombre}</td>
+                <td>${p.descripcion || ""}</td>
+                <td>$${p.precio}</td>
+                <td>${p.proveedor || p.id_proveedor}</td>
+
+                <td>
+                <a href="${p.prospecto_url}" target="_blank">
+                    <i class="bi bi-file-earmark-pdf-fill"></i>
+                </a>
+                </td>
+    
+                <td class="acciones">
+                        <button class="btn btn-sm btn-editarpd" data-id="${p.id_producto}">Editar</button>
+                        <button class="btn btn-sm btn-eliminarpd" data-id="${p.id_producto}">Eliminar</button>
+                </td>
+            </tr>
+            `;
+        });
+
+    } catch (error) {
+        console.error("Error cargando proveedor:", error);
+    }
+}
+
+function verImagen(url) {
+    window.open(url, "_blank");
 }

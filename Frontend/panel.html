@@ -84,8 +84,9 @@
     <div class="row g-4">
 
         <div class="col-md-3">
-        <div class="card dash-card">
+        <div class="card dash-card stock-card">
             <div class="card-body">
+            <i class="bi bi-box-seam dash-icon"></i>
             <h6>Stock Total</h6>
             <h2>14.208</h2>
             <small class="text-success">+12%</small>
@@ -94,8 +95,9 @@
         </div>
 
         <div class="col-md-3">
-        <div class="card dash-card">
+        <div class="card dash-card usuarios-card">
             <div class="card-body">
+            <i class="bi bi-people-fill dash-icon"></i>
             <h6>Usuarios Activos</h6>
             <h2>852</h2>
             <small class="text-success">+4%</small>
@@ -104,8 +106,9 @@
         </div>
 
         <div class="col-md-3">
-        <div class="card dash-card">
+        <div class="card dash-card pedidos-card">
             <div class="card-body">
+            <i class="bi bi-exclamation-triangle-fill dash-icon"></i>
             <h6>Pedidos Pendientes</h6>
             <h2>42</h2>
             <small class="text-danger">Alta prioridad</small>
@@ -114,11 +117,12 @@
         </div>
 
         <div class="col-md-3">
-        <div class="card dash-card">
+        <div class="card dash-card clientact-card">
             <div class="card-body">
-            <h6>Ingresos Mensuales</h6>
-            <h2>$1.4M</h2>
-            <small class="text-success">+22%</small>
+                <i class="bi bi-building dash-icon"></i>
+            <h6>Clientes Activos</h6>
+            <h2>16</h2>
+            <small class="text-success">+8%</small>
             </div>
         </div>
         </div>
@@ -449,6 +453,70 @@
 
 </section>
 
+<!--=========Seccion PRODUCTOS==========-->
+    <section id="productosSection" class="container-fluid p-4 module-section d-none">
+        <button class="btn-volver-panel">
+    ← Volver
+        </button>
+        <!-- FILTROS -->
+    <div class="card p-3 mb-4 shadow-sm">
+
+        <div class="row g-3 align-items-end">
+
+            <!-- BUSQUEDA -->
+            <div class="col-md-3">
+                <label class="form-label">Buscar Productos</label>
+                <input
+                    type="text"
+                    id="inputBusquedaProducto"
+                    class="form-control"
+                    placeholder="nombre del producto">
+            </div>
+
+            <!-- PROVEEDORES-->
+            <div class="col-md-2">
+                <label class="form-label">Ciudad</label>
+                <select id="proveedorProducto" title="proveedorProd" class="form-select">
+                <option value="">Seleccionar proveedor</option>
+                </select>
+            </div>
+            
+            <!-- BOTON BUSCAR -->
+            <div class="col-md-3">
+                <button id="btnBuscarProductos" class="btn btn-primary w-100">
+                    Buscar
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Productos</h2>
+
+        <button class="btn btn-nuevo" id="btnNuevoProductos">
+            + Nuevo Producto
+        </button>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Imagen</th>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Precio</th>
+                <th>Proveedor</th>
+                <th>Prospecto</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody id="tablaProductos"></tbody>
+    </table>
+
+</section>
 
 
     <!-- ================= ACTIVITY + MONITOR ================= -->
@@ -562,7 +630,7 @@
             <!-- HEADER -->
             <div class="modal-header">
 
-                <i id="modalIcon" class="bi bi-person-plus-fill icon-modal"></i>
+                <i class="modalIcon bi bi-person-plus-fill icon-modal"></i>
 
                 <h5 class="modal-title">Usuario</h5>
 
@@ -665,7 +733,7 @@
             <!-- HEADER -->
             <div class="modal-header">
 
-                <i id="modalIcon" class="bi bi-person-plus-fill icon-modal"></i>
+                <i class="modalIcon bi bi-person-plus-fill icon-modal"></i>
 
                 <h5 class="modal-title">Cliente</h5>
 
@@ -724,7 +792,7 @@
                     <option value="2">Hospital</option>
                     <option value="3">Clínica Privada</option>
                     <option value="4">Laboratorio</option>
-                    <option value="5">DrogueríaN</option>
+                    <option value="5">Droguería</option>
                 </select>
                 
             </div>
@@ -739,6 +807,81 @@
 
                 <button class="btn btn-primary btn-guardar"
                         id="btnGuardarClientes">
+                    Guardar
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- MODAL PROVEEDOR -->
+<div class=" modal fade modal-new" id="proveedorModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- HEADER -->
+            <div class="modal-header">
+
+                <i class="modalIcon bi bi-person-plus-fill icon-modal"></i>
+
+                <h5 class="modal-title">Proveedor</h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <!-- BODY -->
+            <div class="modal-body">
+
+                <input type="hidden" id="proveedorId">
+
+                <input type="text"
+                    id="nombrepr"
+                    class="form-control mb-2"
+                    placeholder="Nombre">
+
+                <input type="text"
+                    id="telefonopr"
+                    class="form-control mb-2"
+                    placeholder="111234-5678">
+
+                <input type="email"
+                    id="emailpr"
+                    class="form-control mb-2"
+                    placeholder="Email">
+                
+                <input type="text"
+                    id="direccionpr"
+                    class="form-control mb-2"
+                    placeholder="Ej. Av. Corrientes 1234">    
+
+                <label class="form-label">Ciudad</label>
+
+                <select id="ciudadpr" class="form-select mb-2">
+                    <option value="1">Río Cuarto</option>
+                    <option value="2">Córdoba</option>
+                    <option value="3">Rosario</option>
+                    <option value="4">Santa Fe</option>
+                    <option value="5">Mendoza</option>
+                    <option value="6">Buenos Aires</option>
+                </select>
+            </div>
+
+            <!-- FOOTER -->
+            <div class="modal-footer">
+
+                <button class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                    Cancelar
+                </button>
+
+                <button class="btn btn-primary btn-guardar"
+                        id="btnGuardarProveedores">
                     Guardar
                 </button>
 

@@ -1,4 +1,4 @@
-import { getProveedoresModel,getProveedorByIDModel,searchProveedoresModel, crearProveedorModel, actualizarProveedorModel,
+import { getProveedoresModel,getProveedorByIDModel,searchProveedoresModel,getProveedoresFiltrosModel, crearProveedorModel, actualizarProveedorModel,
 
     eliminarProveedorModel} from "../models/proveedores_model.js";
 
@@ -12,6 +12,11 @@ export const getProveedorByIDService = async (id) => {
 
 export const searchProveedorService = async (nombre) => {
     return await searchProveedoresModel(nombre);
+};
+
+//-----------SERVICIO GET FILTROS------------*
+export const getProveedoresFiltrosService = async (filtros) => {
+    return await getProveedoresFiltrosModel(filtros);
 };
 
 export const crearProveedorService = async (producto) => {

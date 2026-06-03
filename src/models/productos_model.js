@@ -10,7 +10,9 @@ export const getAllProductos = async () => {
                 p.nombre,
                 p.descripcion,
                 p.precio,
-                pr.nombre AS proveedor
+                pr.nombre AS proveedor,
+                p.imagen_url,
+                p.prospecto_url
             FROM productos p
             LEFT JOIN proveedores pr ON p.id_proveedor = pr.id_proveedor
         `);
@@ -35,7 +37,9 @@ export const getProductoByIDModel = async (id) => {
         p.nombre,
         p.descripcion,
         p.precio,
-        pr.nombre AS proveedor
+        pr.nombre AS proveedor,
+        p.imagen_url,
+        p.prospecto_url
         FROM productos p
         LEFT JOIN proveedores pr ON p.id_proveedor = pr.id_proveedor
         WHERE p.id_producto = ?`, [id]);
@@ -61,7 +65,9 @@ export const searchProductosModel = async (nombre) => {
         p.nombre,
         p.descripcion,
         p.precio,
-        pr.nombre AS proveedor
+        pr.nombre AS proveedor,
+        p.imagen_url,
+        p.prospecto_url
         FROM productos p
         LEFT JOIN proveedores pr ON p.id_proveedor = pr.id_proveedor
         WHERE LOWER(p.nombre) LIKE LOWER(?)`, [`%${nombre}%`]);

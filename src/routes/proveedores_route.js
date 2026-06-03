@@ -2,7 +2,7 @@ import express from "express"; //Importa el modulo Express para crear el servido
 
 const router = express.Router(); //crea un enrutador de express, que permite organizar las rutas en modulos separados.
 
-import { getProveedores, getProveedorByID, searchProveedor, crearProveedor,actualizarProveedor, eliminarProveedor } from "../controllers/proveedores_controller.js";
+import { getProveedores, getProveedorByID, searchProveedor, getProveedoresFiltros, crearProveedor,actualizarProveedor, eliminarProveedor } from "../controllers/proveedores_controller.js";
 
 import { auth } from "../middleware/auth_middleware.js";
 
@@ -13,6 +13,9 @@ import { authorizeRole } from "../middleware/authorizeRole.js";
 //-------------------
 
 router.get("/", auth, authorizeRole("admin", "gerente", "empleado"), getProveedores); //Devuelve todos los proveedores
+
+//GET FILTROS
+router.get("/filtros", getProveedoresFiltros);
 
 //GET serach
 router.get("/search", auth, authorizeRole("admin", "gerente", "empleado"), searchProveedor);
@@ -38,6 +41,12 @@ router.put("/:id", auth, authorizeRole("admin", "gerente"), actualizarProveedor)
 //-------------------
 
 router.delete("/:id", auth, authorizeRole("admin"), eliminarProveedor);
+
+//-------------------
+//Route PATCH PARA BORRADO LOGICO
+//-------------------
+
+router.patch("/:id/eliminar", auth, authorizeRole("admin"), eliminarProveedor);
 
 
 export default router; //exporta el router para poder usarlo en otros archivos, como en index.js.

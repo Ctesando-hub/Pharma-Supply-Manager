@@ -990,14 +990,63 @@ body {
 
 .dash-card {
     border: none;
-    border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    transition: 0.2s;
+    border-radius: 14px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+    transition: 0.25s;
+    overflow: hidden;
+    position: relative;
+}
+.dash-card:hover {
+    transform: translateY(-4px);
+}
+.dash-card .card-body {
+    position: relative;
+    padding-left: 24px;
 }
 
-.dash-card:hover {
-    transform: translateY(-3px);
+.dash-icon {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    font-size: 2rem;
+    opacity: 1;
 }
+/*azul marino*/
+.stock-card {
+    border-left: 6px solid #052f62;
+}
+
+.stock-card .dash-icon {
+    color: #052f62;
+}
+
+/*fuscia*/
+.usuarios-card {
+    border-left: 6px solid #e20074;
+}
+
+.usuarios-card .dash-icon {
+    color: #e20074;
+}
+
+/*rojo amarronado*/
+.pedidos-card {
+    border-left: 6px solid #a63d40;
+}
+
+.pedidos-card .dash-icon {
+    color: #a63d40;
+}
+
+/*rosa claro*/
+.clientact-card {
+    border-left: 6px solid #f7b2d0;
+}
+
+.clientact-card .dash-icon {
+    color: #f7b2d0;
+}
+
 
 /*NAVEGACION RAPIDA*/
 .section-title {
@@ -1323,7 +1372,7 @@ MONITOR PANEL
 }
 
 /* HOVER BOTON GUARDAR */
-#btnBuscarUsuarios, #btnBuscarClientes {
+#btnBuscarUsuarios, #btnBuscarClientes, #btnBuscarProveedores {
     background-color: #1f3b66;
     border: none;
     color: white;
@@ -1335,7 +1384,8 @@ MONITOR PANEL
 
 /* HOVER */
 #btnBuscarUsuarios:hover,
-#btnBuscarClientes:hover {
+#btnBuscarClientes:hover,
+#btnBuscarProveedores:hover {
     background-color: #163053;
     transform: translateY(-1px);
     box-shadow: 0 6px 14px rgba(31, 59, 102, 0.25);
@@ -1343,7 +1393,8 @@ MONITOR PANEL
 
 /* ACTIVE (click) */
 #btnBuscarUsuarios:active,
-#btnBuscarClientes:active {
+#btnBuscarClientes:active,
+#btnBuscarProveedores:active {
     transform: translateY(0);
     box-shadow: none;
 }
@@ -1388,20 +1439,20 @@ MONITOR PANEL
 }
 
 /* BOTÓN EDITAR */
-.btn-editar, .btn-editarcl {
+.btn-editar, .btn-editarcl, .btn-editarpr {
     background-color: rgba(58, 95, 148, 0.22);
     color: #1f3b5c;
     border: 1px solid rgba(58, 95, 148, 0.5);
     transition: 0.3s;
 }
 
-.btn-editar:hover, .btn-editarcl:hover {
+.btn-editar:hover, .btn-editarcl:hover, .btn-editarpr:hover {
     background-color: #3a5f94;
     color: white;
 }
 
 /* BOTÓN ELIMINAR */
-.btn-eliminar, .btn-eliminarcl {
+.btn-eliminar, .btn-eliminarcl, .btn-eliminarpr {
     background-color: rgba(214, 69, 69, 0.15);
     color: #a12f2f;
     border: 1px solid rgba(214, 69, 69, 0.4);
@@ -1409,7 +1460,7 @@ MONITOR PANEL
 }
 
 
-.btn-eliminar:hover, .btn-eliminarcl:hover {
+.btn-eliminar:hover, .btn-eliminarcl:hover, .btn-eliminar:hover {
     background-color: #c0392b;
     color: white;
 }
@@ -1441,10 +1492,31 @@ MONITOR PANEL
 }
 
 /*columna acciones*/
-#clientesSection .acciones {
+#clientesSection .acciones{
     display: flex;
     gap: 6px;
     align-items: center;
     justify-content: center;
 }
+#proveedoresSection tbody td{
+    white-space: nowrap;
+}
+
+/*PRDUCTOS*/
+.img-producto-mini {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    transition: transform 0.2s ease;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.img-producto-mini:hover {
+    transform: scale(1.1);
+}
+
 

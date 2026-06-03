@@ -1,5 +1,5 @@
 import { getProveedoresService, getProveedorByIDService, searchProveedorService, crearProveedorService,
-    actualizarProveedorService, eliminarProveedorService} from "../services/proveedores_service.js"; 
+    actualizarProveedorService, eliminarProveedorService, getProveedoresFiltrosService} from "../services/proveedores_service.js"; 
 import logger from "../utils/logger.js";
 
 
@@ -66,19 +66,47 @@ export const searchProveedor = async (req, res) =>{
     }
 };
 
+// FILTROS COMBINADOS
+export const getProveedoresFiltros = async (req, res) => {
+
+    try {
+
+        const { nombre, ciudad} = req.query;
+
+        const proveedores = await getProveedoresFiltrosService({
+            nombre,
+            ciudad
+        });
+        logger.info( `Resultados encontrados: ${proveedores.length}`)
+        return res.status(200).json({
+            message: "Filtros aplicados correctamente",
+            data: proveedores
+        });
+
+    } catch (error) {
+
+        console.error("Error filtros:", error);
+        logger.error(`Error en getProveedoresFiltro: ${error.message}`);
+        return res.status(500).json({
+            message: "Error al filtrar proveedores",
+            error: error.message
+        });
+    }
+};
+
 //Controlador para crear un nuevo proveedor
 export const crearProveedor = async (req, res) =>{
     try{
-        const { nombre, cuit, direccion, telefono, email, id_ciudad} = req.body; //extraer los datos del body
+        const { nombre, direccion, telefono, email, id_ciudad} = req.body; //extraer los datos del body
         logger.info("POST /proveedores - Creando proveedor");
 
         // Validamos que sean campos obligatorios
-        if(!nombre  ||!cuit ||!telefono ||!email  ||!direccion ||!id_ciudad){
+        if(!nombre ||!telefono ||!email  ||!direccion ||!id_ciudad){
             logger.warn("POST proveedor falló: faltan datos obligatorios");
             return res.status(400).json({ message: "Faltan datos obligatorios"});
         }
 
-        const nuevoProveedor = await crearProveedorService({nombre,cuit, direccion, telefono, email, id_ciudad});
+        const nuevoProveedor = await crearProveedorService({nombre, direccion, telefono, email, id_ciudad});
             logger.info(`Proveedor creado con ID: ${nuevoProveedor.id}`);
             return res.status(201).json({ message: "Proveedor creado correctamente", data: nuevoProveedor});       
 

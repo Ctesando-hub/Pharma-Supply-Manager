@@ -6,16 +6,17 @@ export const getProveedoresModel = async () => {
     try {
     const [rows] = await conn.execute(`
         SELECT 
-        p.id_proveedor,
-        p.nombre,
-        p.telefono,
-        p.email,
-        p.direccion,
+        pr.id_proveedor,
+        pr.nombre,
+        pr.telefono,
+        pr.email,
+        pr.direccion,
         c.nombre AS ciudad,
-        pr.nombre AS provincia
-        FROM proveedores p
-        INNER JOIN ciudades c ON p.id_ciudad = c.id_ciudad
-        INNER JOIN provincias pr ON c.id_provincia = pr.id_provincia
+        prv.nombre AS provincia
+        FROM proveedores pr
+        INNER JOIN ciudades c ON pr.id_ciudad = c.id_ciudad
+        INNER JOIN provincias prv ON c.id_provincia = prv.id_provincia
+        WHERE pr.proveedor_eliminado IS NULL
     `);
     return rows;
     } catch (error) {
@@ -31,17 +32,17 @@ export const getProveedorByIDModel = async (id) => {
     const conn = await getConnection();
     try {
     const [rows] = await conn.execute(`SELECT 
-        p.id_proveedor,
-        p.nombre,
-        p.telefono,
-        p.email,
-        p.direccion,
+        pr.id_proveedor,
+        pr.nombre,
+        pr.telefono,
+        pr.email,
+        pr.direccion,
         c.nombre AS ciudad,
         pr.nombre AS provincia
-        FROM proveedores p
-        INNER JOIN ciudades c ON p.id_ciudad = c.id_ciudad
-        INNER JOIN provincias pr ON c.id_provincia = pr.id_provincia
-        WHERE p.id_proveedor = ?`,[id]);
+        FROM proveedores pr
+        INNER JOIN ciudades c ON pr.id_ciudad = c.id_ciudad
+        INNER JOIN provincias prv ON c.id_provincia = prv.id_provincia
+        WHERE pr.id_proveedor = ? AND pr.proveedor_eliminado IS NULL`,[id]);
     
     if (rows.length === 0) {
         throw new Error("Proveedor no encontrado");
@@ -59,16 +60,81 @@ export const getProveedorByIDModel = async (id) => {
 export const searchProveedoresModel = async (nombre) => {
     const conn = await getConnection();
     try {
-    const [rows] = await conn.execute(
-      "SELECT * FROM proveedores WHERE LOWER(nombre) LIKE LOWER(?)",
-        [`%${nombre}%`]
-    );
+    const [rows] = await conn.execute(`SELECT 
+        pr.id_proveedor,
+        pr.nombre,
+        pr.telefono,
+        pr.email,
+        pr.direccion,
+        c.nombre AS ciudad,
+        prv.nombre AS provincia
+        FROM proveedores pr
+        INNER JOIN ciudades c ON pr.id_ciudad = c.id_ciudad
+        INNER JOIN provincias prv ON c.id_provincia = prv.id_provincia
+        WHERE LOWER(pr.nombre) LIKE LOWER(?)
+        AND pr.proveedor_eliminado IS NULL`,[`%${nombre}%`]);
+        
     return rows;
     } catch (error) {
     console.error("Error al buscar proveedores:", error.message);
     throw new Error("No se pudieron buscar los proveedores");
     } finally {
     await conn.end();
+    }
+};
+
+//Buscar proveedores con filtros/ combinados
+export const getProveedoresFiltrosModel = async ({ nombre, ciudad, provincia }) => {
+
+    const conn = await getConnection();
+
+    try {
+
+        let query = `
+            SELECT 
+                pr.id_proveedor,
+                pr.nombre,
+                pr.telefono,
+                pr.email,
+                cl.direccion,
+                c.nombre AS ciudad,
+                p.nombre AS provincia
+                
+            FROM proveedores pr
+            INNER JOIN ciudades c ON pr.id_ciudad = c.id_ciudad
+            INNER JOIN provincias p ON c.id_provincia = p.id_provincia
+            WHERE pr.proveedor_eliminado IS NULL`;
+
+        const params = [];
+
+        if (nombre) {
+            query += ` AND (pr.nombre LIKE ?)`;
+            params.push(`%${nombre}%`);
+}
+
+        if (ciudad) {
+            query += " AND pr.id_ciudad = ?";
+            params.push(ciudad);
+        }
+
+        if(provincia) {
+            query += " AND p.id_provincia = ?";
+            params.push(provincia);
+        }
+
+
+        const [rows] = await conn.execute(query, params);
+
+        return rows;
+
+    } catch (error) {
+
+        console.error("Error filtros proveedores:", error.message);
+        throw new Error("No se pudieron filtrar los proveedores");
+
+    } finally {
+
+        await conn.end();
     }
 };
 
@@ -116,7 +182,10 @@ export const eliminarProveedorModel = async (id) => {
     const conn = await getConnection();
     try {
     const [result] = await conn.execute(
-        "DELETE FROM proveedores WHERE id_proveedor = ?",
+        `UPDATE proveedores 
+            SET proveedor_eliminado = NOW() 
+            WHERE id_proveedor = ?
+            AND proveedor_eliminado IS NULL`,
         [id]
     );
     if (result.affectedRows === 0) {
