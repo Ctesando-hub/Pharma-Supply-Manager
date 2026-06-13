@@ -7,9 +7,12 @@ export const getAllStockModel = async () => {
     const [rows] = await conn.execute(`
         SELECT 
         s.id_stock,
-        p.nombre AS nombre,
+        s.id_producto,
+        p.nombre,
+        p.imagen_url,
         s.cantidad_disponible,
         s.punto_reposicion,
+        s.cantidad_reservada,
         s.ultima_actualizacion
         FROM stock s
         INNER JOIN productos p ON s.id_producto = p.id_producto
@@ -71,50 +74,130 @@ export const searchStockModel = async (nombre) => {
     }
 };
 
-// Crear nuevo stock del producto
-export const crearStockModel = async (stock) => {
+export const getStockFiltrosModel = async ({ nombre }) => {
 
-    const { id_producto, cantidad_disponible, punto_reposicion, ultima_actualizacion} = stock;
     const conn = await getConnection();
-    try {
-    const [resultado] = await conn.execute(
-        "INSERT INTO stock (id_producto, cantidad_disponible, punto_reposicion, ultima_actualizacion) VALUES (?, ?, ?, ?)",
-        [id_producto, cantidad_disponible, punto_reposicion, ultima_actualizacion]);
 
-    return { id: resultado.insertId, ...stock };
+    try {
+
+        let query = `
+            SELECT
+                s.id_stock,
+                s.id_producto,
+                p.nombre,
+                p.imagen_url,
+                s.cantidad_disponible,
+                s.punto_reposicion,
+                s.cantidad_reservada,
+                s.ultima_actualizacion
+            FROM stock s
+            INNER JOIN productos p
+                ON s.id_producto = p.id_producto
+            WHERE 1=1`;
+
+        const params = [];
+
+        if (nombre) {
+            query += `AND p.nombre LIKE ?`;
+            params.push(`%${nombre}%`);
+
+        }
+        const [rows] = await conn.execute(query, params);
+        return rows;
+
     } catch (error) {
 
-    console.error("Error al crear stock:", error.message);
-    throw new Error("No se pudo crear Stock");
+        console.error("Error filtros stock:", error.message);
+        throw new Error(
+            "No se pudieron filtrar los productos"
+        );
+
     } finally {
-    await conn.end();
+        await conn.end();
+    }
+
+};
+
+// Crear nuevo stock del producto
+// Crear stock inicial del producto
+export const crearStockModel = async (id_producto) => {
+
+    const conn = await getConnection();
+
+    try {
+
+        const [resultado] = await conn.execute(
+            `INSERT INTO stock
+            (
+                id_producto,
+                cantidad_disponible,
+                punto_reposicion,
+                cantidad_reservada
+            )
+            VALUES (?, ?, ?, ?)`,
+            [
+                id_producto, 0,0,0
+            ]
+        );
+
+        return {
+            id: resultado.insertId,
+            id_producto,
+            cantidad_disponible: 0,
+            punto_reposicion: 0,
+            cantidad_reservada: 0
+        };
+
+    } catch (error) {
+
+        console.error("Error al crear stock:", error.message);
+        throw new Error("No se pudo crear Stock");
+
+    } finally {
+
+        await conn.end();
+
     }
 };
 
 // Actualizar Stock
 export const actualizarStockModel = async (id, stock) => {
 
-    const { id_producto, cantidad_disponible, punto_reposicion, ultima_actualizacion } = stock;
+    const { cantidad_disponible, punto_reposicion} = stock;
 
     const conn = await getConnection();
 
     try {
-    const [resultado] = await conn.execute(
-        "UPDATE stock SET id_producto=?, cantidad_disponible=?, punto_reposicion=?, ultima_actualizacion=? WHERE id_stock=?",
-        [id_producto, cantidad_disponible, punto_reposicion, ultima_actualizacion, id]);
-    
+        const [resultado] = await conn.execute(
+            `
+            UPDATE stock
+            SET
+                cantidad_disponible = ?,
+                punto_reposicion = ?
+            WHERE id_stock = ? `,
+            [
+                cantidad_disponible, punto_reposicion, id
+            ]
+        );
+
         if (resultado.affectedRows === 0) {
-        throw new Error("Stock no encontrado");
-    }
-    return { id, ...stock };
-        
+            throw new Error("Stock no encontrado");
+        }
+
+        return {
+            id_stock: id,
+            cantidad_disponible,
+            punto_reposicion
+        };
+
     } catch (error) {
-    console.error("Error al actualizar stock:", error.message);
-    throw new Error("No se pudo actualizar Stock");
+        console.error("Error al actualizar stock:",error.message);
+        throw new Error("No se pudo actualizar Stock");
 
     } finally {
-    await conn.end();
+        await conn.end();
     }
+
 };
 
 // Eliminar stock

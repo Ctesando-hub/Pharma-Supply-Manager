@@ -18,6 +18,15 @@ export const login = async (req, res) => { // Exporta la función login para que
             logger.warn(`Login fallido: usuario no encontrado -> ${email}`);
             return res.status(401).json({ message: "Usuario no encontrado"});
         }
+        if (user.eliminado !== null) {
+
+        logger.warn(`Login bloqueado: usuario eliminado -> ${email}`
+    );
+
+        return res.status(403).json({
+            message: "La cuenta se encuentra deshabilitada. Contacte al administrador."
+    });
+}
          // Comparar contraseña ingresada vs hash en BD
         const passwordValida = await bcrypt.compare(password, user.password);
 

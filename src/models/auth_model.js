@@ -12,6 +12,7 @@ export const buscarUsuarioEmail = async (email) => {
             u.email,
             u.password,
             u.id_rol,
+            u.eliminado,
         CASE 
             WHEN r.nombre = 'Administrador' THEN 'admin'
             WHEN r.nombre = 'Gerente' THEN 'gerente'

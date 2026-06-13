@@ -1439,20 +1439,20 @@ MONITOR PANEL
 }
 
 /* BOTÓN EDITAR */
-.btn-editar, .btn-editarcl, .btn-editarpr {
+.btneditar {
     background-color: rgba(58, 95, 148, 0.22);
     color: #1f3b5c;
     border: 1px solid rgba(58, 95, 148, 0.5);
     transition: 0.3s;
 }
 
-.btn-editar:hover, .btn-editarcl:hover, .btn-editarpr:hover {
+.btneditar:hover {
     background-color: #3a5f94;
     color: white;
 }
 
 /* BOTÓN ELIMINAR */
-.btn-eliminar, .btn-eliminarcl, .btn-eliminarpr {
+.btneliminar {
     background-color: rgba(214, 69, 69, 0.15);
     color: #a12f2f;
     border: 1px solid rgba(214, 69, 69, 0.4);
@@ -1460,7 +1460,7 @@ MONITOR PANEL
 }
 
 
-.btn-eliminar:hover, .btn-eliminarcl:hover, .btn-eliminar:hover {
+.btneliminar:hover {
     background-color: #c0392b;
     color: white;
 }
@@ -1502,7 +1502,7 @@ MONITOR PANEL
     white-space: nowrap;
 }
 
-/*PRDUCTOS*/
+/*PRODUCTOS*/
 .img-producto-mini {
     width: 80px;
     height: 80px;
@@ -1518,5 +1518,90 @@ MONITOR PANEL
 .img-producto-mini:hover {
     transform: scale(1.1);
 }
+.icon-prospecto {
+    font-size: 1.6rem;
+    color: #0b1c2d; /* azul marino sistema */
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.icon-prospecto:hover {
+    color: #e20074; /* magenta del sistema */
+    transform: scale(1.15);
+}
+
+/*columna acciones productos*/
+td.acciones_acciones {
+    white-space: nowrap;
+    text-align: center;
+    vertical-align: middle;
+}
+td.acciones_acciones button {
+    display: inline-block;
+    margin: 0 3px;
+    vertical-align: middle;
+}
+/* =========================
+PREVIEW IMAGEN PRODUCTO
+========================= */
+
+.preview-container {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.preview-img {
+    max-width: 140px;
+    max-height: 140px;
+    border-radius: 12px;
+    object-fit: cover;
+    display: none;
+    border: 2px solid #eaeaea;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* =========================
+PROSPECTO PREVIEW
+========================= */
+
+.preview-prospecto {
+    margin-top: 8px;
+    font-size: 0.9rem;
+}
+
+.preview-prospecto a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #e20074;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.preview-prospecto a:hover {
+    text-decoration: underline;
+}
+
+/* ICONO PDF / FILE */
+.preview-prospecto i {
+    font-size: 1.1rem;
+}
+
+/* =========================
+INPUT FILE MEJORADO
+========================= */
+
+.modal-new input[type="file"] {
+    padding: 10px;
+    background: #f3f5f9;
+    border-radius: 12px;
+    border: 1px solid transparent;
+    transition: 0.2s;
+}
+
+.modal-new input[type="file"]:hover {
+    background: #eef1f6;
+}
+
 
 

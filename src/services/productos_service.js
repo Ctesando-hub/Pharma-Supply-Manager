@@ -1,4 +1,6 @@
-import { getProductoByIDModel, getAllProductos, searchProductosModel, crearProductoModel, actualizarProductoModel,eliminarProductoModel } from "../models/productos_model.js"; 
+import { getProductoByIDModel, getAllProductos, searchProductosModel,getProductosFiltrosModel, crearProductoModel, actualizarProductoModel,eliminarProductoModel } from "../models/productos_model.js"; 
+import { crearStockService } from "./stock_service.js";
+
 
 export const getProductosService = async () =>{
     return await getAllProductos();
@@ -12,8 +14,22 @@ export const searchProductosService = async (nombre) => {
     return await searchProductosModel(nombre);
 };
 
+//-----------SERVICIO GET FILTROS------------*
+export const getProductosFiltrosService = async (filtros) => {
+    return await getProductosFiltrosModel(filtros);
+};
+
+//export const crearProductoService = async (producto) => {
+   // return await crearProductoModel(producto);
+//};
 export const crearProductoService = async (producto) => {
-    return await crearProductoModel(producto);
+
+    const nuevoProducto = await crearProductoModel(producto);
+
+    // Crear stock inicial
+    await crearStockService(nuevoProducto.id);
+
+    return nuevoProducto;
 };
 
 export const actualizarProductoService = async (id, producto) => {

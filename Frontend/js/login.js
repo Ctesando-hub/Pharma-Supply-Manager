@@ -1,3 +1,4 @@
+import { alertError, alertSuccess } from "./alerts.js";
 
 document.addEventListener("DOMContentLoaded", () =>{  //Ejecuta el codigo cuando el HTML este cargado
     const form =document.getElementById("formLogin");
@@ -33,12 +34,11 @@ document.addEventListener("DOMContentLoaded", () =>{  //Ejecuta el codigo cuando
                 localStorage.setItem("nombre", data.nombre);
                 localStorage.setItem("apellido", data.apellido);
                 window.location.href = "panel.html"; // lo envia al panel
-            }else {
-                alert(data.message || "Error al Iniciar Sesion"); //muestra o un mensaje generico o un mensaje personalizado
-            }
+            }else { await alertError(data.message ||"Error al iniciar sesión"); //muestra o un mensaje generico o un mensaje personalizado
+                }
         } catch (error){ //captura el error
         console.error(error);
-        alert("Error de conexion con el servidor");
+            await alertError("Error de conexión", "No se pudo conectar con el servidor");
         }
 
     });

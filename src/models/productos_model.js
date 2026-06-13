@@ -10,11 +10,13 @@ export const getAllProductos = async () => {
                 p.nombre,
                 p.descripcion,
                 p.precio,
+                p.id_proveedor,
                 pr.nombre AS proveedor,
                 p.imagen_url,
                 p.prospecto_url
             FROM productos p
             LEFT JOIN proveedores pr ON p.id_proveedor = pr.id_proveedor
+            WHERE p.prod_eliminado IS NULL
         `);
         
         return rows;
@@ -42,7 +44,7 @@ export const getProductoByIDModel = async (id) => {
         p.prospecto_url
         FROM productos p
         LEFT JOIN proveedores pr ON p.id_proveedor = pr.id_proveedor
-        WHERE p.id_producto = ?`, [id]);
+        WHERE p.id_producto = ? AND p.prod_eliminado IS NULL`, [id]);
 
     if (rows.length === 0) {
         throw new Error("Producto no encontrado");
@@ -70,7 +72,7 @@ export const searchProductosModel = async (nombre) => {
         p.prospecto_url
         FROM productos p
         LEFT JOIN proveedores pr ON p.id_proveedor = pr.id_proveedor
-        WHERE LOWER(p.nombre) LIKE LOWER(?)`, [`%${nombre}%`]);
+        WHERE LOWER(p.nombre) LIKE LOWER(?) AND p.prod_eliminado IS NULL`, [`%${nombre}%`]);
     return rows;
     } catch (error) {
     console.error("Error al buscar productos:", error.message);
@@ -80,14 +82,62 @@ export const searchProductosModel = async (nombre) => {
     }
 };
 
+//Buscar productos con filtros/ combinados
+export const getProductosFiltrosModel = async ({ nombre, proveedor }) => {
+
+    const conn = await getConnection();
+
+    try {
+
+        let query = `
+            SELECT 
+                p.id_producto,
+                p.nombre,
+                p.descripcion,
+                p.precio,
+                p.id_proveedor,
+                pr.nombre AS proveedor,
+                p.imagen_url,
+                p.prospecto_url
+            FROM productos p
+            LEFT JOIN proveedores pr ON p.id_proveedor = pr.id_proveedor
+            WHERE p.prod_eliminado IS NULL`;
+
+        const params = [];
+
+        if (nombre) {
+            query += ` AND (p.nombre LIKE ?)`;
+            params.push(`%${nombre}%`);
+}
+
+        if (proveedor) {
+            query += " AND pr.id_proveedor = ?";
+            params.push(proveedor);
+        }
+
+        const [rows] = await conn.execute(query, params);
+
+        return rows;
+
+    } catch (error) {
+
+        console.error("Error filtros productos:", error.message);
+        throw new Error("No se pudieron filtrar los productos");
+
+    } finally {
+
+        await conn.end();
+    }
+};
+
 // Crear un nuevo producto
 export const crearProductoModel = async (producto) => {
-    const { nombre, descripcion, precio, id_proveedor } = producto;
+    const { nombre, descripcion, precio, id_proveedor, imagen_url, prospecto_url } = producto;
     const conn = await getConnection();
     try {
     const [result] = await conn.execute(
-        "INSERT INTO productos (nombre, descripcion, precio, id_proveedor) VALUES (?, ?, ?, ?)",
-        [nombre, descripcion, precio, id_proveedor]
+        "INSERT INTO productos (nombre, descripcion, precio, id_proveedor, imagen_url, prospecto_url) VALUES (?, ?, ?, ?, ?, ?)",
+        [nombre, descripcion, precio, id_proveedor, imagen_url, prospecto_url]
     );
     return { id: result.insertId, ...producto };
     } catch (error) {
@@ -98,24 +148,46 @@ export const crearProductoModel = async (producto) => {
     }
 };
 
-// Actualizar producto
 export const actualizarProductoModel = async (id, producto) => {
-    const { nombre,descripcion, precio, id_proveedor } = producto;
+
+    const {
+        nombre,
+        descripcion,
+        precio,
+        id_proveedor,
+        imagen_url,
+        prospecto_url
+    } = producto;
+
     const conn = await getConnection();
+
     try {
-    const [result] = await conn.execute(
-        "UPDATE productos SET nombre=?, descripcion=?, precio=?, id_proveedor=? WHERE id_producto=?",
-        [nombre, descripcion, precio, id_proveedor, id]
-    );
-    if (result.affectedRows === 0) {
-        throw new Error("Producto no encontrado");
-    }
-    return { id, ...producto };
+        const [result] = await conn.execute(
+            `UPDATE productos 
+                SET nombre=?, descripcion=?, precio=?, id_proveedor=?, imagen_url=?, prospecto_url=? 
+                WHERE id_producto=?`,
+            [
+                nombre,
+                descripcion,
+                precio,
+                id_proveedor,
+                imagen_url,
+                prospecto_url,
+                id
+            ]
+        );
+
+        if (result.affectedRows === 0) {
+            throw new Error("Producto no encontrado");
+        }
+
+        return { id, ...producto };
+
     } catch (error) {
-    console.error("Error al actualizar producto:", error.message);
-    throw new Error("No se pudo actualizar el producto");
+        console.error("Error al actualizar producto:", error.message);
+        throw new Error("No se pudo actualizar el producto");
     } finally {
-    await conn.end();
+        await conn.end();
     }
 };
 
@@ -124,7 +196,10 @@ export const eliminarProductoModel = async (id) => {
     const conn = await getConnection();
     try {
     const [result] = await conn.execute(
-        "DELETE FROM productos WHERE id_producto = ?",
+        `UPDATE productos
+            SET prod_eliminado = NOW() 
+            WHERE id_producto = ?
+            AND prod_eliminado IS NULL`,
         [id]
     );
     if (result.affectedRows === 0) {

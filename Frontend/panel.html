@@ -30,7 +30,7 @@
     <a data-module="usuarios" class="nav-link" data-module="usuarios" href="#"><i class="bi bi-people"></i><span>Usuarios</span></a>
     <a data-module="clientes"class="nav-link" data-module="clientes" href="#"><i class="bi bi-person"></i><span>Clientes</span></a>
     <a data-module="productos"class="nav-link" data-module="productos" href="#" ><i class="bi bi-capsule"></i><span>Productos</span></a>
-    <a data-module="proveedores"class="nav-link" data-module="proveedores" href="#"><i class="bi bi-building"></i><span>Proveedores</span></a>
+    <a data-module="proveedores"class="nav-link" data-module="proveedores" href="#"><i class="bi bi-truck"></i><span>Proveedores</span></a>
     <a data-module="stock"class="nav-link" data-module="stock" href="#"><i class="bi bi-box-seam"></i><span>Stock</span></a>
     <a data-module="ubicaciones"class="nav-link" data-module="ubicaciones" href="#"><i class="bi bi-geo-alt"></i><span>Ubicaciones</span></a>
     <a data-module="ventas"class="nav-link" data-module="ventas"href="#"><i class="bi bi-receipt"></i><span>Ventas</span></a>
@@ -153,7 +153,7 @@
         </div>
 
         <div class="flex-fill">
-        <button class="nav-card" data-module="proveedores"><i class="bi bi-building nav-icon"></i><span>Proveedores</span></button>
+        <button class="nav-card" data-module="proveedores"><i class="bi bi-truck nav-icon"></i><span>Proveedores</span></button>
         </div>
 
         <div class="flex-fill">
@@ -196,14 +196,14 @@
                 <input
                     type="text"
                     id="inputBusquedaUsuario"
-                    class="form-control"
+                    class="form-control filtro-campo"
                     placeholder="ID o nombre">
             </div>
 
             <!-- ROL -->
             <div class="col-md-3">
                 <label class="form-label">Rol</label>
-                <select id="filtroRol" title="rol" class="form-select">
+                <select id="filtroRol" title="rol" class="form-select filtro-campo ">
                     <option value="">Todos</option>
                     <option value="1">Administrador</option>
                     <option value="2">Gerente</option>
@@ -217,17 +217,17 @@
                 <label class="form-label d-block">Estado</label>
 
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" id="estadoTodos" title="todos" type="radio" name="estadoUsuario" value="" checked>
+                    <input class="form-check-input filtro-campo" id="estadoTodos" title="todos" type="radio" name="estadoUsuario" value="" checked>
                     <label class="form-check-label">Todos</label>
                 </div>
 
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" id="estadoActivo" title="activo" type="radio" name="estadoUsuario" value="1">
+                    <input class="form-check-input filtro-campo" id="estadoActivo" title="activo" type="radio" name="estadoUsuario" value="1">
                     <label class="form-check-label">Activos</label>
                 </div>
 
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" id="estadoInactivo" title="inactivo" type="radio" name="estadoUsuario" value="0">
+                    <input class="form-check-input filtro-campo" id="estadoInactivo" title="inactivo" type="radio" name="estadoUsuario" value="0">
                     <label class="form-check-label">Inactivos</label>
                 </div>
 
@@ -237,6 +237,9 @@
             <div class="col-md-2">
                 <button id="btnBuscarUsuarios" class="btn btn-primary w-100">
                     Buscar
+                </button>
+                <button id="btnLimpiarUsuarios"class="btn btn-outline-secondary"><i class="bi bi-arrow-clockwise"></i>
+                    Restablecer
                 </button>
             </div>
 
@@ -285,14 +288,14 @@
                 <input
                     type="text"
                     id="inputBusquedaCliente"
-                    class="form-control"
+                    class="form-control filtro-campo"
                     placeholder="ID, nombre o CUIT">
             </div>
 
             <!-- TIPO -->
             <div class="col-md-2">
                 <label class="form-label">Tipo</label>
-                <select id="filtroTipo" title="tipo" class="form-select">
+                <select id="filtroTipo" title="tipo" class="form-select filtro-campo">
                     <option value="">Todos</option>
                     <option value="1">Farmacia/Droguería</option>
                     <option value="2">Hospital</option>
@@ -304,7 +307,7 @@
             <!-- CIUDAD-->
             <div class="col-md-2">
                 <label class="form-label">Ciudad</label>
-                <select id="filtroCiudad" title="ciudad" class="form-select">
+                <select id="filtroCiudad" title="ciudad" class="form-select filtro-campo">
                     <option value="">Todas</option>
                     <option value="1">Río Cuarto</option>
                     <option value="2">Córdoba</option>
@@ -318,7 +321,7 @@
             <!-- CIUDAD-->
             <div class="col-md-2">
                 <label class="form-label">Provincia</label>
-                <select id="filtroProvincia" title="provincia" class="form-select">
+                <select id="filtroProvincia" title="provincia" class="form-select filtro-campo">
                     <option value="">Todas</option>
                     <option value="1">Córdoba</option>
                     <option value="2">Buenos Aires</option>
@@ -334,6 +337,9 @@
                 <button id="btnBuscarClientes" class="btn btn-primary w-100">
                     Buscar
                 </button>
+                <button id="btnLimpiarClientes" class="btn btn-outline-secondary"><i class="bi bi-arrow-clockwise"></i>
+                Restablecer
+            </button>
             </div>
 
         </div>
@@ -384,14 +390,14 @@
                 <input
                     type="text"
                     id="inputBusquedaProveedor"
-                    class="form-control"
+                    class="form-control filtro-campo"
                     placeholder="ID o nombre">
             </div>
 
             <!-- CIUDAD-->
             <div class="col-md-2">
                 <label class="form-label">Ciudad</label>
-                <select id="filtroCiudadPr" title="ciudad" class="form-select">
+                <select id="filtroCiudadPr" title="ciudad" class="form-select filtro-campo">
                     <option value="">Todas</option>
                     <option value="1">Río Cuarto</option>
                     <option value="2">Córdoba</option>
@@ -405,7 +411,7 @@
             <!-- PROVINCIAS-->
             <div class="col-md-2">
                 <label class="form-label">Provincia</label>
-                <select id="filtroProvinciaPr" title="provincia" class="form-select">
+                <select id="filtroProvinciaPr" title="provincia" class="form-select filtro-campo">
                     <option value="">Todas</option>
                     <option value="1">Córdoba</option>
                     <option value="2">Buenos Aires</option>
@@ -421,6 +427,10 @@
                 <button id="btnBuscarProveedores" class="btn btn-primary w-100">
                     Buscar
                 </button>
+                <button id="btnLimpiarProveedores" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-clockwise"></i>
+                Restablecer
+            </button>
             </div>
 
         </div>
@@ -469,22 +479,25 @@
                 <input
                     type="text"
                     id="inputBusquedaProducto"
-                    class="form-control"
-                    placeholder="nombre del producto">
+                    class="form-control filtro-campo"
+                    placeholder="nombre">
             </div>
 
             <!-- PROVEEDORES-->
-            <div class="col-md-2">
-                <label class="form-label">Ciudad</label>
-                <select id="proveedorProducto" title="proveedorProd" class="form-select">
+            <div class="col-md-4">
+                <label class="form-label">Proveedor</label>
+                <select id="proveedorProducto" title="proveedorProd" class="form-select w-100 filtro-campo">
                 <option value="">Seleccionar proveedor</option>
                 </select>
             </div>
             
             <!-- BOTON BUSCAR -->
-            <div class="col-md-3">
-                <button id="btnBuscarProductos" class="btn btn-primary w-100">
+            <div class="col-md-3 d-flex align-items-end">
+                <button id="btnBuscarProductos" class="btn btn-primary w-100 ">
                     Buscar
+                </button>
+                <button id="btnLimpiarProductos" class="btn btn-outline-secondary"><i class="bi bi-arrow-clockwise"></i>
+                Restablecer
                 </button>
             </div>
 
@@ -518,6 +531,77 @@
 
 </section>
 
+<!--Seccion stock-->
+    <section id="stockSection" class="container-fluid p-4 module-section d-none">
+        <button class="btn-volver-panel">
+    ← Volver
+        </button>
+        <!-- FILTROS -->
+    <div class="card p-3 mb-4 shadow-sm">
+
+        <div class="row g-3 align-items-end">
+
+            <!-- BUSQUEDA -->
+            <div class="col-md-4">
+                <label class="form-label">Buscar producto</label>
+                <input
+                    type="text"
+                    id="inputBusquedaStock"
+                    class="form-control filtro-campo"
+                    placeholder="ID o nombre">
+            </div>
+
+            <!-- Estado del Stock -->
+            <div class="col-md-3">
+                <label class="form-label">Estado</label>
+                <select id="filtroStock" title="estado_stock" class="form-select filtro-campo">
+                    <option value="">Todos</option>
+                    <option value="SIN CONFIGURAR">Sin Configurar</option>
+                    <option value="SIN STOCK">Sin Stock</option>
+                    <option value="CRÍTICO">Crítico</option>
+                    <option value="BAJO">Bajo</option>
+                    <option value="OK">OK</option>
+                </select>
+            </div>
+
+            
+
+            <!-- BOTON BUSCAR -->
+            <div class="col-md-2">
+                <button id="btnBuscarStock" class="btn btn-primary w-100">
+                    Buscar
+                </button>
+                <button id="btnLimpiarStock" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-clockwise"></i>
+                Restablecer
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Stock</h2>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Imagen</th>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Disponible </th>
+                <th>Punto de reposición</th>
+                <th>Reservado </th>
+                <th>Estado</th>
+                <th>Última actualización</th>
+            </tr>
+        </thead>
+
+        <tbody id="tablaStock"></tbody>
+    </table>
+
+</section>
 
     <!-- ================= ACTIVITY + MONITOR ================= -->
     <section class="container-fluid p-4">
@@ -647,7 +731,7 @@
                 <input type="hidden" id="usuarioId">
 
                 <input type="text"
-                    id="nombre"
+                    id="nombreu"
                     class="form-control mb-2"
                     placeholder="Nombre">
 
@@ -882,6 +966,121 @@
 
                 <button class="btn btn-primary btn-guardar"
                         id="btnGuardarProveedores">
+                    Guardar
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- MODAL PRODUCTO -->
+<div class="modal fade modal-new" id="productoModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <!-- HEADER -->
+            <div class="modal-header">
+                <i id="productoModalIcon" class=" modalIcon bi bi-capsule icon-modal"></i>
+                <h5 class="modal-title">Producto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- BODY -->
+            <div class="modal-body">
+
+                <input type="hidden" id="productoId">
+
+                <input type="text" id="nombre" class="form-control mb-2" placeholder="Nombre del producto">
+
+                <textarea id="descripcion" class="form-control mb-2" placeholder="Descripción" rows="3"></textarea>
+
+                <input type="number" id="precio" class="form-control mb-2" placeholder="Precio">
+
+                <label class="form-label">Proveedor</label>
+                <select id="proveedorProducto2" class="form-select mb-3">
+                    <option value="">Seleccionar proveedor</option>
+                </select>
+
+                <!-- IMAGEN PRODUCTO -->
+                <label class="form-label">Imagen del producto</label>
+                <input type="file" id="imagenProducto" class="form-control mb-2" accept="image/*">
+
+                <div class="preview-container">
+                    <img id="previewImagenProducto" class="preview-img">
+                </div>
+
+                <!-- PROSPECTO -->
+                <label class="form-label">Prospecto (imagen o PDF)</label>
+                <input type="file" id="prospectoProducto" class="form-control mb-2" accept="image/*,application/pdf">
+
+                <div id="previewProspecto" class="preview-prospecto"></div>
+
+            </div>
+
+            <!-- FOOTER -->
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button class="btn btn-primary" id="btnGuardarProductos">Guardar</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- MODAL STOCK -->
+<div class=" modal fade modal-new" id="stockModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- HEADER -->
+            <div class="modal-header">
+
+                <i class="modalIcon bi bi-boxes icon-modal"></i>
+
+                <h5 class="modal-title">Stock</h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <!-- BODY -->
+            <div class="modal-body">
+
+                <input type="hidden" id="stockId">
+
+                <label class="form-label">Cantidad disponible</label>
+                    <input
+                        type="number"
+                        id="cantidad_stock"
+                        class="form-control mb-3"
+                        min="0"
+                        placeholder="0">
+
+                    <label class="form-label">Punto de reposición</label>
+                    <input
+                        type="number"
+                        id="reposicion"
+                        class="form-control mb-2"
+                        min="0"
+                        placeholder="0">
+                        
+
+            </div>
+
+            <!-- FOOTER -->
+            <div class="modal-footer">
+
+                <button class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                    Cancelar
+                </button>
+
+                <button class="btn btn-primary btn-guardar"
+                        id="btnGuardarStock">
                     Guardar
                 </button>
 

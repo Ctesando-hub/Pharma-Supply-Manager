@@ -2,7 +2,7 @@
 
 import multer from "multer"; //sin Multer Express no entiende de archivos
 
-const storage = multer.diskStorage({}); //Definir el storage. Usamos el disco. Muter crea carpetas temporales.
+const storage = multer.memoryStorage({}); //Definir el storage. Muter crea carpetas temporales.
 
 const upload = multer({storage}); //le pasamos la configuracion storage y obtenemos el middleware
 

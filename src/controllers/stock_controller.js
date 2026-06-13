@@ -1,4 +1,4 @@
-import { getAllStockService, getStockByIDService, searchStockService, crearStockService, actualizarStockService,
+import { getAllStockService, getStockByIDService, searchStockService,getStockFiltrosService, crearStockService, actualizarStockService,
     eliminarStockService} from "../services/stock_service.js";
 import logger from "../utils/logger.js";
 
@@ -66,28 +66,68 @@ export const searchStock = async (req, res) => {
     }
 };
 
-//Controlador para crear un nuevo stock
-export const crearStock = async (req, res) =>{
-    try{
-        const {id_producto, cantidad_disponible, punto_reposicion, ultima_actualizacion} = req.body; //extraer los datos del body
-        logger.info("POST /stock - Creando nuevo stock", { body: req.body });
+// FILTROS COMBINADOS
+export const getStockFiltros = async (req, res) => {
 
-        // Validamos que sean campos obligatorios
-        if(!id_producto || !cantidad_disponible ||!punto_reposicion ||!ultima_actualizacion){
-            logger.warn("Intento de creación con datos incompletos");
-            return res.status(400).json({ message: "Faltan datos obligatorios"});
-        }
+    try {
 
-        const nuevoStock =  await crearStockService({ id_producto, cantidad_disponible, punto_reposicion, ultima_actualizacion});
+        const { nombre, estado } = req.query;
 
-        logger.info("Stock creado correctamente", nuevoStock);
-        res.status(201).json({ message: "Stock creado correctamente", data: nuevoStock});       
+        const stock = await getStockFiltrosService({
+            nombre,
+            estado
+        });
+        logger.info( `Resultados encontrados: ${stock.length}`)
+        return res.status(200).json({
+            message: "Filtros aplicados correctamente",
+            data: stock
+        });
 
-    } catch (error){
-        logger.error(`Error al crear Stock: ${error.message}`);
-        res.status(500).json({ message: "Error al crear el Stock", error: error.message});
+    } catch (error) {
+
+        console.error("Error filtros:", error);
+        logger.error(`Error en getStockFiltro: ${error.message}`);
+        return res.status(500).json({
+            message: "Error al filtrar productos por stock",
+            error: error.message
+        });
     }
 };
+
+//Controlador para crear un nuevo stock
+export const crearStock = async (req, res) => {
+
+    try {
+
+        const { id_producto } = req.body;
+
+        if (!id_producto) {
+
+            return res.status(400).json({
+                message: "Debe indicar un producto"
+            });
+
+        }
+
+        const nuevoStock =
+            await crearStockService(id_producto);
+
+        return res.status(201).json({
+            message: "Stock creado correctamente",
+            data: nuevoStock
+        });
+
+    } catch (error) {
+
+        return res.status(500).json({
+            message: "Error al crear Stock",
+            error: error.message
+        });
+
+    }
+
+};
+
 
 //Controlador para actualizar Stock
 export const actualizarStock =  async (req, res) => {
