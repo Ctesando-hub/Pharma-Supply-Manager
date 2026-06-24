@@ -96,7 +96,7 @@ export const getProveedoresFiltrosModel = async ({ nombre, ciudad, provincia }) 
                 pr.nombre,
                 pr.telefono,
                 pr.email,
-                cl.direccion,
+                pr.direccion,
                 c.nombre AS ciudad,
                 p.nombre AS provincia
                 

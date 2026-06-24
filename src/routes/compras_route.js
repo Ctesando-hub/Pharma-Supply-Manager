@@ -2,7 +2,7 @@ import express from "express"; //Importa el modulo Express para crear el servido
 
 const router = express.Router(); //crea un enrutador de express, que permite organizar las rutas en modulos separados.
 
-import{getCompras, searchCompras, getCompraByID, crearCompras, actualizarCompra, eliminarCompra} from "../controllers/compras_controller.js";
+import{getCompras, searchCompras,getFiltroCompra, getDetalleCompra, getCompraByID, crearCompras, actualizarCompra, eliminarCompra} from "../controllers/compras_controller.js";
 
 import { auth } from "../middleware/auth_middleware.js";
 import { authorizeRole } from "../middleware/authorizeRole.js";
@@ -13,6 +13,16 @@ import { authorizeRole } from "../middleware/authorizeRole.js";
 //-------------------
 
 router.get("/", auth, authorizeRole("admin", "gerente", "empleado"), getCompras); //Devuelve todas las compras
+
+//------------------
+//Route GET -Detalles Compra
+//------------------
+router.get("/:id/detalle", auth, authorizeRole("admin", "gerente", "empleado"),getDetalleCompra);
+
+//------------------
+// Route GET-FILTRO Compra
+//-------------------
+router.get("/filtros", auth, authorizeRole("admin", "gerente", "empelado"), getFiltroCompra)
 
 // --------------------
 // GET SEARCH - Buscar Compra por estado o cliente

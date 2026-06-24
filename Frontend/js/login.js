@@ -30,6 +30,7 @@ document.addEventListener("DOMContentLoaded", () =>{  //Ejecuta el codigo cuando
 
             if (response.ok){ // status 200
                 localStorage.setItem("token", data.token)
+                localStorage.setItem("id_usuario", data.id_usuario);;
                 localStorage.setItem("rol", data.rol);
                 localStorage.setItem("nombre", data.nombre);
                 localStorage.setItem("apellido", data.apellido);

@@ -1,4 +1,4 @@
-import { getAllComprasService, getCompraByIDService, searchCompraService, crearComprasService, actualizarCompraService, eliminarCompraService } from "../services/compras_service.js";
+import { getAllComprasService, getDetalleCompraService, getComprasFiltrosService, getCompraByIDService, searchCompraService, crearComprasService, actualizarCompraService, eliminarCompraService } from "../services/compras_service.js";
 import logger from "../utils/logger.js";
 
 // Controlador GET Traer todos las Compras
@@ -13,6 +13,40 @@ export const getCompras = async (req, res) => {
     }catch (error) {
         logger.error("Error en GET /compras:", error);
         res.status(500).json({ message: "Error al obtener lista de Compras", error: error.message});
+    }
+};
+// GET /compras/:id/detalle
+export const getDetalleCompra = async (req, res) => {
+
+    try {
+        const { id } = req.params;
+
+        logger.info(`GET /compras/${id}/detalle → Solicitando detalle de compra`);
+
+        const detalle = await getDetalleCompraService(id);
+
+        if (detalle.length === 0) {
+
+            logger.warn(`GET /compras/${id}/detalle → No se encontró detalle`);
+            return res.status(404).json({
+                message: "No se encontraron productos para esta compra"
+            });
+        }
+
+        logger.info(
+            `GET /compras/${id}/detalle → Productos encontrados: ${detalle.length}`
+        );
+
+        return res.status(200).json({message: "Detalle de compra encontrado", data: detalle
+        });
+
+    } catch (error) {
+        logger.error(
+            `Error en GET /compras/${req.params.id}/detalle: ${error.message}`);
+
+        return res.status(500).json({
+            message: "Error al obtener detalle de compra",
+            error: error.message});
     }
 };
 
@@ -66,6 +100,34 @@ export const searchCompras = async (req, res) => {
     }
 };
 
+// FILTROS COMBINADOS
+export const getFiltroCompra = async (req, res) => {
+    try {
+
+        const { id_compra, proveedor, estado } = req.query;
+
+        const compras = await getComprasFiltrosService({
+            id_compra: id_compra || null,
+            proveedor: proveedor || null,
+            estado: estado || null
+        });
+
+        logger.info(`Filtros compras → ${compras.length} resultados`);
+
+        return res.status(200).json({
+            message: "Filtros aplicados correctamente",
+            data: compras
+        });
+
+    } catch (error) {
+        console.error("Error filtros:", error);
+        return res.status(500).json({
+            message: "Error al filtrar compras",
+            error: error.message
+        });
+    }
+};
+
 
 //Controlador para crear una nueva Compra
 export const crearCompras = async (req, res) =>{
@@ -98,31 +160,36 @@ export const crearCompras = async (req, res) =>{
 
 //Controlador para actualizar una compra
 export const actualizarCompra = async (req, res) => {
+
     try {
+
         const { id } = req.params;
-        const compra = req.body; 
+        const { id_estado } = req.body;
+
         logger.info(`PUT /compras/${id} → Datos recibidos para actualizar`, req.body);
 
-        // Validamos campos obligatorios
-        const {total, id_proveedor, id_usuario, id_sucursal, id_estado } = compra;
-
-        if (!total || !id_proveedor || !id_usuario || !id_sucursal || !id_estado) {
-            logger.warn(`PUT /compras/${id} → Faltan datos obligatorios`);
-            return res.status(400).json({ message: "Faltan datos obligatorios" });
+        if (!id_estado) {
+            logger.warn(`PUT /compras/${id} → Debe indicar el estado`);
+            return res.status(400).json({
+                message: "Debe indicar el estado de la compra"
+            });
         }
 
-        const compraActualizada = await actualizarCompraService(id, compra);
+        const compraActualizada =
+            await actualizarCompraService(id, { id_estado });
 
         logger.info(`PUT /compras/${id} → Compra actualizada con éxito`);
-        res.status(200).json({ 
-            message: "Compra actualizada correctamente", data: compraActualizada });
+
+        res.status(200).json({
+            message: "Compra actualizada correctamente", data: compraActualizada
+        });
 
     } catch (error) {
-        logger.error(`Error en PUT /compras/${req.params.id}:`, error);
-        res.status(500).json({ 
-            message: "Error al actualizar Compra", 
-            error: error.message 
+        logger.error(`Error en PUT /compras/${req.params.id}:`,error);
+        res.status(500).json({
+            message: "Error al actualizar Compra", error: error.message
         });
+
     }
 };
 

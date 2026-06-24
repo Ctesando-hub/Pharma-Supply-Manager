@@ -48,6 +48,7 @@ export const login = async (req, res) => { // Exporta la función login para que
             logger.info(`Token generado correctamente para el usuario ${email}`);
             return res.json({ 
                 token,
+                id_usuario: user.id_usuario,
                 rol: user.rol.toLowerCase(),
                 nombre: user.nombre,
                 apellido: user.apellido

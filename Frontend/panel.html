@@ -212,7 +212,7 @@
             </div>
 
             <!-- ESTADO -->
-            <div class="col-md-3">
+            <div class="col-md-5">
 
                 <label class="form-label d-block">Estado</label>
 
@@ -234,12 +234,12 @@
             </div>
 
             <!-- BOTON BUSCAR -->
-            <div class="col-md-2">
-                <button id="btnBuscarUsuarios" class="btn btn-primary w-100">
+            <div class="d-flex justify-content-end gap-2 mt-3">
+                <button id="btnBuscarUsuarios" class="btn btn-buscar">
                     Buscar
                 </button>
-                <button id="btnLimpiarUsuarios"class="btn btn-outline-secondary"><i class="bi bi-arrow-clockwise"></i>
-                    Restablecer
+                <button id="btnLimpiarUsuarios"class="btn btn-restablecer"><i class="bi bi-arrow-clockwise"></i>
+                Limpiar
                 </button>
             </div>
 
@@ -333,11 +333,11 @@
             
 
             <!-- BOTON BUSCAR -->
-            <div class="col-md-3">
-                <button id="btnBuscarClientes" class="btn btn-primary w-100">
+            <div class="d-flex justify-content-end gap-2 mt-3">
+                <button id="btnBuscarClientes" class="btn btn-buscar">
                     Buscar
                 </button>
-                <button id="btnLimpiarClientes" class="btn btn-outline-secondary"><i class="bi bi-arrow-clockwise"></i>
+                <button id="btnLimpiarClientes" class="btn btn-restablecer"><i class="bi bi-arrow-clockwise"></i>
                 Restablecer
             </button>
             </div>
@@ -395,7 +395,7 @@
             </div>
 
             <!-- CIUDAD-->
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <label class="form-label">Ciudad</label>
                 <select id="filtroCiudadPr" title="ciudad" class="form-select filtro-campo">
                     <option value="">Todas</option>
@@ -409,7 +409,7 @@
             </div>
 
             <!-- PROVINCIAS-->
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <label class="form-label">Provincia</label>
                 <select id="filtroProvinciaPr" title="provincia" class="form-select filtro-campo">
                     <option value="">Todas</option>
@@ -423,11 +423,11 @@
             
 
             <!-- BOTON BUSCAR -->
-            <div class="col-md-3">
-                <button id="btnBuscarProveedores" class="btn btn-primary w-100">
+            <div class="d-flex justify-content-end gap-2 mt-3">
+                <button id="btnBuscarProveedores" class="btn btn-buscar">
                     Buscar
                 </button>
-                <button id="btnLimpiarProveedores" class="btn btn-outline-secondary">
+                <button id="btnLimpiarProveedores" class="btn btn-restablecer">
                 <i class="bi bi-arrow-clockwise"></i>
                 Restablecer
             </button>
@@ -492,11 +492,11 @@
             </div>
             
             <!-- BOTON BUSCAR -->
-            <div class="col-md-3 d-flex align-items-end">
-                <button id="btnBuscarProductos" class="btn btn-primary w-100 ">
+            <div class="d-flex justify-content-end gap-2 mt-3">
+                <button id="btnBuscarProductos" class="btn btn-buscar">
                     Buscar
                 </button>
-                <button id="btnLimpiarProductos" class="btn btn-outline-secondary"><i class="bi bi-arrow-clockwise"></i>
+                <button id="btnLimpiarProductos" class="btn btn-restablecer"><i class="bi bi-arrow-clockwise"></i>
                 Restablecer
                 </button>
             </div>
@@ -567,11 +567,11 @@
             
 
             <!-- BOTON BUSCAR -->
-            <div class="col-md-2">
-                <button id="btnBuscarStock" class="btn btn-primary w-100">
+            <div class="d-flex justify-content-end gap-2 mt-3">
+                <button id="btnBuscarStock" class="btn btn-buscar">
                     Buscar
                 </button>
-                <button id="btnLimpiarStock" class="btn btn-outline-secondary">
+                <button id="btnLimpiarStock" class="btn btn-restablecer">
                 <i class="bi bi-arrow-clockwise"></i>
                 Restablecer
                 </button>
@@ -599,6 +599,86 @@
         </thead>
 
         <tbody id="tablaStock"></tbody>
+    </table>
+
+</section>
+
+<!--Seccion compra-->
+    <section id="comprasSection" class="container-fluid p-4 module-section d-none">
+        <button class="btn-volver-panel">
+    ← Volver
+        </button>
+        <!-- FILTROS -->
+    <div class="card p-3 mb-4 shadow-sm">
+
+        <div class="row g-3 align-items-end">
+
+            <!-- BUSQUEDA -->
+            <div class="col-md-4">
+                <label class="form-label">Buscar Compra</label>
+                <input
+                    type="text"
+                    id="inputBusquedaCompra"
+                    class="form-control filtro-campo"
+                    placeholder="ID">
+            </div>
+
+            <!--PROVEEDOR-->
+            <div class="col-md-3">
+                <label class="form-label">Proveedor</label>
+                <select title="proveedor_compra"id="filtroProveedorCompra"class="form-select filtro-campo">
+                <option value="">Todos</option>
+                </select>
+            </div>
+
+            <!-- ESTADO -->
+            <div class="col-md-3">
+                <label class="form-label">Estado</label>
+                <select id="filtroEstado" title="Estado" class="form-select filtro-campo ">
+                    <option value="">Todos</option>
+                    <option value="1">Pendiente</option>
+                    <option value="2">En Proceso</option>
+                    <option value="3">Completado</option>
+                    <option value="4">Cancelado</option>
+                </select>
+            </div>
+
+            <!-- BOTON BUSCAR -->
+            <div class="d-flex justify-content-end gap-2 mt-3">
+                <button id="btnBuscarCompras" class="btn btn-buscar">
+                    Buscar
+                </button>
+                <button id="btnLimpiarCompras"class="btn btn-restablecer"><i class="bi bi-arrow-clockwise"></i>
+                Limpiar
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Compras a proveedores</h2>
+
+        <button class="btn btn-nuevo" id="btnNuevaCompra">
+            + Nueva Compra
+        </button>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Fecha</th>
+                <th>Proveedor</th>
+                <th>Nombre Usuario</th>
+                <th>Sucursal</th>
+                <th>Total</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody id="tablaCompras"></tbody>
     </table>
 
 </section>
@@ -1086,6 +1166,387 @@
 
             </div>
 
+        </div>
+    </div>
+</div>
+
+<!-- MODAL COMPRAS -->
+<div class="modal fade modal-new" id="compraModal" tabindex="-1" aria-hidden="true">
+
+    <div class="modal-dialog modal-xl">
+
+        <div class="modal-content">
+
+            <!-- HEADER -->
+            <div class="modal-header">
+                <i class="modalIcon bi bi-cart-plus icon-modal"></i>
+                <h5 class="modal-title">Nueva Compra</h5>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal">
+                </button>
+            </div>
+
+            <!-- BODY -->
+            <div class="modal-body">
+
+                <input type="hidden" id="compraId">
+
+                <div class="row">
+
+                    <!-- PROVEEDOR -->
+                    <div class="col-md-5">
+                        <label class="form-label">
+                            Proveedor
+                        </label>
+
+                        <select id="proveedorCompraModal"
+                                class="form-select">
+                            <option value="">
+                                Seleccionar proveedor
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- PRODUCTO -->
+                <div class="col-md-4">
+                    <label class="form-label">Producto</label>
+
+                    <select id="productoCompra" class="form-select">
+                        <option value="">Seleccionar producto</option>
+                    </select>
+                </div>
+
+                    <!-- SUCURSAL -->
+                    <div class="col-md-3">
+                        <label class="form-label">
+                            Sucursal
+                        </label>
+
+                        <select id="sucursalCompra"
+                                class="form-select">
+
+                            <option value="1">Sucursal Central Río Cuarto</option>
+                            <option value="2">Sucursal Córdoba Centro</option>
+                            <option value="3">Sucursal Nueva Córdoba</option>
+                            <option value="4">Sucursal Rosario Norte</option>
+                            <option value="5">Sucursal Santa Fe Capital</option>
+                            <option value="6">Sucursal Mendoza Centro</option>
+                            <option value="7">Sucursal Godoy Cruz</option>
+                            <option value="8">Sucursal Buenos Aires Norte</option>
+                            <option value="9">Sucursal Buenos Aires Sur</option>
+                            <option value="10">Sucursal Rosario Sur</option>
+
+                        </select>
+                    </div>
+
+                </div>
+
+
+                <hr>
+
+                <!-- DETALLE PRODUCTO -->
+                <div class="row">
+
+                    <div class="col-md-3">
+                        <label class="form-label">
+                            Cantidad
+                        </label>
+
+                        <input
+                            type="number"
+                            min="1"
+                            id="cantidadCompra"
+                            class="form-control">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">
+                            Precio unitario
+                        </label>
+
+                        <input
+                            type="number"
+                            step="0.01"
+                            id="precioUnitarioCompra"
+                            class="form-control">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">
+                            Subtotal
+                        </label>
+
+                        <input
+                            type="number"
+                            id="subtotalCompra"
+                            class="form-control"
+                            readonly>
+                    </div>
+
+                    <div class="col-md-3 d-flex align-items-end">
+                        <button class="btn btn-success w-100" id="btnAgregarProductoCompra"><i class="bi bi-plus-circle"></i>
+                            Agregar
+                        </button>
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- TABLA DETALLE -->
+                <h6>Productos agregados</h6>
+
+                <table class="table table-bordered align-middle">
+
+                    <thead>
+
+                        <tr>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unitario</th>
+                            <th>Subtotal</th>
+                            <th>Acciones</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="tablaDetalleCompra">
+
+                    </tbody>
+
+                </table>
+
+
+                <!-- TOTAL -->
+                <div class="row">
+
+                    <div class="col-md-4 offset-md-8">
+
+                        <label class="form-label fw-bold">
+                            Total Compra
+                        </label>
+
+                        <input
+                            type="number"
+                            id="totalCompra"
+                            class="form-control"
+                            readonly>
+
+                    </div>
+
+                </div>
+
+
+                <hr>
+
+                <!-- ESTADO -->
+                <div class="row">
+
+                    <div class="col-md-3">
+
+                        <label class="form-label">
+                            Estado </label>
+
+                        <select
+                            id="compraEstado" class="form-select" disabled>
+                            <option value="1">
+                                Pendiente
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FOOTER -->
+            <div class="modal-footer">
+                <button
+                    class="btn btn-secondary" data-bs-dismiss="modal"> Cancelar
+                </button>
+                <button
+                    class="btn btn-primary" id="btnGuardarCompra">
+                    Guardar Compra
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!--MODAL PARA VISUALIZAR DETALLE DE COMPRA-->
+<!-- MODAL DETALLE COMPRA -->
+<div class="modal fade modal-new" id="detalleCompraModal" tabindex="-1" aria-hidden="true">
+
+    <div class="modal-dialog modal-lg">
+
+        <div class="modal-content">
+
+            <!-- HEADER -->
+            <div class="modal-header">
+
+                <i class="modalIcon bi bi-receipt-cutoff icon-modal"></i>
+
+                <h5 class="modal-title text-white">
+                    Detalle de Compra
+                </h5>
+
+                <button
+                    type="button"
+                    class="btn-close btn-close-white"
+                    data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <!-- BODY -->
+            <div class="modal-body">
+
+                <h6 class="mb-3">
+                    Productos de la compra
+                </h6>
+
+                <table class="table table-bordered align-middle">
+
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unitario</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="tablaDetalleCompraVer">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <!-- FOOTER -->
+            <div class="modal-footer">
+
+                <button
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal">
+                    Cerrar
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<!-- MODAL EDITAR COMPRA -->
+<div class="modal fade modal-new" id="editarCompraModal" tabindex="-1" aria-hidden="true">
+
+    <div class="modal-dialog modal-xl">
+
+        <div class="modal-content">
+
+            <!-- HEADER -->
+            <div class="modal-header">
+                <i class="modalIcon bi bi-pencil-square icon-modal"></i>
+                <h5 class="modal-title">Gestionar Compra</h5>
+
+                <button
+                    type="button" class="btn-close" data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <!-- BODY -->
+            <div class="modal-body">
+                <input type="hidden" id="editarCompraId">
+
+                <div class="row">
+
+                    <!-- FECHA -->
+                    <div class="col-md-3">
+                        <label class="form-label">Fecha</label>
+
+                        <input type="text" id="editarCompraFecha" class="form-control" readonly>
+                    </div>
+
+                    <!-- PROVEEDOR -->
+                    <div class="col-md-5">
+                        <label class="form-label">Proveedor</label>
+
+                        <input type="text" id="editarCompraProveedor" class="form-control" readonly>
+                    </div>
+
+                    <!-- SUCURSAL -->
+                    <div class="col-md-4">
+                        <label class="form-label">Sucursal</label>
+                        <input type="text" id="editarCompraSucursal" class="form-control" readonly>
+                    </div>
+                </div>
+                <hr>
+
+                <!-- PRODUCTOS -->
+                <h6>Productos comprados </h6>
+
+                <table class="table table-bordered align-middle">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unitario</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaEditarDetalleCompra">
+                    </tbody>
+                </table>
+                <hr>
+
+                <!-- TOTAL -->
+                <div class="row">
+                    <div class="col-md-4 offset-md-8">
+                        <label class="form-label fw-bold">Total Compra</label>
+
+                        <input type="number" id="editarCompraTotal" class="form-control" readonly>
+                    </div>
+                </div>
+                <hr>
+
+                <!-- ESTADO -->
+                <div class="row">
+                    <div class="col-md-4">
+                        <label class="form-label">Estado</label>
+
+                        <select
+                            id="editarCompraEstado" class="form-select">
+                            <option value="1">Pendiente</option>
+                            <option value="2">En proceso</option>
+                            <option value="3"> Completado</option>
+                            <option value="4">Cancelado</option>
+
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FOOTER -->
+            <div class="modal-footer">
+                <button
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal">
+                    Cerrar
+                </button>
+
+                <button
+                    class="btn btn-primary"
+                    id="btnActualizarEstadoCompra">
+                    Actualizar Estado
+                </button>
+            </div>
         </div>
     </div>
 </div>
