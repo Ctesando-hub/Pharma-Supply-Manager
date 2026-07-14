@@ -2,7 +2,7 @@ import express from "express"; //Importa el modulo Express para crear el servido
 
 const router = express.Router(); //crea un enrutador de express, que permite organizar las rutas en modulos separados.
 
-import { actualizarStock, crearStock, eliminarStock, getStock, getStockByID, getStockFiltros, searchStock } from "../controllers/stock_controller.js";
+import { actualizarStock, crearStock, eliminarStock, getStockProducto, getStock, getStockByID, getStockFiltros, searchStock } from "../controllers/stock_controller.js";
 
 import { auth } from "../middleware/auth_middleware.js";
 import { authorizeRole } from "../middleware/authorizeRole.js";
@@ -20,6 +20,9 @@ router.get("/search", auth, authorizeRole("admin", "gerente", "empleado"), searc
 
 //GET ID
 router.get("/:id", auth, authorizeRole("admin", "gerente", "empleado"), getStockByID);
+
+//GET CANTIDAD PRODUCTOS
+router.get("/producto/:id", auth, authorizeRole("admin", "gerente", "empleado"), getStockProducto);
 
 
 //--------------------

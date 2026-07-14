@@ -52,6 +52,29 @@ export const getStockByIDModel = async (id) => {
     }
 };
 
+//Buscar cantidad disponible y reservada 
+export const getStockProductoModel = async (idProducto) => {
+    const conn = await getConnection();
+    try {
+        const [rows] = await conn.execute(`
+            SELECT
+                cantidad_disponible,
+                cantidad_reservada
+            FROM stock
+            WHERE id_producto = ?
+        `, [idProducto]);
+
+        if (rows.length === 0) {
+            return null;
+        }
+        return rows[0];
+
+    } finally {
+        await conn.end();
+    }
+
+};
+
 // Buscar Stock por nombre del producto
 export const searchStockModel = async (nombre) => {
     const conn = await getConnection();

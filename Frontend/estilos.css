@@ -1627,4 +1627,18 @@ INPUT FILE MEJORADO
     
 }
 
+/*Seccion Ubicaciones*/
+#provinciasSection table,
+#ciudadesSection table{
+    width:100%;
+}
+
+#provinciasSection td:last-child,
+#provinciasSection th:last-child,
+#ciudadesSection td:last-child,
+#ciudadesSection th:last-child{
+    text-align:right;
+    white-space:nowrap;
+}
+
 

@@ -10,3 +10,12 @@ package-lock.json
 Thumbs.db
 
 
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# FastAPI / Python
+.pytest_cache/

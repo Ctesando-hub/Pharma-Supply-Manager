@@ -35,12 +35,6 @@ router.post("/", auth, authorizeRole("admin", "gerente", "empleado"), crearClien
 router.put("/:id", auth, authorizeRole("admin", "gerente"), actualizarCliente);
 
 
-//-------------------
-//Route DELETE
-//-------------------
-
-router.delete("/:id", auth, authorizeRole("admin"), eliminarCliente);
-
 
 //-------------------
 //Route PATCH PARA BORRADO LOGICO

@@ -1,4 +1,4 @@
-import { getAllStockModel, getStockByIDModel, searchStockModel,getStockFiltrosModel, crearStockModel, actualizarStockModel, eliminarStockModel } from "../models/stock_model.js"; 
+import { getAllStockModel, getStockByIDModel, getStockProductoModel, searchStockModel,getStockFiltrosModel, crearStockModel, actualizarStockModel, eliminarStockModel } from "../models/stock_model.js"; 
 
 
 export const getAllStockService = async () => {
@@ -47,6 +47,10 @@ export const getAllStockService = async () => {
 
 export const getStockByIDService = async (id) => {
     return await getStockByIDModel(id);
+};
+
+export const getStockProductoService = async (id) => {
+    return await getStockProductoModel(id);
 };
 
 export const searchStockService = async (nombre) => {

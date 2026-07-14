@@ -9,6 +9,9 @@ import pedidosRouters from "./routes/pedidos_route.js";
 import stockRouters from "./routes/stock_route.js";
 import compraRouters from "./routes/compras_route.js"
 import authRouters from "./routes/auth.routes.js";
+import ciudadesRouters from "./routes/ciudades_routes.js";
+import provinciasRouters from "./routes/provincias_routes.js";
+import reportesRoutes from "./routes/reportes_route.js";
 
 console.log("ESTE ES EL INDEX DEL BACKEND");
 
@@ -55,8 +58,17 @@ app.use("/api/stock", stockRouters); //usa el router de stock con el prefijo /st
 //Compras
 app.use("/api/compras", compraRouters); //usa el router de compras con el prefijo /compras
 
+//Ciudades
+app.use("/api/ciudades", ciudadesRouters); //usa el router de ciudades con el prefijo /ciudades
+
+//Provincia
+app.use("/api/provincias", provinciasRouters); //usa el router de provincias con el prefijo /provincias
+
 //auth
 app.use("/api/auth", authRouters);
+
+//reportes para fastapi
+app.use("/api/reportes", reportesRoutes);
 
 
 

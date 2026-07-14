@@ -1,8 +1,16 @@
-import { getAllPedidosModel, getPedidoByIDModel, searchPedidoModel, crearPedidoModel, actualizarPedidoModel, eliminarPedidoModel } from "../models/pedidos_model.js";
+import { getAllPedidosModel, getPedidoByIDModel, getPedidoFiltrosModel, getDetallePedidoModel, searchPedidoModel, crearPedidoModel, actualizarPedidoModel, eliminarPedidoModel } from "../models/pedidos_model.js";
 
 
 export const getAllPedidosService = async () =>{
     return await getAllPedidosModel();
+};
+
+export const getDetallePedidoService = async (id) => {
+    return await getDetallePedidoModel(id);
+};
+
+export const getPedidosFiltrosService = async (filtros) => {
+    return await getPedidoFiltrosModel(filtros);
 };
 
 export const getPedidoByIDService = async (id) => {

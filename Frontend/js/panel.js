@@ -121,16 +121,15 @@ function configurarGerente(){
 }
 
 //FUNCION CENTRAL PERMISOS
-function aplicarPermisos(modulosPermitidos){ // Oculta o muestra módulos según permisos del rol
-       document.querySelectorAll("[data-module]").forEach(el => {  // Selecciona todos los elementos del menú
-        const modulo = el.getAttribute("data-module");
-
-        const permitido = modulosPermitidos.includes(modulo);
-        
-        if (!permitido){ // Si no está permitido, lo oculta
-            el.style.display = "none";
+function aplicarPermisos(modulosPermitidos) { // Oculta o muestra módulos según permisos del rol
+    document.querySelectorAll(".nav-card").forEach(card => { // Selecciona todos los elementos del menú
+        const modulo = card.dataset.module;
+        if (!modulosPermitidos.includes(modulo)) {
+            card.parentElement.remove();
         }
+
     });
+
 }
 
 //CERRAR SESION
@@ -201,14 +200,22 @@ function manejarModulo(modulo) {
             break;
 
             case "ubicaciones":
-            console.log("Ubicaciones aún no implementado");
+            mostrarSeccion("ubicacionesSection");
+            mostrarModuloUbicaciones("provincias");
+    
             break;
 
-            case "compras":;
+            case "compras":
             mostrarSeccion("comprasSection");
             cargarCompras();
             cargarProveedoresFiltroCompra()
             break;
+
+            case "ventas":
+                mostrarSeccion("pedidosSection");
+                cargarPedidos();
+                cargarClientesFiltroPedido()
+                break;
     }
 } 
 
@@ -263,6 +270,23 @@ function registrarEventos(){
             editarCompra(id);
         }
 
+         // BOTON EDITAR PEDIDO
+        if (e.target.classList.contains("btn-editarPedido")) {
+            const id = e.target.dataset.id;
+            editarPedido(id);
+        }
+
+         // BOTON EDITAR PROVINCIA
+        if (e.target.classList.contains("btn-editarProvincia")) {
+            const id = e.target.dataset.id;
+            editarProvincia(id);
+        }
+
+         // BOTON EDITAR CIUDAD
+        if (e.target.classList.contains("btn-editarCiudad")) {
+            const id = e.target.dataset.id;
+            editarCiudad(id);
+        }
         // BOTON ELIMINAR USUARIO
         if (e.target.classList.contains("btn-eliminar")) {
             const id = e.target.dataset.id;
@@ -284,6 +308,18 @@ function registrarEventos(){
         if (e.target.classList.contains("btn-eliminarpd")) {
             const id = e.target.dataset.id;
             eliminarProducto(id);
+        }
+
+        //BOTON ELIMINAR PROVINCIA
+        if (e.target.classList.contains("btn-eliminarProvincia")) {
+            const id = e.target.dataset.id;
+            eliminarProvincia(id);
+        }
+
+         //BOTON ELIMINAR CIUDAD
+        if (e.target.classList.contains("btn-eliminarCiudad")) {
+            const id = e.target.dataset.id;
+            eliminarCiudad(id);
         }
 
         // NUEVO USUARIO
@@ -309,6 +345,21 @@ function registrarEventos(){
          // NUEVA COMPRA -MODAL
         if (e.target.id === "btnNuevaCompra") {
             abrirModalNuevaCompra();
+        }
+
+        // NUEVO PEDIDO-MODAL
+        if (e.target.id === "btnNuevoPedido") {
+            abrirModalNuevoPedido();
+        }
+
+        // NUEVA PROVINCIA-MODAL
+        if (e.target.id === "btnNuevaProvincia") {
+            abrirModalNuevaProvincia();
+        }
+
+        // NUEVA CIUDAD-MODAL
+        if (e.target.id === "btnNuevaCiudad") {
+            abrirModalNuevaCiudad();
         }
 
         // GUARDAR USUARIO
@@ -346,9 +397,29 @@ function registrarEventos(){
             guardarCompra();
         }
 
+         //GUARDAR PEDIDO
+        if (e.target.id === "btnGuardarPedido") {
+            guardarPedido();
+        }
+
+         //GUARDAR PROVINCIA
+        if (e.target.id === "btnGuardarProvincia") {
+            guardarProvincia();
+        }
+
+         //GUARDAR CIUDAD
+        if (e.target.id === "btnGuardarCiudad") {
+            guardarCiudad();
+        }
+
         //GUARDAR ACTUALIZACION COMPRA
         if (e.target.id === "btnActualizarEstadoCompra"){
             actualizarCompra();
+        }
+
+         //GUARDAR ACTUALIZACION PEDIDO
+        if (e.target.id === "btnActualizarEstadoPedido"){
+            actualizarPedido();
         }
 
         // BUSCAR USUARIOS
@@ -377,6 +448,11 @@ function registrarEventos(){
         //BUSCAR COMPRAS/FILTRO
         if(e.target.id ==="btnBuscarCompras"){
             buscarCompras();
+        }
+
+        //BUSCAR PEDIDOS/FILTRO
+        if(e.target.id ==="btnBuscarPedidos"){
+            buscarPedidos();
         }
 
         // RESTABLECER USUARIOS
@@ -415,6 +491,12 @@ function registrarEventos(){
             limpiarFiltrosCompras();
             cargarCompras();
         }
+
+        //RESTABLECER PEDIDOS
+        if(e.target.id === "btnLimpiarPedidos"){
+            limpiarFiltrosPedidos();
+            cargarPedidos();
+        }
         
         // CLICK IMAGEN PRODUCTO
         if (e.target.classList.contains("img-producto-mini")) {
@@ -434,9 +516,22 @@ function registrarEventos(){
             verDetalleCompra(id);
         }
 
+        // VER DETALLE PEDIDO
+        if (e.target.closest(".btn-verPedido")) {
+
+            const id = e.target.closest(".btn-verPedido").dataset.id;
+
+            verDetallePedido(id);
+        }
+
         //agregar productos al carrito temporal
         if (e.target.id === "btnAgregarProductoCompra") {
             agregarProductoCompra();
+        }
+
+         //agregar productos al carrito temporal de pedidos
+        if (e.target.id === "btnAgregarProductoPedido") {
+            agregarProductoPedido();
         }
 
         // ELIMINAR ITEM DEL DETALLE DE COMPRA
@@ -448,16 +543,37 @@ function registrarEventos(){
             eliminarItemCompra(index);
         }
 
+        // ELIMINAR ITEM DEL DETALLE DE PEDIDO
+        if (e.target.closest(".btnEliminarItemPedido")) {
+
+            const index =
+                e.target.closest(".btnEliminarItemPedido").dataset.index;
+
+            eliminarItemPedido(index);
+        }
+
+         // MÓDULO PROVINCIAS
+        if (e.target.id === "btnModuloProvincias") {
+            mostrarModuloUbicaciones("provincias");
+            cargarProvincias();
+        }
+
+        // MÓDULO CIUDADES
+        if (e.target.id === "btnModuloCiudades") {
+            mostrarModuloUbicaciones("ciudades");
+            cargarCiudades();
+        }
+
     });
       // EVENTOS DEL MODAL DE COMPRAS
         //Mostrar productos por proveedor
         document.getElementById("proveedorCompraModal")
             ?.addEventListener("change", () => {
 
-                const idProveedor =
+                const idProducto =
                     document.getElementById("proveedorCompraModal").value;
 
-                cargarProductosModalCompra(idProveedor);
+                cargarProductossModalCompra(idProducto);
 
             });
 
@@ -470,6 +586,27 @@ function registrarEventos(){
             ?.addEventListener("input", calcularSubtotalCompra);
 
         
+            // EVENTOS DEL MODAL DE PEDIDOS;
+
+             //Mostrar precio del producto
+        document.getElementById("productoPedido")
+            ?.addEventListener("change", () => {
+
+                const idProducto =
+                    document.getElementById("productoPedido").value;
+
+                cargarPrecioModalPedido(idProducto);
+                cargarDisponibilidadProducto(idProducto);
+
+            });
+
+        // Calcular subtotal al modificar cantidad
+        document.getElementById("cantidadPedido")
+            ?.addEventListener("input", calcularSubtotalPedido);
+
+        // Calcular subtotal al modificar precio
+        document.getElementById("precioUnitarioPedido")
+            ?.addEventListener("input", calcularSubtotalPedido);
 }
 
 
@@ -2644,7 +2781,7 @@ function mostrarProveedorProducto() {
     }
 }
 
-async function cargarProductosModalCompra(idProveedor = null) {
+async function cargarProductossModalCompra(idProveedor = null) {
     try {
         const res = await fetch(`${API_URL}/api/productos`, {
             headers: {
@@ -2757,7 +2894,7 @@ function agregarProductoCompra() {
     const subtotal = parseFloat(document.getElementById("subtotalCompra").value) || 0;
 
     if (!idProducto || cantidad <= 0 || precio <= 0) {
-        alert("Completa producto, cantidad y precio");
+        alertError("Completa producto, cantidad y precio");
         return;
     }
 
@@ -3201,3 +3338,1267 @@ async function limpiarFiltrosCompras() {
 
 
 }
+
+//-*-*-*-*-*PEDIDOS *-*-*-*-*-*-
+
+    let detallePedidos = [];
+    let stockDisponibleActual = 0;
+
+// TRAER Pedidos
+async function cargarPedidos() {
+
+    try {
+
+        const res = await fetch(`${API_URL}/api/pedidos`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        const data = await res.json();
+
+        const tbody = document.getElementById("tablaPedidos");
+
+        if (!tbody) return;
+
+        tbody.innerHTML = "";
+
+        data.data.forEach(pe => {
+
+            let badgeEstado = "";
+
+            switch (pe.estado) {
+                case "Pendiente":
+                    badgeEstado ='<span class="badge bg-secondary">Pendiente</span>';
+                    break;
+
+                case "En proceso":
+                    badgeEstado ='<span class="badge bg-warning text-dark">En proceso</span>';
+                    break;
+
+                case "Completado":
+                    badgeEstado ='<span class="badge bg-success">Completado</span>';
+                    break;
+
+                default:
+                    badgeEstado ='<span class="badge bg-danger">Cancelado</span>';
+            }
+
+            tbody.innerHTML += `
+            <tr>
+                <td>${pe.id_pedido}</td>
+                <td>${new Date(pe.fecha).toLocaleDateString("es-AR")}</td>
+                <td>${pe.nombre_cliente}</td>
+                <td>${pe.usuario_tomoPedido}</td>
+                <td>${pe.sucursal}</td>
+                <td>$${pe.total}</td>
+                <td>${badgeEstado}</td>
+                <td class="acciones_acciones">
+                    <button
+                        class="btn btn-sm btn-editarPedido btneditar"
+                        data-id="${pe.id_pedido}">
+                        Editar
+                    </button>
+                    <button
+                        class="btn btn-sm btn-verPedido"
+                        data-id="${pe.id_pedido}">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                </td>
+            </tr>`;
+        });
+
+    } catch (error) {
+        console.error("Error cargando compras:", error);
+    }
+}
+
+//Funcion cargar Clientes Filtro
+async function cargarClientesFiltroPedido() {
+
+    try {
+        const res = await fetch(`${API_URL}/api/clientes`,{
+            headers:{
+                Authorization:`Bearer ${token}`
+            }
+        });
+
+        const data = await res.json();
+
+        const select = document.getElementById("filtroClientePedido");
+
+        if(!select) return;
+        select.innerHTML =
+            `<option value="">Todos</option>`;
+
+        data.data.forEach(cl => {
+            select.innerHTML += `
+                <option value="${cl.id_cliente}">${cl.nombre}</option>`;
+        });
+
+    } catch(error){
+        console.error(error);
+    }
+}
+
+async function cargarClientesModalPedido() {
+
+    try {
+        const res = await fetch(`${API_URL}/api/clientes`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        const data = await res.json();
+
+        const select = document.getElementById("clientePedidoModal");
+        if (!select) return;
+
+        select.innerHTML = `<option value="">Seleccionar Cliente</option>`;
+
+        data.data.forEach(cl => {
+            select.innerHTML += `
+                <option value="${cl.id_cliente}">
+                    ${cl.nombre}
+                </option>`;
+        });
+
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+//carga de productos del modal de nuevo pedido
+async function cargarProductosModalPedido() {
+    try {
+        const res = await fetch(`${API_URL}/api/productos`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        const data = await res.json();
+
+        const select = document.getElementById("productoPedido");
+        if (!select) return;
+
+        select.innerHTML = `<option value="">Seleccionar producto</option>`;
+
+        data.data.forEach(p => {
+        select.innerHTML += `
+            <option 
+            value="${p.id_producto}">
+            ${p.nombre}
+            </option>`;
+        });
+
+    } catch (error) {
+        console.error("Error cargando productos:", error);
+    }
+}
+
+//Modal Nuevo Pedido
+function abrirModalNuevoPedido() {
+
+    cargarClientesModalPedido();
+    cargarProductosModalPedido();
+
+
+    // limpiar productos 
+    const select = document.getElementById("productoPedido");
+    if (select) {
+        select.innerHTML = `<option value="">Seleccionar producto</option>`;
+    }
+
+    document.querySelector("#pedidoModal .modal-title").innerText = "Nuevo Pedido";
+    document.querySelector("#pedidoModal .modalIcon").className =
+        "modalIcon bi bi-cart-plus icon-modal";
+
+    const modal = new bootstrap.Modal(document.getElementById("pedidoModal"));
+    modal.show();
+}
+
+//Funcion cargar precio del producto en modal de pedido
+async function cargarPrecioModalPedido(idProducto) {
+
+    try{
+        if(!idProducto) {
+            Document.getElementById("precioUnitarioPedido").value = "";
+            return;
+        }
+
+        const res = await fetch (
+            `${API_URL}/api/productos/${idProducto}`,
+            {
+                headers:{
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        const data = await res.json();
+            if(!res.ok){
+            throw new Error(data.message);
+            }
+
+            document.getElementById("precioUnitarioPedido").value = 
+            Number(data.data.precio).toFixed(2);
+
+    }catch (error){
+        console.error(error);
+
+    }
+    
+}
+
+//funcion cargar la cantidad disponible del producto
+async function cargarDisponibilidadProducto(idProducto){
+        try {
+
+        const res = await fetch(
+            `${API_URL}/api/stock/producto/${idProducto}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            throw new Error(data.message);
+        }
+        
+        stockDisponibleActual = data.data.cantidad_disponible;
+        const inputCantidad = document.getElementById("cantidadPedido");
+
+       // Mostrar disponibilidad
+        document.getElementById("stockDisponiblePedido").innerHTML =
+            `Disponibles: <strong>${stockDisponibleActual}</strong> unidades`;
+
+        // Limitar cantidad máxima
+        inputCantidad.max = stockDisponibleActual;
+        inputCantidad.dataset.disponible = stockDisponibleActual;
+
+        // Si no hay stock, limpiar el campo
+        if (stockDisponibleActual <= 0) {
+            inputCantidad.value = "";
+        }
+
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+// calcular subtotal: 
+function calcularSubtotalPedido() {
+
+    const cantidad =
+        parseFloat(document.getElementById("cantidadPedido").value) || 0;
+
+    const precio =
+        parseFloat(document.getElementById("precioUnitarioPedido").value) || 0;
+
+    document.getElementById("subtotalPedido").value =
+        (cantidad * precio).toFixed(2);
+}
+
+function renderDetallePedido() {
+
+    const tbody = document.getElementById("tablaDetallePedido");
+    console.log(tbody);
+    tbody.innerHTML = "";
+
+    detallePedidos.forEach((item, index) => {
+
+        tbody.innerHTML += `
+            <tr>
+                <td>${item.nombreProducto}</td>
+                <td>${item.cantidad}</td>
+                <td>${item.precio.toFixed(2)}</td>
+                <td>${item.subtotal.toFixed(2)}</td>
+                <td>
+                    <button
+                        class="btn btn-danger btn-sm btnEliminarItemPedido"
+                        data-index="${index}">
+                        <i class="bi bi-trash"></i>
+                    </button
+                </td>
+            </tr>
+        `;
+    });
+}
+
+function calcularTotalPedido() {
+
+    const total = detallePedidos.reduce((acc, item) => acc + item.subtotal, 0);
+
+    document.getElementById("totalPedido").value = total.toFixed(2);
+}
+ //limpiar inputs de detalle compra
+function limpiarInputsProductoPedido() {
+    document.getElementById("cantidadPedido").value = "";
+    document.getElementById("precioUnitarioPedido").value = "";
+    document.getElementById("subtotalPedido").value = "";
+}
+
+// Agregar productos a la lista del pedido
+function agregarProductoPedido() {
+
+    console.log("Entró a agregarProductoPedido");
+
+    const selectProducto = document.getElementById("productoPedido");
+    const idProducto = selectProducto.value;
+    const nombreProducto =
+        selectProducto.options[selectProducto.selectedIndex]?.text;
+
+    const cantidad =
+        parseFloat(document.getElementById("cantidadPedido").value) || 0;
+
+    const precio =
+        parseFloat(document.getElementById("precioUnitarioPedido").value) || 0;
+
+    const subtotal =
+        parseFloat(document.getElementById("subtotalPedido").value) || 0;
+
+    // Validaciones básicas
+    if (!idProducto || cantidad <= 0 || precio <= 0) {
+        alertError("Completa producto, cantidad y precio");
+        return;
+    }
+
+    // Sin stock
+    if (stockDisponibleActual <= 0) {
+        alertError("Este producto no posee stock disponible.");
+        return;
+    }
+
+    // La cantidad supera el stock disponible
+    if (cantidad > stockDisponibleActual) {
+        alertError(
+            `Solo hay ${stockDisponibleActual} unidades disponibles para este producto.`
+        );
+        return;
+    }
+
+    // Verificar si el producto ya fue agregado al pedido
+    const existe = detallePedidos.find(
+        p => p.idProducto == idProducto
+    );
+
+    if (existe) {
+        // Validar que la suma no supere el stock
+        if ((existe.cantidad + cantidad) > stockDisponibleActual) {
+            alertError(`Solo hay ${stockDisponibleActual} unidades disponibles para este producto.`);
+            return;
+        }
+
+        existe.cantidad += cantidad;
+        existe.subtotal = existe.cantidad * existe.precio;
+
+    } else {
+
+        detallePedidos.push({
+            idProducto,
+            nombreProducto,
+            cantidad,
+            precio,
+            subtotal
+        });
+
+    }
+
+    renderDetallePedido();
+    calcularTotalPedido();
+    limpiarInputsProductoPedido();
+}
+ //Funcion eliminar items de la lista del pedido
+function eliminarItemPedido(index) {
+
+    detallePedidos.splice(index, 1);
+
+    renderDetallePedido();
+
+    calcularTotalPedido();
+}
+
+function obtenerPedidoFormulario() {
+
+    return {
+
+        id_cliente:
+            parseInt(document.getElementById("clientePedidoModal").value),
+
+        id_usuario: parseInt(idUsuario),
+
+        id_sucursal:
+            parseInt(document.getElementById("sucursalPedido").value),
+
+        id_estado:
+            parseInt(document.getElementById("pedidoEstado").value),
+
+        total:
+            parseFloat(document.getElementById("totalPedido").value) || 0,
+
+        productos: detallePedidos.map(item => ({
+            id_producto: parseInt(item.idProducto),
+            cantidad: item.cantidad,
+            precio_unitario: item.precio
+        }))
+    };
+}
+ //Funcion ceerar modal nuevo pedido
+function cerrarModalPedido() {
+
+    const modal = bootstrap.Modal.getInstance(
+        document.getElementById("pedidoModal")
+    );
+
+    if (modal) {
+        modal.hide();
+    }
+
+    document.getElementById("pedidoId").value = "";
+    document.getElementById("clientePedidoModal").innerHTML = `<option value="">Seleccionar cliente</option>`;
+    document.getElementById("productoPedido").innerHTML = `<option value="">Seleccionar producto</option>`;
+    document.getElementById("cantidadPedido").value = "";
+    document.getElementById("precioUnitarioPedido").value = "";
+    document.getElementById("subtotalPedido").value = "";
+    document.getElementById("totalPedido").value = "";
+
+    detallePedidos = [];
+
+    renderDetallePedido();
+}
+async function guardarPedido() {
+
+    try {
+
+        const id = document.getElementById("pedidoId").value;
+        const pedido = obtenerPedidoFormulario();
+        const url = id
+            ? `${API_URL}/api/pedidos/${id}`
+            : `${API_URL}/api/pedidos`;
+
+        const method = id ? "PUT" : "POST";
+        const res = await fetch(url, {
+
+            method,
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(pedido)
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            await alertError(
+                data.message || "Error al guardar pedido"
+            );
+        return;
+        }
+        await alertSuccess(
+            id ? "Pedido actualizado" : "Pedido creado"
+        );
+
+        cerrarModalPedido();
+        await cargarPedidos();
+
+    }
+
+    catch (error) {
+        console.error(error);
+        alertError("Error de conexión");
+    }
+}
+
+//Funcion mostral el modal de detalle de cada pedido
+function mostrarModalDetallePedido(productos) {
+
+    const tbody = document.getElementById("tablaDetallePedidoVer");
+
+    tbody.innerHTML = "";
+
+    productos.forEach(p => {
+
+        tbody.innerHTML += `
+            <tr>
+                <td>${p.nombre}</td>
+                <td>${p.cantidad}</td>
+                <td>$${p.precio_unitario}</td>
+                <td>$${p.subtotal}</td>
+            </tr>
+        `;
+    });
+
+    new bootstrap.Modal(
+        document.getElementById("detallePedidoModal")
+    ).show();
+}
+
+//Funcion ver detalle pedido
+async function verDetallePedido(id) {
+
+    try {
+            const res = await fetch(`${API_URL}/api/pedidos/${id}/detalle`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        const data = await res.json();
+        mostrarModalDetallePedido(data.data);
+
+    } catch(error) {
+        console.error(error);
+        alertError("No se pudo cargar el detalle");
+
+    }
+
+}
+
+// Función Editar estado Pedido
+async function editarPedido(id) {
+
+    try {
+
+        // pedido general
+        const resPedido = await fetch(
+            `${API_URL}/api/pedidos/${id}`,
+            {
+                headers: { Authorization: `Bearer ${token}` }
+            }
+        );
+
+        const dataPedido = await resPedido.json();
+
+        if (!resPedido.ok) {
+            await alertError(dataPedido.message);
+            return;
+        }
+
+        const pedido = dataPedido.data;
+
+        // VALIDACIÓN PRIMERO (regla de negocio)
+        if (pedido.estado?.toLowerCase() === "completado") {
+            await alertError("El estado ya está completado. No se puede editar este pedido.");
+            return;
+        }
+
+        // 2. detalle productos (solo si se puede editar)
+        const resDetalle = await fetch(
+            `${API_URL}/api/pedidos/${id}/detalle`,
+            {
+                headers: { Authorization: `Bearer ${token}` }
+            }
+        );
+
+        const dataDetalle = await resDetalle.json();
+
+        if (!resDetalle.ok) {
+            await alertError(dataDetalle.message);
+            return;
+        }
+
+        // ===== CABECERA -----
+        document.getElementById("editarPedidoId").value = pedido.id_pedido;
+        document.getElementById("editarPedidoCliente").value = pedido.nombre_cliente;
+        document.getElementById("editarPedidoSucursal").value = pedido.sucursal;
+        document.getElementById("editarPedidoFecha").value = pedido.fecha?.substring(0, 10);
+        document.getElementById("editarPedidoTotal").value = pedido.total;
+        document.getElementById("editarPedidoEstado").value = pedido.id_estado;
+
+        // ----- DETALLE ----
+        const tbody = document.getElementById("tablaEditarDetallePedido");
+        tbody.innerHTML = "";
+
+        dataDetalle.data.forEach(p => {
+
+            tbody.innerHTML += `
+                <tr>
+                    <td>${p.nombre}</td>
+                    <td>${p.cantidad}</td>
+                    <td>${Number(p.precio_unitario).toFixed(2)}</td>
+                    <td>${Number(p.subtotal).toFixed(2)}</td>
+                </tr>
+            `;
+        });
+
+        // abrir modal
+        const modal = new bootstrap.Modal(
+            document.getElementById("editarPedidoModal")
+        );
+
+        modal.show();
+
+    } catch (error) {
+        console.error(error);
+        await alertError("Error al cargar el pedido");
+    }
+}
+
+async function actualizarPedido() {
+
+    try {
+
+        const id = document.getElementById("editarPedidoId").value;
+        const id_estado = document.getElementById("editarPedidoEstado").value;
+
+        const res = await fetch(`${API_URL}/api/pedidos/${id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify({ id_estado })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            await alertError(data.message || "Error al actualizar pedido");
+            return;
+        }
+
+        await alertSuccess("Estado del pedido actualizado");
+
+        // cerrar modal
+        const modalEl = document.getElementById("editarPedidoModal");
+        const modal = bootstrap.Modal.getInstance(modalEl);
+        modal.hide();
+
+        // refrescar tabla
+        cargarPedidos();
+
+    } catch (error) {
+        console.error(error);
+        await alertError("Error de conexión al actualizar pedido");
+    }
+}
+
+async function buscarPedidos() {
+    try {
+
+        const valorBusqueda = document.getElementById("inputBusquedaPedido").value.trim();
+        const cliente = document.getElementById("filtroClientePedido").value;
+        const estado = document.getElementById("filtroEstadoPedido").value;
+
+        let response;
+
+        // BUSQUEDA POR ID (prioridad)
+        if (valorBusqueda !== "" && !isNaN(valorBusqueda)) {
+            response = await fetch(
+                `${API_URL}/api/pedidos/${valorBusqueda}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+
+        } else {
+
+            //  FILTROS COMBINADOS
+            const params = new URLSearchParams();
+
+            if (valorBusqueda !== "") {
+                params.append("id_pedido", valorBusqueda);
+            }
+
+            if (cliente !== "") {
+                params.append("nombre_cliente", cliente);
+            }
+
+            if (estado !== "") {
+                params.append("estado", estado);
+            }
+
+            response = await fetch(
+                `${API_URL}/api/pedidos/filtros?${params.toString()}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+        }
+
+        if (response.status === 404) {
+            await alertError("Sin resultados","No se encontró ningún pedido con ese ID.");
+            mostrarPedidos([]);
+            return;
+        }
+
+        if (!response.ok) {
+            throw new Error(`Error HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        const pedidos = Array.isArray(data.data)
+            ? data.data
+            : [data.data];
+
+        if (pedidos.length === 0) {
+            alertError("Sin resultados", "No se encontraron pedidos");
+            mostrarPedidos([]);
+            return;
+        }
+
+        mostrarPedidos(pedidos);
+
+        // limpiar filtros
+        document.getElementById("inputBusquedaPedido").value = "";
+        document.getElementById("filtroClientePedido").value = "";
+        document.getElementById("filtroEstadoPedido").value = "";
+
+    } catch (error) {
+        console.error(error);
+        alertError("Error al buscar pedidos");
+    }
+}
+
+function mostrarPedidos(pedidos) {
+
+    const tbody = document.getElementById("tablaPedidos");
+
+    if (!tbody) return;
+
+    tbody.innerHTML = "";
+    pedidos.forEach(pe => {
+        let badgeEstado = "";
+        switch (pe.estado) {
+
+            case "Pendiente":
+                badgeEstado =
+                    '<span class="badge bg-secondary">Pendiente</span>';
+                break;
+
+            case "En proceso":
+                badgeEstado =
+                    '<span class="badge bg-warning text-dark">En proceso</span>';
+                break;
+
+            case "Completado":
+                badgeEstado =
+                    '<span class="badge bg-success">Completado</span>';
+                break;
+
+            default:
+                badgeEstado =
+                    '<span class="badge bg-danger">Cancelado</span>';
+        }
+
+        tbody.innerHTML += `
+            <tr>
+                <td>${pe.id_pedido}</td>
+                <td>${new Date(pe.fecha).toLocaleDateString("es-AR")}</td>
+                <td>${pe.nombre_cliente}</td>
+                <td>${pe.usuario_tomoPedido}</td>
+                <td>${pe.sucursal}</td>
+                <td>$${Number(pe.total).toFixed(2)}</td>
+                <td>${badgeEstado}</td>
+                <td class="acciones_acciones">
+
+                    <button
+                        class="btn btn-sm btn-editarPedido btneditar"
+                        data-id="${pe.id_pedido}">
+                        Editar
+                    </button>
+
+                    <button
+                        class="btn btn-sm btn-verPedido"
+                        data-id="${pe.id_pedido}">
+                        <i class="bi bi-eye"></i>
+                    </button>
+
+                </td>
+            </tr> `;
+    });
+
+}
+
+//funcion limpiar filtros
+async function limpiarFiltrosPedidos() {
+
+    document.getElementById("inputBusquedaPedidos").value = "";
+    document.getElementById("filtroClientePedido").value = "";
+    document.getElementById("filtroEstadoPedido").value = "";
+
+
+
+}
+
+//-*-*-*-*-*-*-UBICACIONES: CIUADES Y PROVINCIAS -*-*-*-*-*-*-*-
+function mostrarModuloUbicaciones(modulo){
+
+    document.getElementById("provinciasSection").classList.add("d-none");
+
+    document.getElementById("ciudadesSection").classList.add("d-none");
+
+    if(modulo==="provincias"){
+
+        document.getElementById("provinciasSection").classList.remove("d-none");
+        cargarProvincias();
+
+    }else{
+
+        document.getElementById("ciudadesSection").classList.remove("d-none");
+        cargarCiudades();
+
+    }
+
+}
+function mostrarProvincias(provincias) {
+    const tbody = document.getElementById("tablaProvincias");
+
+    if (!tbody) return;
+
+    tbody.innerHTML = "";
+
+    provincias.forEach(p => {
+
+        tbody.innerHTML += `
+            <tr>
+                <td>${p.id_provincia}</td>
+                <td>${p.nombre}</td>
+
+                <td>
+                    <button
+                        class="btn btn-sm btn-editarProvincia btneditar"
+                        data-id="${p.id_provincia}">
+                        Editar
+                    </button>
+
+                    <button
+                        class="btn btn-sm btn-eliminarProvincia btneliminar"
+                        data-id="${p.id_provincia}">
+                        Eliminar
+                    </button>
+                </td>
+            </tr>
+        `;
+
+    });
+
+}
+function mostrarCiudades(ciudades) {
+
+    const tbody = document.getElementById("tablaCiudades");
+
+    if (!tbody) return;
+
+    tbody.innerHTML = "";
+
+    ciudades.forEach(c => {
+
+        tbody.innerHTML += `
+            <tr>
+                <td>${c.id_ciudad}</td>
+                <td>${c.nombre}</td>
+                <td>${c.provincia}</td>
+
+                <td>
+                    <button
+                        class="btn btn-sm btn-editarCiudad btneditar"
+                        data-id="${c.id_ciudad}">
+                        Editar
+                    </button>
+
+                    <button
+                        class="btn btn-sm btn-eliminarCiudad btneliminar"
+                        data-id="${c.id_ciudad}">
+                        Eliminar
+                    </button>
+                </td>
+            </tr>
+        `;
+
+    });
+
+}
+
+async function cargarCiudades() {
+    try {
+        const response = await fetch(`${API_URL}/api/ciudades`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        const repuesta = await response.json();
+
+        if (!response.ok) {
+            throw new Error(repuesta.message);
+        }
+
+        mostrarCiudades(repuesta.data);
+
+    } catch (error) {
+
+        console.error(error);
+        alertError("Error al cargar ciudades");
+    }
+
+}
+
+//funcion cargar provincias
+async function cargarProvincias() {
+
+    try {
+        const response = await fetch(`${API_URL}/api/provincias`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        const rta = await response.json();
+
+        if (!response.ok) {
+            throw new Error(rta.message);
+        }
+
+        mostrarProvincias(rta.data);
+
+    } catch (error) {
+
+        console.error(error);
+        alertError("Error al cargar provincias");
+    }
+
+}
+
+//FUNCION ELIMINAR PROVINCIA
+async function eliminarProvincia(id) {
+    try{ // manejo de bloque 
+        const confirmar = await confirmDelete("¿Seguro que querés eliminar esta provincia?"); //muestra un poup del navegador con mensaje
+
+        if (!confirmar.isConfirmed) return;
+        const res = await fetch(`${API_URL}/api/provincias/${id}/eliminar`, { //peticion al backend
+            method: "PATCH",
+            headers: { // cabecera HTTP, metaddata del la request
+                "Content-Type": "application/json", //lo que se envia es json
+                "Authorization": `Bearer ${token}` //envio del token (Bearer es el esquema de autenticacion y token esta guardado en el localStorage)
+            }
+        });
+        const data = await res.json(); //convierte la repuesta del backend en un objeto JS
+
+        if(!res.ok){ //si hay error muestra el mensaje
+            await alertError(data.message || "Error al eliminar provincia");
+            return; //corta la ejecucion si hubo error
+        }
+
+        await alertSuccess(data.message); //mensaje de exito
+
+        //refrescar tabla
+        cargarProvincias();
+
+    }catch (error){ //captura el error
+        console.error("Error eliminando provincia:", error); //mensaje debbug
+        await alertError("Error de conexión con el servidor");
+    }
+};
+
+//FUNCION MOSTRAR FORMULARIO NUEVA PROVINCIA
+function abrirModalNuevaProvincia() {
+
+    // limpiar formulario
+    document.getElementById("nombreprov").value = "";
+
+    // cambiar título
+    document.querySelector("#provinciaModal .modal-title").innerText = "Nueva Provincia";
+
+    document.querySelector("#provinciaModal .modalIcon").className = "modalIcon bi bi-map icon-modal";
+
+    // abrir modal
+    const modal = new bootstrap.Modal(document.getElementById("provinciaModal"));
+    modal.show();
+}
+
+function cerrarModalProvincia() {
+
+    const modalEl = document.getElementById("provinciaModal");
+    const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+
+    modal.hide();
+
+    //Limpiar el input
+    document.getElementById("nombreprov").value = "";
+}
+
+//Funcion guardar provincia: post, put
+async function guardarProvincia() {
+
+    try {
+
+        const id = document.getElementById("provinciaId").value;
+        const nombre_provincia = document.getElementById("nombreprov").value.trim();
+
+        const url = id
+            ? `${API_URL}/api/provincias/${id}`
+            : `${API_URL}/api/provincias`;
+
+        const method = id ? "PUT" : "POST";
+
+        const res = await fetch(url, {
+            method,
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify({nombre: nombre_provincia})
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            await alertError(data.message || "Error al guardar provincia");
+            return;
+        }
+
+        await alertSuccess(id ? "Provincia actualizada" : "Provincia creada");
+
+        cerrarModalProvincia();
+        cargarProvincias();
+
+    } catch (error) {
+        console.error(error);
+        alert("Error de conexión");
+    }
+}
+
+//FUNCION EDITAR PROVINCIA
+async function editarProvincia(id) {
+
+    try {
+        const res = await fetch(`${API_URL}/api/provincias/${id}`, {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        const data = await res.json();
+
+        if (!res.ok || !data?.data) {
+            await alertError(data.message || "Error al obtener provincia");
+            return;
+        }
+
+        const prov = data.data;
+
+        // ID oculto
+        document.getElementById("provinciaId").value = prov.id_provincia;
+
+        // Campo
+        document.getElementById("nombreprov").value = prov.nombre;
+        
+        // título dinámico
+        document.querySelector("#provinciaModal .modal-title").innerText = "Editar Provincia";
+
+        document.querySelector("#provinciaModal .modalIcon").className ="modalIcon bi bi-pencil-square icon-modal";
+
+        // abrir modal
+        const modalEl = document.getElementById("provinciaModal");
+        const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+        modal.show();
+
+    } catch (error) {
+        console.error(error);
+        await alertError("Error de conexión con el servidor");
+    }
+}
+
+//FUNCION ELIMINAR CIUDAD
+async function eliminarCiudad(id) {
+    try{ // manejo de bloque 
+        const confirmar = await confirmDelete("¿Seguro que querés eliminar esta ciudad?"); //muestra un poup del navegador con mensaje
+
+        if (!confirmar.isConfirmed) return;
+        const res = await fetch(`${API_URL}/api/ciudades/${id}/eliminar`, { //peticion al backend
+            method: "PATCH",
+            headers: { // cabecera HTTP, metaddata del la request
+                "Content-Type": "application/json", //lo que se envia es json
+                "Authorization": `Bearer ${token}` //envio del token (Bearer es el esquema de autenticacion y token esta guardado en el localStorage)
+            }
+        });
+        const data = await res.json(); //convierte la repuesta del backend en un objeto JS
+
+        if(!res.ok){ //si hay error muestra el mensaje
+            await alertError(data.message || "Error al eliminar ciudad");
+            return; //corta la ejecucion si hubo error
+        }
+
+        await alertSuccess(data.message); //mensaje de exito
+
+        //refrescar tabla
+        cargarCiudades();
+
+    }catch (error){ //captura el error
+        console.error("Error eliminando ciudad:", error); //mensaje debbug
+        await alertError("Error de conexión con el servidor");
+    }
+};
+
+//FUNCION MOSTRAR FORMULARIO NUEVA PROVINCIA
+async function abrirModalNuevaCiudad() {
+
+    // limpiar formulario
+    document.getElementById("ciudadId").value = "";
+    document.getElementById("provinciaciudad").value = "";
+    document.getElementById("nombreciudad").value = "";
+
+    await cargarProvinciasSelect();
+
+    // cambiar título
+    document.querySelector("#ciudadModal .modal-title").innerText = "Nueva Ciudad";
+
+    document.querySelector("#ciudadModal .modalIcon").className = "modalIcon bi bi-geo icon-modal";
+
+    // abrir modal
+    const modal = new bootstrap.Modal(document.getElementById("ciudadModal"));
+    modal.show();
+}
+
+function cerrarModalCiudad() {
+
+    const modalEl = document.getElementById("ciudadModal");
+    const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+
+    modal.hide();
+
+    //Limpiar los inputs
+    document.getElementById("ciudadId").value = "";
+    document.getElementById("provinciaciudad").value = "";
+    document.getElementById("nombreciudad").value = "";
+}
+
+//Funcion guardar ciudad: post, put
+async function guardarCiudad() {
+
+    try {
+
+        const id = document.getElementById("ciudadId").value;
+        const id_provincia = parseInt(document.getElementById("provinciaciudad").value);
+        const nombre = document.getElementById("nombreciudad").value.trim();
+
+        const url = id
+            ? `${API_URL}/api/ciudades/${id}`
+            : `${API_URL}/api/ciudades`;
+
+        const method = id ? "PUT" : "POST";
+
+        const res = await fetch(url, {
+            method,
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                nombre,
+                id_provincia
+            })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            await alertError(data.message || "Error al guardar ciudad");
+            return;
+        }
+
+        await alertSuccess(id ? "Ciudad actualizada" : "Ciudad creada");
+
+        cerrarModalCiudad();
+        cargarCiudades();
+
+    } catch (error) {
+        console.error(error);
+        alert("Error de conexión");
+    }
+}
+
+// Cargar provincias en el select del modal de ciudades
+async function cargarProvinciasSelect() {
+    try {
+        const res = await fetch(`${API_URL}/api/provincias`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            throw new Error(data.message);
+        }
+
+        const select = document.getElementById("provinciaciudad");
+
+        select.innerHTML = `
+            <option value="">Seleccionar provincia</option>`;
+
+        data.data.forEach(provincia => {
+            select.innerHTML += `
+                <option value="${provincia.id_provincia}">${provincia.nombre}</option>`;
+        });
+
+    } catch (error) {
+        console.error(error);
+        alertError("Error al cargar provincias");
+    }
+
+}
+// FUNCION EDITAR CIUDAD
+async function editarCiudad(id) {
+
+    try {
+
+        const res = await fetch(`${API_URL}/api/ciudades/${id}`, {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        const data = await res.json();
+
+        if (!res.ok || !data?.data) {
+            await alertError(data.message || "Error al obtener ciudad");
+            return;
+        }
+
+        const ciudad = data.data;
+
+        // Cargar provincias en el select
+        await cargarProvinciasSelect();
+
+        // ID oculto
+        document.getElementById("ciudadId").value = ciudad.id_ciudad;
+
+        // Nombre
+        document.getElementById("nombreciudad").value = ciudad.nombre;
+
+        // Provincia
+        document.getElementById("provinciaciudad").value = ciudad.id_provincia;
+
+        // Título
+        document.querySelector("#ciudadModal .modal-title").innerText = "Editar Ciudad";
+        document.querySelector("#ciudadModal .modalIcon").className = "modalIcon bi bi-pencil-square icon-modal";
+
+        // Abrir modal
+        const modalEl = document.getElementById("ciudadModal");
+        const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+        modal.show();
+
+    } catch (error) {
+        console.error(error);
+        await alertError("Error de conexión con el servidor");
+
+    }
+}
+

@@ -1,4 +1,4 @@
-import { getAllStockService, getStockByIDService, searchStockService,getStockFiltrosService, crearStockService, actualizarStockService,
+import { getAllStockService, getStockByIDService, getStockProductoService, searchStockService,getStockFiltrosService, crearStockService, actualizarStockService,
     eliminarStockService} from "../services/stock_service.js";
 import logger from "../utils/logger.js";
 
@@ -38,6 +38,35 @@ export const getStockByID = async (req,res) => {
             logger.error(`Error al buscar Stock por ID: ${error.message}`);
             return res.status(500).json({ message: "Error al encontrar Stock", error: error.message});
     }   
+};
+
+//controlador GET para obtener cantidad 
+export const getStockProducto = async (req, res) => {
+
+    try {
+        const { id } = req.params;
+        logger.info(`GET /stock/producto/${id}`);
+        const stock = await getStockProductoService(id);
+
+        if (!stock) {
+            return res.status(404).json({
+                message: "No existe stock para ese producto"
+            });
+        }
+
+        return res.status(200).json({
+            message: "Stock encontrado",
+            data: stock
+        });
+
+    } catch (error) {
+        logger.error(error.message);
+        return res.status(500).json({
+            message: error.message
+        });
+
+    }
+
 };
 
 // Controlador GET SEARCH - Buscar stock por producto

@@ -141,44 +141,72 @@
     <div class="row g-3 d-flex flex-nowrap overflow-auto">
 
         <div class="flex-fill">
-        <button class="nav-card"><i class="bi bi-people nav-icon" data-module="usuarios"></i><span>Usuarios</span></button>
+            <button class="nav-card" data-module="clientes">
+                <i class="bi bi-person nav-icon"></i>
+                <span>Clientes</span>
+            </button>
         </div>
 
         <div class="flex-fill">
-        <button class="nav-card"><i class="bi bi-person nav-icon"data-module="clientes"></i><span>Clientes</span></button>
+            <button class="nav-card" data-module="proveedores">
+                <i class="bi bi-truck nav-icon"></i>
+                <span>Proveedores</span>
+            </button>
         </div>
 
         <div class="flex-fill">
-        <button class="nav-card" data-module="productos"><i class="bi bi-capsule nav-icon"></i><span>Productos</span></button>
+            <button class="nav-card" data-module="productos">
+                <i class="bi bi-capsule nav-icon"></i>
+                <span>Productos</span>
+            </button>
+        </div>
+
+
+        <div class="flex-fill">
+            <button class="nav-card" data-module="stock">
+                <i class="bi bi-box-seam nav-icon"></i>
+                <span>Stock</span>
+            </button>
         </div>
 
         <div class="flex-fill">
-        <button class="nav-card" data-module="proveedores"><i class="bi bi-truck nav-icon"></i><span>Proveedores</span></button>
+            <button class="nav-card" data-module="compras">
+                <i class="bi bi-receipt nav-icon"></i>
+                <span>Compras</span>
+            </button>
         </div>
 
         <div class="flex-fill">
-        <button class="nav-card" data-module="stock"><i class="bi bi-box-seam nav-icon"></i><span>Stock</span></button>
+            <button class="nav-card" data-module="ventas">
+                <i class="bi bi-receipt nav-icon"></i>
+                <span>Ventas</span>
+            </button>
         </div>
 
         <div class="flex-fill">
-        <button class="nav-card" data-module="sucursales"><i class="bi bi-building-gear nav-icon"></i><span>Sucursales</span></button>
+            <button class="nav-card" data-module="sucursales">
+                <i class="bi bi-building-gear nav-icon"></i>
+                <span>Sucursales</span>
+            </button>
         </div>
 
         <div class="flex-fill">
-        <button class="nav-card" data-module="ubicaciones"><i class="bi bi-geo-alt nav-icon"></i><span>Ubicaciones</span></button>
+            <button class="nav-card" data-module="ubicaciones">
+                <i class="bi bi-geo-alt nav-icon"></i>
+                <span>Ubicaciones</span>
+            </button>
         </div>
 
         <div class="flex-fill">
-        <button class="nav-card" data-module="compras"><i class="bi bi-receipt nav-icon"></i><span>Compras</span></button>
-        </div>
-
-        <div class="flex-fill">
-        <button class="nav-card" data-module="ventas"><i class="bi bi-receipt nav-icon"></i><span>Ventas</span></button>
+            <button class="nav-card" data-module="usuarios">
+                <i class="bi bi-people nav-icon"></i>
+                <span>Usuarios</span>
+            </button>
         </div>
 
     </div>
 
-    </section>
+</section>
 
     <!--Seccion usuarios-->
     <section id="usuariosSection" class="container-fluid p-4 module-section d-none">
@@ -683,6 +711,160 @@
 
 </section>
 
+<!--Seccion Pedidos-->
+    <section id="pedidosSection" class="container-fluid p-4 module-section d-none">
+        <button class="btn-volver-panel">
+    ← Volver
+        </button>
+        <!-- FILTROS -->
+    <div class="card p-3 mb-4 shadow-sm">
+
+        <div class="row g-3 align-items-end">
+
+            <!-- BUSQUEDA -->
+            <div class="col-md-4">
+                <label class="form-label">Buscar Pedido</label>
+                <input
+                    type="text"
+                    id="inputBusquedaPedido"
+                    class="form-control filtro-campo"
+                    placeholder="ID">
+            </div>
+
+            <!--Cliente-->
+            <div class="col-md-3">
+                <label class="form-label">Cliente</label>
+                <select title="cliente_pedido"id="filtroClientePedido"class="form-select filtro-campo">
+                <option value="">Todos</option>
+                </select>
+            </div>
+
+            <!-- ESTADO -->
+            <div class="col-md-3">
+                <label class="form-label">Estado</label>
+                <select id="filtroEstadoPedido" title="Estado" class="form-select filtro-campo ">
+                    <option value="">Todos</option>
+                    <option value="1">Pendiente</option>
+                    <option value="2">En Proceso</option>
+                    <option value="3">Completado</option>
+                    <option value="4">Cancelado</option>
+                </select>
+            </div>
+
+            <!-- BOTON BUSCAR -->
+            <div class="d-flex justify-content-end gap-2 mt-3">
+                <button id="btnBuscarPedidos" class="btn btn-buscar">
+                    Buscar
+                </button>
+                <button id="btnLimpiarPedidos"class="btn btn-restablecer"><i class="bi bi-arrow-clockwise"></i>
+                Limpiar
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Pedidos de Clientes</h2>
+
+        <button class="btn btn-nuevo" id="btnNuevoPedido">
+            + Nuevo Pedido
+        </button>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Fecha</th>
+                <th>Cliente</th>
+                <th>Nombre Usuario</th>
+                <th>Sucursal</th>
+                <th>Total</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody id="tablaPedidos"></tbody>
+    </table>
+
+</section>
+
+<!-- Sección Ubicaciones -->
+<section id="ubicacionesSection" class="container-fluid p-4 module-section d-none">
+
+    <button class="btn-volver-panel"> ← Volver </button>
+
+    <!-- Selector de entidad -->
+    <div class="card p-3 mb-4 shadow-sm">
+
+        <div class="d-flex gap-2">
+            <button id="btnModuloProvincias" class="btn btn-primary">Provincias</button>
+            <button id="btnModuloCiudades"class="btn btn-outline-primary">Ciudades</button>
+        </div> 
+    </div>
+
+    <!-- Aquí cambia el contenido -->
+    <div id="provinciasSection" class="d-none">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <h2>Provincias</h2>
+
+        <button class="btn btn-nuevo" id="btnNuevaProvincia">
+            + Nueva Provincia
+        </button>
+
+    </div>
+
+    <table class="table table-striped">
+
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody id="tablaProvincias"></tbody>
+
+    </table>
+
+</div>
+
+<div id="ciudadesSection" class="d-none">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <h2>Ciudades</h2>
+
+        <button class="btn btn-nuevo" id="btnNuevaCiudad">
+            + Nueva Ciudad
+        </button>
+
+    </div>
+
+    <table class="table table-striped">
+
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Ciudad</th>
+                <th>Provincia</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody id="tablaCiudades"></tbody>
+
+    </table>
+
+</div>
+
+</section>
+
     <!-- ================= ACTIVITY + MONITOR ================= -->
     <section class="container-fluid p-4">
 
@@ -779,9 +961,8 @@
         </button>
     </div>
 
-        </div>
-
-        </div>
+    </div>
+    </div>
 
     </div>
 
@@ -1547,6 +1728,492 @@
                     Actualizar Estado
                 </button>
             </div>
+        </div>
+    </div>
+</div>
+<!-- MODAL PEDIDOS -->
+<div class="modal fade modal-new" id="pedidoModal" tabindex="-1" aria-hidden="true">
+
+    <div class="modal-dialog modal-xl">
+
+        <div class="modal-content">
+
+            <!-- HEADER -->
+            <div class="modal-header">
+                <i class="modalIcon bi bi-cart-plus icon-modal"></i>
+                <h5 class="modal-title">Nuevo Pedido</h5>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal">
+                </button>
+            </div>
+
+            <!-- BODY -->
+            <div class="modal-body">
+
+                <input type="hidden" id="pedidoId">
+
+                <div class="row">
+
+                    <!-- CLIENTE-->
+                    <div class="col-md-5">
+                        <label class="form-label">
+                            Cliente
+                        </label>
+
+                        <select id="clientePedidoModal"
+                                class="form-select">
+                            <option value="">
+                                Seleccionar Cliente
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- PRODUCTO -->
+                <div class="col-md-4">
+                    <label class="form-label">Producto</label>
+
+                    <select id="productoPedido" class="form-select">
+                        <option value="">Seleccionar producto</option>
+                    </select>
+                </div>
+
+                    <!-- SUCURSAL -->
+                    <div class="col-md-3">
+                        <label class="form-label">
+                            Sucursal
+                        </label>
+
+                        <select id="sucursalPedido"
+                                class="form-select">
+
+                            <option value="1">Sucursal Central Río Cuarto</option>
+                            <option value="2">Sucursal Córdoba Centro</option>
+                            <option value="3">Sucursal Nueva Córdoba</option>
+                            <option value="4">Sucursal Rosario Norte</option>
+                            <option value="5">Sucursal Santa Fe Capital</option>
+                            <option value="6">Sucursal Mendoza Centro</option>
+                            <option value="7">Sucursal Godoy Cruz</option>
+                            <option value="8">Sucursal Buenos Aires Norte</option>
+                            <option value="9">Sucursal Buenos Aires Sur</option>
+                            <option value="10">Sucursal Rosario Sur</option>
+
+                        </select>
+                    </div>
+
+                </div>
+
+
+                <hr>
+
+                <!-- DETALLE PRODUCTO -->
+                <div class="row">
+
+                    <div class="col-md-3">
+                        <label class="form-label">
+                            Cantidad
+                        </label>
+
+                        <input
+                            type="number"
+                            min="1"
+                            id="cantidadPedido"
+                            class="form-control">
+
+                        <small id="stockDisponiblePedido" class="text-success"></small>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">
+                            Precio unitario
+                        </label>
+
+                        <input
+                            type="number"
+                            step="0.01"
+                            id="precioUnitarioPedido"
+                            class="form-control">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">
+                            Subtotal
+                        </label>
+
+                        <input
+                            type="number"
+                            id="subtotalPedido"
+                            class="form-control"
+                            readonly>
+                    </div>
+
+                    <div class="col-md-3 d-flex align-items-end">
+                        <button class="btn btn-success w-100" id="btnAgregarProductoPedido"><i class="bi bi-plus-circle"></i>
+                            Agregar
+                        </button>
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- TABLA DETALLE -->
+                <h6>Productos agregados</h6>
+
+                <table class="table table-bordered align-middle">
+
+                    <thead>
+
+                        <tr>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unitario</th>
+                            <th>Subtotal</th>
+                            <th>Acciones</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="tablaDetallePedido">
+
+                    </tbody>
+
+                </table>
+
+
+                <!-- TOTAL -->
+                <div class="row">
+
+                    <div class="col-md-4 offset-md-8">
+
+                        <label class="form-label fw-bold">
+                            Total Pedido
+                        </label>
+
+                        <input
+                            type="number"
+                            id="totalPedido"
+                            class="form-control"
+                            readonly>
+
+                    </div>
+
+                </div>
+
+
+                <hr>
+
+                <!-- ESTADO -->
+                <div class="row">
+
+                    <div class="col-md-3">
+
+                        <label class="form-label">
+                            Estado </label>
+
+                        <select
+                            id="pedidoEstado" class="form-select" disabled>
+                            <option value="1">
+                                Pendiente
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FOOTER -->
+            <div class="modal-footer">
+                <button
+                    class="btn btn-secondary" data-bs-dismiss="modal"> Cancelar
+                </button>
+                <button
+                    class="btn btn-primary" id="btnGuardarPedido">
+                    Guardar Pedido
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!--MODAL PARA VISUALIZAR DETALLE DE PEDIDO-->
+
+<div class="modal fade modal-new" id="detallePedidoModal" tabindex="-1" aria-hidden="true">
+
+    <div class="modal-dialog modal-lg">
+
+        <div class="modal-content">
+
+            <!-- HEADER -->
+            <div class="modal-header">
+
+                <i class="modalIcon bi bi-receipt-cutoff icon-modal"></i>
+
+                <h5 class="modal-title text-white">
+                    Detalle de Pedido
+                </h5>
+
+                <button
+                    type="button"
+                    class="btn-close btn-close-white"
+                    data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <!-- BODY -->
+            <div class="modal-body">
+
+                <h6 class="mb-3">
+                    Productos del Pedido
+                </h6>
+
+                <table class="table table-bordered align-middle">
+
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unitario</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="tablaDetallePedidoVer">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <!-- FOOTER -->
+            <div class="modal-footer">
+
+                <button
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal">
+                    Cerrar
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<!-- MODAL EDITAR Pedido -->
+<div class="modal fade modal-new" id="editarPedidoModal" tabindex="-1" aria-hidden="true">
+
+    <div class="modal-dialog modal-xl">
+
+        <div class="modal-content">
+
+            <!-- HEADER -->
+            <div class="modal-header">
+                <i class="modalIcon bi bi-pencil-square icon-modal"></i>
+                <h5 class="modal-title">Gestionar Pedido</h5>
+
+                <button
+                    type="button" class="btn-close" data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <!-- BODY -->
+            <div class="modal-body">
+                <input type="hidden" id="editarPedidoId">
+
+                <div class="row">
+
+                    <!-- FECHA -->
+                    <div class="col-md-3">
+                        <label class="form-label">Fecha</label>
+
+                        <input type="text" id="editarPedidoFecha" class="form-control" readonly>
+                    </div>
+
+                    <!-- CLIENTE -->
+                    <div class="col-md-5">
+                        <label class="form-label">Cliente</label>
+
+                        <input type="text" id="editarPedidoCliente" class="form-control" readonly>
+                    </div>
+
+                    <!-- SUCURSAL -->
+                    <div class="col-md-4">
+                        <label class="form-label">Sucursal</label>
+                        <input type="text" id="editarPedidoSucursal" class="form-control" readonly>
+                    </div>
+                </div>
+                <hr>
+
+                <!-- PRODUCTOS -->
+                <h6>Productos solicitados </h6>
+
+                <table class="table table-bordered align-middle">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unitario</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaEditarDetallePedido">
+                    </tbody>
+                </table>
+                <hr>
+
+                <!-- TOTAL -->
+                <div class="row">
+                    <div class="col-md-4 offset-md-8">
+                        <label class="form-label fw-bold">Total Pedido</label>
+
+                        <input type="number" id="editarPedidoTotal" class="form-control" readonly>
+                    </div>
+                </div>
+                <hr>
+
+                <!-- ESTADO -->
+                <div class="row">
+                    <div class="col-md-4">
+                        <label class="form-label">Estado</label>
+
+                        <select
+                            id="editarPedidoEstado" class="form-select">
+                            <option value="1">Pendiente</option>
+                            <option value="2">En proceso</option>
+                            <option value="3"> Completado</option>
+                            <option value="4">Cancelado</option>
+
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FOOTER -->
+            <div class="modal-footer">
+                <button
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal">
+                    Cerrar
+                </button>
+
+                <button
+                    class="btn btn-primary"
+                    id="btnActualizarEstadoPedido">
+                    Actualizar Estado
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL UBICACIONES PROVINCIA -->
+<div class=" modal fade modal-new" id="provinciaModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- HEADER -->
+            <div class="modal-header">
+
+                <i class="modalIcon bi bi-map icon-modal"></i>
+
+                <h5 class="modal-title">Provincia</h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <!-- BODY -->
+            <div class="modal-body">
+
+                <input type="hidden" id="provinciaId">
+
+                <label class="form-label">Nombre de la Provincia</label>
+                <input type="text"
+                    id="nombreprov"
+                    class="form-control mb-2"
+                    placeholder="Nombre">
+
+            </div>
+
+            <!-- FOOTER -->
+            <div class="modal-footer">
+
+                <button class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                    Cancelar
+                </button>
+
+                <button class="btn btn-primary btn-guardar"
+                        id="btnGuardarProvincia">
+                    Guardar
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- MODAL UBICACIONES CIUDAD-->
+<div class=" modal fade modal-new" id="ciudadModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- HEADER -->
+            <div class="modal-header">
+
+                <i class="modalIcon bi bi-geo icon-modal"></i>
+
+                <h5 class="modal-title">Ciudades</h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <!-- BODY -->
+            <div class="modal-body">
+
+                <input type="hidden" id="ciudadId">
+
+                <label class="form-label">Nombre de la Ciudad</label>
+                <input type="text"
+                    id="nombreciudad"
+                    class="form-control mb-2"
+                    placeholder="Nombre">
+
+                <select id="provinciaciudad" class="form-select">
+                <option value="">Seleccionar provincia</option>
+                </select>
+
+            </div>
+
+            <!-- FOOTER -->
+            <div class="modal-footer">
+
+                <button class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                    Cancelar
+                </button>
+
+                <button class="btn btn-primary btn-guardar"
+                        id="btnGuardarCiudad">
+                    Guardar
+                </button>
+            </div>
+
         </div>
     </div>
 </div>

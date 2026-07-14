@@ -2,7 +2,7 @@ import express from "express"; //Importa el modulo Express para crear el servido
 
 const router = express.Router(); //crea un enrutador de express, que permite organizar las rutas en modulos separados.
 
-import{getPedidos, searchPedidos, getPedidosByID, crearPedidos, actualizarPedido, eliminarPedido} from "../controllers/pedidos_controller.js";
+import{getPedidos, searchPedidos, getDetallePedido, getPedidosByID, crearPedidos, actualizarPedido, eliminarPedido, getFiltroPedido} from "../controllers/pedidos_controller.js";
 
 import { auth } from "../middleware/auth_middleware.js";
 import { authorizeRole } from "../middleware/authorizeRole.js";
@@ -13,6 +13,16 @@ import { authorizeRole } from "../middleware/authorizeRole.js";
 //-------------------
 
 router.get("/", auth, authorizeRole("admin", "gerente", "empleado"), getPedidos); //Devuelve todos los pedidos 
+
+//------------------
+// Route GET-FILTRO PEDIDO
+//-------------------
+router.get("/filtros", auth, authorizeRole("admin", "gerente", "empelado"), getFiltroPedido)
+
+//------------------
+//Route GET -Detalles Pedido
+//------------------
+router.get("/:id/detalle", auth, authorizeRole("admin", "gerente", "empleado"),getDetallePedido);
 
 // --------------------
 // GET SEARCH - Buscar pedidos por estado o cliente
