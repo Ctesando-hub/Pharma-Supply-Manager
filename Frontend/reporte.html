@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="estilos.css">
+    <link rel="icon" type="image/x-icon" href="assets/logo2.ico">
+    <title>Pharma Supply Manager/Reportes</title>
+</head>
+
+<body class="bg-light">
+
+
+<!-- ================= MAIN CONTENT ================= -->
+<div class="main-content">
+
+<header class="topbar d-flex justify-content-between align-items-center px-4">
+
+
+    <div class="d-flex align-items-center gap-3">
+
+        <a href="panel.html" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left"></i>Dashboard</a>
+
+    <div>
+        <h1 class="m-0 fw-semibold fs-5">Centro de Reportes Gerenciales</h1>
+            <small class="text-muted">Análisis detallado y predicciones inteligentes</small>
+    </div>
+
+    </div>
+    <div class="d-flex align-items-center gap-4">
+
+        <div class="live-status d-flex align-items-center gap-2 px-3 py-1">
+            <span class="status-dot"></span>
+            <small class="fw-bold text-uppercase">Actualización en vivo</small>
+        </div>
+
+        <div class="user-box d-flex align-items-center gap-2">
+
+            <i class="bi bi-person-circle fs-4 text-primary"></i>
+
+            <div>
+                <small class="text-muted d-block">Bienvenido</small>
+
+                <span class="fw-bold" id="usuarioLogueado">Administrador</span>
+            </div>
+
+        </div>
+
+        <a href="login.html" class="logout-link">Salir</a>
+
+    </div>
+
+</header>
+<!-- ================= RESUMEN EJECUTIVO ================= -->
+<section class="container-fluid p-4">
+
+    <div class="mb-4">
+        <h2 class="section-title">Resumen Ejecutivo</h2>
+        <p class="text-muted mb-0">Indicadores principales para la toma de decisiones.</p>
+    </div>
+
+    <div class="row g-4">
+
+        <!-- Ventas -->
+        <div class="col-lg col-md-6">
+            <div class="card dash-card ventas-card">
+                <div class="card-body">
+                    <i class="bi bi-cash-stack dash-icon"></i>
+                    <h6>Ventas Totales</h6>
+                    <h2 id="ventasTotales">$0</h2>
+                    <small class="text-muted">Período seleccionado</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pedidos -->
+        <div class="col-lg col-md-6">
+            <div class="card dash-card pedidos-card">
+                <div class="card-body">
+                    <i class="bi bi-receipt dash-icon"></i>
+                    <h6>Pedidos</h6>
+                    <h2 id="cantidadPedidos">0</h2>
+                    <small class="text-muted">Completados</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Productos -->
+        <div class="col-lg col-md-6">
+            <div class="card dash-card stock-card">
+                <div class="card-body">
+                    <i class="bi bi-capsule dash-icon"></i>
+                    <h6>Productos</h6>
+                    <h2 id="cantidadProductos">0</h2>
+                    <small class="text-muted">Vendidos</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Clientes -->
+        <div class="col-lg col-md-6">
+            <div class="card dash-card clientact-card">
+                <div class="card-body">
+                    <i class="bi bi-building dash-icon"></i>
+                    <h6>Clientes</h6>
+                    <h2 id="cantidadClientes">0</h2>
+                    <small class="text-muted">Con compras</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalles -->
+        <div class="col-lg col-md-6">
+            <div class="card dash-card usuarios-card">
+                <div class="card-body">
+                    <i class="bi bi-list-ul dash-icon"></i>
+                    <h6>Productos Vendidos</h6>
+                    <h2 id="cantidadDetalles">0</h2>
+                    <small class="text-muted">Registros</small>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+<section class="container-fluid p-4">
+
+<div class="row g-4">
+
+    <!-- GRAFICO -->
+<div class="col-lg-8">
+
+    <div class="activity-panel p-4">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <h2 class="activity-title mb-0">
+                Ventas Mensuales
+            </h2>
+
+            <select id="tipoGrafico" name="tipoGrafico" title="tipoGrafico" class="form-select form-select-sm w-auto">
+                <option value="line">📈 Línea</option>
+                <option value="bar">📊 Barras</option>
+            </select>
+
+        </div>
+
+        <canvas id="graficoVentas" height="120"></canvas>
+
+    </div>
+
+</div>
+
+    <!-- IA -->
+    <div class="col-lg-4">
+
+        <div class="pulse-panel p-4 text-white">
+
+            <h6>Inteligencia Artificial</h6>
+
+            <h3>IA Predictiva</h3><hr>
+
+            <div id="prediccionIA">
+
+                <p class="small">Próximamente...</p>
+                <p>Este módulo utilizará Machine Learning para estimar ventas futuras y recomendar reposición de productos. </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+<!-- ================= PRODUCTOS - CLIENTES - STOCK ================= -->
+
+<section class="container-fluid p-4">
+
+    <div class="row g-4">
+
+        <!-- ================= IZQUIERDA ================= -->
+
+        <div class="col-lg-8">
+
+            <!-- PRODUCTOS MÁS VENDIDOS -->
+
+            <div class="activity-panel p-4 mb-4">
+
+                <h2 class="activity-title mb-4">
+                    <i class="bi bi-trophy-fill text-warning"></i>
+                    Productos más vendidos
+                </h2>
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Producto</th>
+                                <th class="text-end">Vendidos</th>
+
+                            </tr>
+                        </thead>
+
+                        <tbody id="tablaProductosTop"></tbody>
+                    </table>
+
+                </div>
+
+            </div>
+
+            <!-- CLIENTES TOP -->
+
+            <div class="activity-panel p-4">
+
+                <h2 class="activity-title mb-4">
+
+                    <i class="bi bi-building text-primary"></i>
+
+                    Clientes Top
+
+                </h2>
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>Cliente</th>
+                                <th class="text-end">Total Comprado</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="tablaClientesTop"></tbody>
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ================= DERECHA ================= -->
+
+    <div class="pulse-panel p-4 text-white">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <h5 class="mb-0"><i class="bi bi-exclamation-triangle-fill text-warning"></i>Stock crítico</h5>
+        <span class="badge bg-danger" id="cantidadAlertas"> 0</span>
+
+    </div>
+
+    <!-- Lista de productos -->
+    <div id="listaStockCritico" class="mb-4">
+
+    </div>
+
+    <hr class="border-light opacity-25">
+
+    <div class="d-grid gap-2">
+
+        <button class="btn btn-outline-light btn-sm"><i class="bi bi-box-seam"></i>Ver inventario completo</button>
+
+        <button class="btn btn-light btn-sm" data-module="compras"><i class="bi bi-cart-plus"></i>Ir al módulo de Compras</button>
+
+    </div>
+
+</div>
+<footer class="container-fluid py-4 mt-5 border-top">
+
+    <div class="d-flex justify-content-between align-items-center flex-wrap">
+
+        <small class="text-muted">© 2026 Pharma Supply Manager</small>
+        <small class="text-muted">Centro de Reportes Gerenciales</small>
+        <small class="text-muted">Versión 1.0</small>
+
+    </div>
+
+</footer>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script type="module" src="./js/reporte.js"></script>
+</html>

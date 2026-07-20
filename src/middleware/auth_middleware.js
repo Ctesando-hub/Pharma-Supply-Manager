@@ -33,6 +33,7 @@ export const auth = (req, res, next) => {
 
     // Verifica el token con la clave secreta
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+
         // Si es inválido o expiró → 403
         if (err) {
             logger.error(`Token inválido o expirado. Ruta: ${req.originalUrl} | Error: ${err.message}`);

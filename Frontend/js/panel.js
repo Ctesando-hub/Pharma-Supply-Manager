@@ -66,7 +66,8 @@ const permisos = { // Objeto que define qué módulos puede ver cada rol
         "ventas",
         "stock",
         "proveedores",
-        "sucursales"
+        "sucursales",
+        "reportes"
         
     ],
 
@@ -82,7 +83,8 @@ const permisos = { // Objeto que define qué módulos puede ver cada rol
         "sucursales",
         "ubicaciones",
         "ciudades",
-        "provincias"
+        "provincias",
+        "reportes"
     ]
 };
 
@@ -127,6 +129,13 @@ function aplicarPermisos(modulosPermitidos) { // Oculta o muestra módulos segú
         if (!modulosPermitidos.includes(modulo)) {
             card.parentElement.remove();
         }
+
+        // Ocultar botón "Abrir Centro de Reportes"
+    const btnReportes = document.getElementById("btnReportes");
+
+    if (btnReportes && !modulosPermitidos.includes("reportes")) {
+        btnReportes.style.display = "none";
+    }
 
     });
 
