@@ -1,11 +1,12 @@
 import { alertSuccess, alertError } from "./alerts.js";
+console.log("reportes.js cargado");
 
 const token = localStorage.getItem("token");
 const rol = localStorage.getItem("rol");
 const nombre = localStorage.getItem("nombre");
 const apellido = localStorage.getItem("apellido");
 
-const API_URL = "http://localhost:3000";
+const API_URL = "http://localhost:3000/api";
 
 console.log("Reportes cargado");
 
@@ -41,6 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
     cargarProductosTop();
     cargarClientesTop();
     cargarStockCritico();
+    cargarIA();
 
 });
 function mostrarUsuario() {
@@ -61,7 +63,7 @@ function configurarPermisos() {
 //Funcion cargar resumen
 async function cargarResumen() {
     try {
-        const respuesta = await fetch(`${API_URL}/api/reportes/resumen`, {
+        const respuesta = await fetch(`${API_URL}/reportes/resumen`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -103,7 +105,7 @@ function mostrarResumen(datos) {
 
 async function cargarVentasMensuales() {
     try {
-        const respuesta = await fetch(`${API_URL}/api/reportes/ventas-mensuales`, {
+        const respuesta = await fetch(`${API_URL}/reportes/ventas-mensuales`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -141,11 +143,23 @@ function crearGraficoVentas(meses, ventas, tipo = "line") {
         data: {
             labels: meses,
             datasets: [
-                {
-                    label: "Ventas mensuales",
-                    data: ventas,
-                    tension: 0.4
-                }
+            {
+            label: "Ventas mensuales",
+            data: ventas,
+            tension: 0.4,
+
+            borderColor: "#e6007e",
+            backgroundColor: "rgba(230, 0, 126, 0.15)",
+
+            borderWidth: 3,
+
+            pointBackgroundColor: "#e6007e",
+            pointBorderColor: "#ffffff",
+            pointRadius: 5,
+            pointHoverRadius: 7,
+
+            fill: true
+            }
             ]
 
         },
@@ -202,7 +216,7 @@ function crearGraficoVentas(meses, ventas, tipo = "line") {
 //Funcion carga los productos con mas ventas
 async function cargarProductosTop() {
     try {
-        const respuesta = await fetch(`${API_URL}/api/reportes/productos-mas-vendidos`, {
+        const respuesta = await fetch(`${API_URL}/reportes/productos-mas-vendidos`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -242,7 +256,7 @@ function mostrarProductosTop(productos) {
 
 async function cargarClientesTop() {
     try {
-        const respuesta = await fetch(`${API_URL}/api/reportes/clientes-top`, {
+        const respuesta = await fetch(`${API_URL}/reportes/clientes-top`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -282,7 +296,7 @@ function mostrarClientesTop(clientes) {
 async function cargarStockCritico() {
     try {
 
-        const respuesta = await fetch(`${API_URL}/api/reportes/stock-critico`, {
+        const respuesta = await fetch(`${API_URL}/reportes/stock-critico`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -295,6 +309,10 @@ async function cargarStockCritico() {
         }
 
         const resultado = await respuesta.json();
+        console.log(resultado);
+        console.log(resultado.data.productos);
+        console.log("Cantidad:", resultado.data.productos.length);
+        
         mostrarStockCritico(resultado.data.productos);
 
     } catch (error) {
@@ -322,3 +340,69 @@ function mostrarStockCritico(productos) {
     });
 
 }
+
+//funcion que carga el modelo inteligente de analisis de datos
+async function cargarIA() {
+    try {
+        console.log(API_URL);
+        console.log(`${API_URL}/ia`);
+        const respuesta = await fetch(`${API_URL}/ia`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        if (!respuesta.ok) {
+            throw new Error("No se pudo obtener el análisis de IA.");
+        }
+
+        const resultado = await respuesta.json();
+        console.log(resultado);
+        mostrarIA(resultado.data);
+
+    } catch (error) {
+        console.error(error);
+        Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "No se pudo cargar el análisis inteligente."
+        });
+    }
+}
+function mostrarIA(ia) {
+
+    const contenedor = document.getElementById("prediccionIA");
+    contenedor.innerHTML = `
+
+        <div class="mb-3">
+            <h6 class="fw-bold text-info"><i class="bi bi-graph-up-arrow me-2"></i>Resumen</h6>
+
+            <p class="small mb-1">
+                <strong>Ventas totales:</strong><br>$${Number(ia.resumen.ventas_totales).toLocaleString("es-AR")}
+            </p>
+
+            <p class="small"><strong>Mejor mes:</strong><br>${ia.resumen.mejor_mes}</p>
+        </div>
+
+        <hr>
+        <div class="mb-3">
+
+            <h6 class="fw-bold text-warning"><i class="bi bi-lightbulb-fill me-2"></i>Recomendaciones</h6>
+
+            ${ia.recomendaciones.map(r => `<p class="small mb-2">✔ ${r}</p>`).join("")}
+
+        </div>
+        <hr>
+        <div>
+
+            <h6 class="fw-bold text-danger"><i class="bi bi-exclamation-triangle-fill me-2"></i>Alertas</h6>
+            ${ia.alertas.map(a => `<p class="small mb-2"> ⚠ ${a}</p>`).join("")}
+        </div>`;
+
+}
+
+window.abrirModulo = function(modulo) {
+    localStorage.setItem("moduloInicial", modulo);
+    window.location.href = "panel.html";
+};

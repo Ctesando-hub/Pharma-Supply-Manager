@@ -20,7 +20,16 @@ document.addEventListener("DOMContentLoaded", () =>{ // Espera a que todo el HTM
 
     registrarEventos();
 
+    cargarDashboard();
+
     inicializarPasswordToggle();
+
+    const moduloInicial = localStorage.getItem("moduloInicial");
+
+    if (moduloInicial) {
+        manejarModulo(moduloInicial);
+        localStorage.removeItem("moduloInicial");
+    }
 
 });
 
@@ -107,20 +116,31 @@ function configurarAdmin(){
 
 //Panel EMPLEADO
 function configurarEmpleado() {
-    
+    const rolElement = document.querySelector(".sidebar-user-role");
 
-    document.querySelector(".manager-role").innerText = "EMPLEADO";
-    document.querySelector(".user-box span.fw-bold").innerText = "Empleado";
+    if (rolElement) {
+        rolElement.innerText = "Empleado";
+    }
 
+    document.querySelector(".user-box span.fw-bold")
+    .innerText = "Empleado";
     aplicarPermisos(permisos.empleado);
-}
 
+};
+
+//Panel Gerente: nombre rol
 function configurarGerente(){
-    document.querySelector(".manager-role").innerText = "GERENTE";
-    document.querySelector(".user-box span.fw-bold").innerText = "Gerente";
+const rolElement = document.querySelector(".sidebar-user-role");
 
+    if (rolElement) {
+        rolElement.innerText = "Gerente";
+    }
+
+    document.querySelector(".user-box span.fw-bold")
+    .innerText = "Gerente";
     aplicarPermisos(permisos.gerente);
-}
+
+};
 
 //FUNCION CENTRAL PERMISOS
 function aplicarPermisos(modulosPermitidos) { // Oculta o muestra módulos según permisos del rol
@@ -617,7 +637,6 @@ function registrarEventos(){
         document.getElementById("precioUnitarioPedido")
             ?.addEventListener("input", calcularSubtotalPedido);
 }
-
 
 function limpiarFiltros() {
 
@@ -4611,3 +4630,102 @@ async function editarCiudad(id) {
     }
 }
 
+//--*-**-*-*-*---Tarjetas y resumen PANEL ---*-*-*-*---*-**-
+// Cargar dashboard
+async function cargarDashboard(){
+    try {
+        const respuesta = await fetch(
+            `${API_URL}/api/panel/dashboard`,
+            {
+                method: "GET",
+                headers:{
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type":"application/json"
+                }
+            }
+        );
+
+        if(!respuesta.ok){
+            throw new Error("No se pudo cargar el dashboard");
+        }
+
+        const resultado = await respuesta.json();
+        mostrarEstadisticas(resultado.data.estadisticas);
+        mostrarMonitor(resultado.data.monitor, resultado.data.estadisticas);
+        mostrarActividad( resultado.data.actividad);
+
+    } catch(error){
+        console.error("Error dashboard:",error);
+
+    }
+
+}
+ //cards superiores
+function mostrarEstadisticas(datos){
+    document.getElementById("stockTotal").textContent =Number(datos.stock_total).toLocaleString("es-AR");
+    document.getElementById("usuariosActivos").textContent = datos.usuarios_activos;
+    document.getElementById("pedidosPendientes").textContent = datos.pedidos_pendientes;
+    document.getElementById("clientesRegistrados").textContent = datos.clientes_registrados;
+
+}
+ //monitor
+function mostrarMonitor(monitor, estadisticas){
+
+    document.getElementById("monitorStockCritico").textContent = monitor.stock_critico;
+    document.getElementById("monitorProductos").textContent = monitor.total_productos;
+    document.getElementById("monitorPedidos").textContent = monitor.pedidos_espera;
+    document.getElementById("monitorUsuarios").textContent = estadisticas.usuarios_activos;
+
+    // Barras
+    document.getElementById("barraStockCritico").style.width = `${(monitor.stock_critico / monitor.total_productos) * 100}%`;
+
+    document.getElementById("barraInventario").style.width = "100%";
+
+    document.getElementById("barraPedidos").style.width =`${(estadisticas.pedidos_pendientes / 20) * 100}%`;
+
+    document.getElementById("barraUsuarios").style.width = `${(estadisticas.usuarios_activos / 20) * 100}%`;
+
+}
+//Lista de actividad
+function mostrarActividad(datos) {
+
+    const lista = document.getElementById("listaActividad");
+    lista.innerHTML = "";
+
+    datos.forEach(item => {
+
+        let icono = "";
+        let claseIcono = "";
+        let claseBadge = "";
+        let badge = "";
+
+        if (item.tipo === "pedido") {
+            icono = "bi-receipt";
+            claseIcono = "icon-primary";
+            claseBadge = "badge-primary";
+            badge = "PEDIDO";
+        } else {
+            icono = "bi-box-seam";
+            claseIcono = "icon-warning";
+            claseBadge = "badge-info";
+            badge = "COMPRA";
+        }
+
+        lista.innerHTML += `
+            <div class="activity-item">
+
+                <div class="activity-icon ${claseIcono}">
+                    <i class="bi ${icono}"></i>
+                </div>
+
+                <div class="activity-content">
+                    <h6>${item.titulo}</h6>
+                    <small>
+                        ${item.detalle} • ${new Date(item.fecha).toLocaleString("es-AR")}
+                    </small>
+                </div>
+
+                <span class="activity-badge ${claseBadge}">${badge}</span>
+            </div>`;
+    });
+}

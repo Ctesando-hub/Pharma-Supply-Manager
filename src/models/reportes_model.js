@@ -98,8 +98,8 @@ export const obtenerStockModel = async () => {
 
         return rows;
     } catch (error) {
-        console.error("Error al obtener datos para obtener productos mas vendidos:", error.message);
-        throw new Error("No se pudieron obtener los datos para el reporte de productos mas vendidos.");
+    logger.error(`Error al obtener datos de stock: ${error.message}`);
+    throw new Error( "No se pudieron obtener los datos de stock.");
 
     } finally {
         await conn.end();

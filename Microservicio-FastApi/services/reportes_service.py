@@ -90,7 +90,7 @@ def generar_stock_critico(datos):
 
     df = pd.DataFrame(stock)
 
-    criticos = df[df["cantidad_disponible"] <= df["punto_reposicion"]]
+    criticos = df[(df["cantidad_disponible"] > 0) &(df["cantidad_disponible"] <= df["punto_reposicion"])]
 
     return {
         "productos": criticos.to_dict(orient="records")

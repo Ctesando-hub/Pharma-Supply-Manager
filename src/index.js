@@ -12,6 +12,8 @@ import authRouters from "./routes/auth.routes.js";
 import ciudadesRouters from "./routes/ciudades_routes.js";
 import provinciasRouters from "./routes/provincias_routes.js";
 import reportesRoutes from "./routes/reportes_route.js";
+import iaRouters from "./routes/ia_route.js";
+import panelRoutes from "./routes/panel_route.js";
 
 console.log("ESTE ES EL INDEX DEL BACKEND");
 
@@ -69,6 +71,12 @@ app.use("/api/auth", authRouters);
 
 //reportes para fastapi
 app.use("/api/reportes", reportesRoutes);
+
+//IA
+app.use("/api/ia", iaRouters);
+
+//Panel
+app.use("/api/panel", panelRoutes);
 
 
 

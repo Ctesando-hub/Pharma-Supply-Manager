@@ -6,7 +6,7 @@ from routes.ia_route import router as ia
 
 app = FastAPI() #instancia de la app FastApi
 app.include_router(reportes_router) #fastApi incluye ademas las rutas del reporte
-app.include_router(ia.router)
+app.include_router(ia)
 
 @app.get("/") #endpoint decorador. Le dice que cuando se haga una peticion a la ruta / , se ejecutela funcion de abajo
 def inicio(): #funcion inicio que se ejecuta cuando visite el localhost
