@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () =>{  //Ejecuta el codigo cuando
         const password = document.getElementById("password").value;
 
         try{  //manejo de errores
-            const response =  await fetch("http://localhost:3000/api/auth/login", { //Hace una peticion HTTP al backend
+            const response =  await fetch("https://pharma-supply-manager-production-f1c3.up.railway.app/api/auth/login", { //Hace una peticion HTTP al backend
                 method: "POST",
                 headers: {
                     "Content-type": "application/json"

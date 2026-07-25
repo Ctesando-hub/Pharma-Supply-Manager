@@ -6,7 +6,7 @@ const rol = localStorage.getItem("rol");
 const nombre = localStorage.getItem("nombre");
 const apellido = localStorage.getItem("apellido");
 
-const API_URL = "http://localhost:3000/api";
+const API_URL = "https://pharma-supply-manager-production-f1c3.up.railway.app/api";
 
 console.log("Reportes cargado");
 

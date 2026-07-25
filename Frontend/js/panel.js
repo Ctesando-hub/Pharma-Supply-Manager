@@ -5,7 +5,7 @@
     const nombre = localStorage.getItem("nombre"); //Obtiene el nombre del usuario y apellido
     const apellido = localStorage.getItem("apellido");
     const idUsuario = localStorage.getItem("id_usuario"); //obtiene el ID del Usuario
-    const API_URL = "http://localhost:3000";
+    const API_URL = "https://pharma-supply-manager-production-f1c3.up.railway.app";
     console.log("panel cargado");
 
 document.addEventListener("DOMContentLoaded", () =>{ // Espera a que todo el HTML del documento esté cargado antes de ejecutar el JS
