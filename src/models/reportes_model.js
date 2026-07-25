@@ -37,27 +37,29 @@ export const obtenerResumenModel = async () => {
 };
 
 export const obtenerVentasMensualesModel = async () => {
-const conn = await getConnection();
+    const conn = await getConnection();
+
     try {
         const [rows] = await conn.execute(`
-        SELECT
-        DATE_FORMAT(fecha,'%M') AS mes,
-        SUM(dp.subtotal) AS ventas
-        FROM pedidos p
-        INNER JOIN detalles_pedidos dp ON p.id_pedido=dp.id_pedido
-        WHERE p.id_estado=3
-        GROUP BY MONTH(fecha)
-        ORDER BY MONTH(fecha);
-        `);
+            SELECT
+                DATE_FORMAT(p.fecha,'%M') AS mes,
+                SUM(dp.subtotal) AS ventas
+            FROM pedidos p
+            INNER JOIN detalles_pedidos dp 
+                ON p.id_pedido = dp.id_pedido
+            WHERE p.id_estado = 3
+            GROUP BY DATE_FORMAT(p.fecha,'%M'), MONTH(p.fecha)
+            ORDER BY MONTH(p.fecha);`);
 
         return rows;
+
     } catch (error) {
         console.error("Error al obtener datos para obtener ventas mensuales:", error.message);
         throw new Error("No se pudieron obtener los datos para el reporte de ventas mensuales.");
+
     } finally {
         await conn.end();
     }
-
 }
 
 export const obtenerProductosMasVendidosModel = async () => {

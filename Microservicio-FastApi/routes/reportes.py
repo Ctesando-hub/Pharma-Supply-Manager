@@ -50,11 +50,3 @@ def stock_critico(datos: dict):
 def clientes_top(datos: dict):
     return generar_clientes_top(datos)
 
-
-# ==========================
-# IA Predictiva
-# ==========================
-#@router.post("/reportes/prediccion")
-
-#def prediccion(datos: dict):
-    #return generar_prediccion(datos)
