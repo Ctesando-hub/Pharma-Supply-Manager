@@ -144,7 +144,7 @@ const rolElement = document.querySelector(".sidebar-user-role");
 
 //FUNCION CENTRAL PERMISOS
 function aplicarPermisos(modulosPermitidos) { // Oculta o muestra módulos según permisos del rol
-    document.querySelectorAll(".nav-card").forEach(card => { // Selecciona todos los elementos del menú
+     document.querySelectorAll("[data-module]").forEach(card => { // Selecciona todos los elementos del menú
         const modulo = card.dataset.module;
         if (!modulosPermitidos.includes(modulo)) {
             card.parentElement.remove();
