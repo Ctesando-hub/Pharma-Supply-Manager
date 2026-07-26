@@ -144,11 +144,13 @@ const rolElement = document.querySelector(".sidebar-user-role");
 
 //FUNCION CENTRAL PERMISOS
 function aplicarPermisos(modulosPermitidos) { // Oculta o muestra módulos según permisos del rol
-     document.querySelectorAll("nav-card").forEach(card => { // Selecciona todos los elementos del menú
+     document.querySelectorAll(".nav-card").forEach(card => { // Selecciona todos los elementos del menú
         const modulo = card.dataset.module;
         if (!modulosPermitidos.includes(modulo)) {
             card.parentElement.remove();
         }
+
+    });    
 
      // SIDEBAR
     document.querySelectorAll(".nav-link[data-module]").forEach(link => {
@@ -168,7 +170,6 @@ function aplicarPermisos(modulosPermitidos) { // Oculta o muestra módulos segú
         btnReportes.style.display = "none";
     }
 
-    });
 
 }
 
@@ -209,6 +210,12 @@ function mostrarSeccion(seccion) {
 
 //MANEJAR MODULO
 function manejarModulo(modulo) {
+    const permisosUsuario = permisos[rol] || [];
+
+    if (!permisosUsuario.includes(modulo)) {
+        console.warn("Acceso bloqueado al módulo:", modulo);
+        return;
+    }
 
     switch (modulo) {
 
