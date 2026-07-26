@@ -150,6 +150,17 @@ function aplicarPermisos(modulosPermitidos) { // Oculta o muestra módulos segú
             card.parentElement.remove();
         }
 
+     // SIDEBAR
+    document.querySelectorAll(".nav-link[data-module]").forEach(link => {
+
+        const modulo = link.dataset.module;
+
+        if (!modulosPermitidos.includes(modulo)) {
+            link.style.display = "none";
+        }
+
+    });    
+
         // Ocultar botón "Abrir Centro de Reportes"
     const btnReportes = document.getElementById("btnReportes");
 
