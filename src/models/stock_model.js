@@ -16,6 +16,7 @@ export const getAllStockModel = async () => {
         s.ultima_actualizacion
         FROM stock s
         INNER JOIN productos p ON s.id_producto = p.id_producto
+        WHERE p.prod_eliminado IS NULL
         ORDER BY s.id_stock ASC`);
     return rows;
     } catch (error) {
@@ -142,7 +143,6 @@ export const getStockFiltrosModel = async ({ nombre }) => {
 };
 
 // Crear nuevo stock del producto
-// Crear stock inicial del producto
 export const crearStockModel = async (id_producto) => {
 
     const conn = await getConnection();
