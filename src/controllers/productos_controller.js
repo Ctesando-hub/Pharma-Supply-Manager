@@ -201,17 +201,13 @@ export const crearProducto = async (req, res) => {
             data: nuevoProducto
         });
 
-    } catch (error) {
-
-        logger.error("Error al crear producto", {
-            error: error.message
-        });
-
-        return res.status(500).json({
-            message: "Error al crear el producto",
-            error: error.message
-        });
-    }
+    }catch (error) {
+    console.error(error);
+    logger.error(`Error al crear producto: ${error.message}`);
+    res.status(500).json({
+        message: error.message
+    });
+}
 };
 // Controlador para editar producto
 export const actualizarProducto = async (req, res) => {
