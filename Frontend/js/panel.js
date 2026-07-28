@@ -1941,14 +1941,12 @@ async function cargarProveedoresModal() {
         select.innerHTML = `<option value="">Seleccionar proveedor</option>`;
 
         data.data.forEach(p => {
-            select.innerHTML += `
-            <option
-            value="${p.id_producto}"
-            data-proveedor="${p.id_proveedor}">
+        select.innerHTML += `
+        <option
+            value="${p.id_proveedor}">
             ${p.nombre}
-        </option>`;  
-            
-        });
+        </option>`;
+});
 
         return data.data; 
 
@@ -2037,6 +2035,8 @@ async function guardarProducto() {
         : `${API_URL}/api/productos`;
 
     const metodo = id ? "PUT" : "POST";
+
+    console.log(document.getElementById("proveedorProducto2").value);
 
     const res = await fetch(url, {
         method: metodo,
