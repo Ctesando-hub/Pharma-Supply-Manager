@@ -41,7 +41,7 @@ def generar_inteligencia(datos): #Funcion tiene datos como parametro. será el J
         producto_top = df_productos.loc[df_productos["cantidad"].idxmax()]#busca el producto con mayor cantidad vendida
 
         resultado["recomendaciones"].append(
-            f"Priorizar la reposición de stock del producto '{producto_top['nombre']}', debido a su alta demanda.") #lo agrega a la lista con append
+            f"El producto '{producto_top['nombre']}' registra la mayor rotación de ventas. Se recomienda mantener un seguimiento de su disponibilidad para evitar faltantes.") #lo agrega a la lista con append
 
     # Análisis de stock
     if len(stock) > 0:
@@ -77,6 +77,6 @@ def generar_inteligencia(datos): #Funcion tiene datos como parametro. será el J
         cliente_top = df_clientes.loc[df_clientes["total"].idxmax()] #busca el cliente que mas compro
 
         resultado["recomendaciones"].append(
-            f"Fortalecer la relación comercial con '{cliente_top['nombre']}', ya que es el cliente con mayor volumen de compras.")# f nos permite meter variables en el texto
+            f"'{cliente_top['nombre']}' concentra el mayor volumen de compras. Mantener una estrategia de fidelización puede contribuir a sostener este nivel de facturación.")# f nos permite meter variables en el texto
 
     return resultado
