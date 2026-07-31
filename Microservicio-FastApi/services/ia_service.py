@@ -37,7 +37,7 @@ def generar_inteligencia(datos): #Funcion tiene datos como parametro. será el J
     # Productos más vendidos
     if len(productos) > 0:  #si hay productos lo convierte en dataframe
         df_productos = pd.DataFrame(productos)
-
+        print(df_productos)
         producto_top = df_productos.loc[df_productos["cantidad"].idxmax()]#busca el producto con mayor cantidad vendida
 
         resultado["recomendaciones"].append(
@@ -74,6 +74,7 @@ def generar_inteligencia(datos): #Funcion tiene datos como parametro. será el J
     if len(clientes) > 0:
 
         df_clientes = pd.DataFrame(clientes)
+        print(df_clientes)
         cliente_top = df_clientes.loc[df_clientes["total"].idxmax()] #busca el cliente que mas compro
 
         resultado["recomendaciones"].append(
