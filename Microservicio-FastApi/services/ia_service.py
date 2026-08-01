@@ -39,6 +39,8 @@ def generar_inteligencia(datos): #Funcion tiene datos como parametro. será el J
         df_productos = pd.DataFrame(productos)
         print(df_productos)
         producto_top = df_productos.loc[df_productos["cantidad"].idxmax()]#busca el producto con mayor cantidad vendida
+        producto_top = df_productos.loc[df_productos["cantidad"].idxmax()]
+        print(producto_top)
 
         resultado["recomendaciones"].append(
             f"El producto '{producto_top['nombre']}' registra la mayor rotación de ventas. Se recomienda mantener un seguimiento de su disponibilidad para evitar faltantes.") #lo agrega a la lista con append
@@ -76,6 +78,8 @@ def generar_inteligencia(datos): #Funcion tiene datos como parametro. será el J
         df_clientes = pd.DataFrame(clientes)
         print(df_clientes)
         cliente_top = df_clientes.loc[df_clientes["total"].idxmax()] #busca el cliente que mas compro
+        cliente_top = df_clientes.loc[df_clientes["total"].idxmax()]
+        print(cliente_top)
 
         resultado["recomendaciones"].append(
             f"'{cliente_top['nombre']}' concentra el mayor volumen de compras. Mantener una estrategia de fidelización puede contribuir a sostener este nivel de facturación.")# f nos permite meter variables en el texto
