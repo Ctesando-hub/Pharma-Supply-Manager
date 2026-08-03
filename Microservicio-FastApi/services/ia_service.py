@@ -2,6 +2,10 @@ import pandas as pd #importamos la libreria pandas
 #Pandas nos permite trabajar con datos como si fueran tablas de Excel.
 
 def generar_inteligencia(datos): #Funcion tiene datos como parametro. será el JSON que llega desde Node.js mediante Axios.
+    print("PRODUCTOS RECIBIDOS POR IA")
+    print(pd.DataFrame(productos))
+    print("CLIENTES RECIBIDOS")
+    print(pd.DataFrame(clientes))
     ventas = datos.get("ventas_mensuales", []) #dentro del json buscamos la clave ventas_mensuales, sino un [] por defecto
     productos = datos.get("productos", [])
     stock = datos.get("stock", [])
@@ -37,10 +41,27 @@ def generar_inteligencia(datos): #Funcion tiene datos como parametro. será el J
     # Productos más vendidos
     if len(productos) > 0:  #si hay productos lo convierte en dataframe
         df_productos = pd.DataFrame(productos)
+
         print(df_productos)
-        producto_top = df_productos.loc[df_productos["cantidad"].idxmax()]#busca el producto con mayor cantidad vendida
-        producto_top = df_productos.loc[df_productos["cantidad"].idxmax()]
+        print(df_productos.dtypes)
+
+        df_productos["cantidad"] = pd.to_numeric(
+            df_productos["cantidad"],
+            errors="coerce"
+        )
+
+        print(df_productos["cantidad"])
+        print(df_productos["cantidad"].dtype)
+
+        print("IDXMAX:", df_productos["cantidad"].idxmax())
+
+        producto_top = df_productos.loc[
+            df_productos["cantidad"].idxmax()
+        ]
+
         print(producto_top)
+            
+        
 
         resultado["recomendaciones"].append(
             f"El producto '{producto_top['nombre']}' registra la mayor rotación de ventas. Se recomienda mantener un seguimiento de su disponibilidad para evitar faltantes.") #lo agrega a la lista con append
@@ -76,9 +97,24 @@ def generar_inteligencia(datos): #Funcion tiene datos como parametro. será el J
     if len(clientes) > 0:
 
         df_clientes = pd.DataFrame(clientes)
+
         print(df_clientes)
-        cliente_top = df_clientes.loc[df_clientes["total"].idxmax()] #busca el cliente que mas compro
-        cliente_top = df_clientes.loc[df_clientes["total"].idxmax()]
+        print(df_clientes.dtypes)
+
+        df_clientes["total"] = pd.to_numeric(
+            df_clientes["total"],
+            errors="coerce"
+        )
+
+        print(df_clientes["total"])
+        print(df_clientes["total"].dtype)
+
+        print("IDXMAX CLIENTE:", df_clientes["total"].idxmax())
+
+        cliente_top = df_clientes.loc[
+            df_clientes["total"].idxmax()
+        ]
+
         print(cliente_top)
 
         resultado["recomendaciones"].append(
