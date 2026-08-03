@@ -2,14 +2,18 @@ import pandas as pd #importamos la libreria pandas
 #Pandas nos permite trabajar con datos como si fueran tablas de Excel.
 
 def generar_inteligencia(datos): #Funcion tiene datos como parametro. será el JSON que llega desde Node.js mediante Axios.
-    print("PRODUCTOS RECIBIDOS POR IA")
-    print(pd.DataFrame(productos))
-    print("CLIENTES RECIBIDOS")
-    print(pd.DataFrame(clientes))
+
     ventas = datos.get("ventas_mensuales", []) #dentro del json buscamos la clave ventas_mensuales, sino un [] por defecto
     productos = datos.get("productos", [])
     stock = datos.get("stock", [])
     clientes = datos.get("clientes", [])
+    
+    print("PRODUCTOS RECIBIDOS POR IA")
+    print(pd.DataFrame(productos))
+
+    print("CLIENTES RECIBIDOS")
+    print(pd.DataFrame(clientes))
+
 
     resultado = { "resumen": {}, "recomendaciones": [], "alertas": [] #creamos la estructura de la repuesta
     }
